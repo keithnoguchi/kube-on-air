@@ -20,11 +20,14 @@ ping-node:
 
 test-master: ansible ping-master
 	ansible-playbook -vvv master.yml \
-		-i inventory.local -c local -e travis_ci=true
+		-i inventory.local -c local -e travis_ci=true \
+		-e gitsite=https://github.com/
+
 
 test-node: ansible ping-node
 	ansible-playbook -vvv node.yml \
-		-i inventory.local -c local -e travis_ci=true
+		-i inventory.local -c local -e travis_ci=true \
+		-e gitsite=https://github.com/
 
 clean:
 	sudo $(RM) -rf .ansible
