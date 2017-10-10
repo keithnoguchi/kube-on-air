@@ -1,7 +1,4 @@
 ---
-- name: create git root directory
-  file: path={{ gitpath }} state=directory mode=0700
-
 - name: clone the golang git repo
   git:
     repo: "{{ gitsite }}golang/go"

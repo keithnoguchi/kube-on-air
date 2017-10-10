@@ -7,6 +7,9 @@
     gobootstrap: /usr/lib/go-1.6
   gather_facts: false
   tasks:
+    - name: create git root directory
+      file: path={{ gitpath }} state=directory mode=0700
+
     - name: install the latest golang
       import_tasks: tasks/golang.yml
 
