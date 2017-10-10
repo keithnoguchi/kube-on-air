@@ -3,6 +3,12 @@
   hosts: node
   gather_facts: false
   tasks:
+    - name: install apt packages
+      apt: name={{ item }} state=present update_cache=true
+      items:
+        - init-system-helpers
+      become: true
+
     - name: install gce encription key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -18,7 +24,7 @@
       become: true
 
     - name: install kubernetes packages
-      apt: name={{ item }} state=present update_cache=true
+      apt: name={{ item }} state=present upgrade=true update_cache=false
       items:
         - kubelet
         - kubeadm

@@ -7,6 +7,13 @@
     gobootstrap: /usr/lib/go-1.6
   gather_facts: false
   tasks:
+    - name: install apt packages
+      apt: name={{ item }} state=present update_cache=true
+      items:
+        - init-system-helpers
+        - golang-1.6
+      become: true
+
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
 
@@ -38,7 +45,7 @@
       become: true
 
     - name: install kubernetes packages
-      apt: name={{ item }} state=present update_cache=true
+      apt: name={{ item }} state=present upgrade=true update_cache=false
       items:
         - kubelet
         - kubeadm
