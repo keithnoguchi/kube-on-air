@@ -50,3 +50,4 @@
         - kubeadm
         - kubernetes-cni
       become: true
+      when: ansible_distribution_version == "16.04"

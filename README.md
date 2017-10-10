@@ -1,4 +1,4 @@
-# Kube-on-Air!
+# Kube-on-Air
 
 [![Build Status](https://travis-ci.org/keinohguchi/kube-on-air.svg)](https://travis-ci.org/keinohguchi/kube-on-air)
 
