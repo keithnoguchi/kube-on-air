@@ -5,7 +5,7 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true

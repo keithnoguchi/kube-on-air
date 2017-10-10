@@ -1,7 +1,7 @@
 ---
 - name: setup ubuntu based kube node
   hosts: node
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true
