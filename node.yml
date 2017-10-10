@@ -15,16 +15,11 @@
         state: present
       become: true
 
-    - name: add gce kubernetes list
-      lineinfile:
-        path: /etc/apt/sources.list.d/kubernetes.list
-        regexp: '^deb http://apt.kubernetes.io/'
-        line: 'deb http://apt.kubernetes.io/ kubernetes-xenial main'
-        create: true
-      become: true
-
-    - name: upgrade the cache to reflect the new source
-      apt: upgrade=safe
+    - name: add gce kubernetes repository
+      apt_repository:
+        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes.list
       become: true
 
     - name: install kubernetes packages
