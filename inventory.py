@@ -45,7 +45,8 @@ def master():
     if c != None:
         for i in c.listDomainsID():
             dom = c.lookupByID(i)
-            master['hosts'].append(dom.name())
+            if dom.name().startswith('node') == False:
+                master['hosts'].append(dom.name())
 
     return master
 
@@ -58,7 +59,8 @@ def node():
     if c != None:
         for i in c.listDomainsID():
             dom = c.lookupByID(i)
-            node['hosts'].append(dom.name())
+            if dom.name().startswith('node'):
+                node['hosts'].append(dom.name())
 
     return node
 
