@@ -14,6 +14,7 @@
         path: /etc/apt/sources.list.d/kubernetes.list
         regexp: '^deb http://apt.kubernetes.io/'
         line: 'deb http://apt.kubernetes.io/ kubernetes-xenial main'
+        validate: 'touch %s'
       become: true
 
     - name: install kubernetes packages

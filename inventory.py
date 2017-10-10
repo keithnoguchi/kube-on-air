@@ -13,10 +13,11 @@ def main():
     inventory['host'] = {'hosts': ['localhost'],
                          'vars': {'ansible_python_interpreter':
                                   '/usr/bin/python2'}}
+    inventory['master'] = master()
     inventory['node'] = node()
 
     hostvars = {}
-    for type in ['node']:
+    for type in ['master', 'node']:
         for host in inventory[type]['hosts']:
             inventory['all']['hosts'].append(host)
             hostvars[host] = {'name': host}
@@ -34,6 +35,19 @@ def main():
         print(json.dumps(inventory))
     elif args.host:
         print(json.dumps(hostvars.get(args.host, {})))
+
+
+def master():
+    master = {'hosts': [],
+              'vars': {'ansible_python_interpreter': '/usr/bin/python'}}
+
+    c = libvirt.openReadOnly("qemu:///system")
+    if c != None:
+        for i in c.listDomainsID():
+            dom = c.lookupByID(i)
+            master['hosts'].append(dom.name())
+
+    return master
 
 
 def node():

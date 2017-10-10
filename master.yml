@@ -1,8 +1,15 @@
 ---
 - name: setup ubuntu based kube node
   hosts: master
+  vars:
+    gitsite: "git@github.com:"
+    gitpath: "{{ lookup('env', 'HOME') }}/git/"
+    gobootstrap: /usr/lib/go-1.6
   gather_facts: false
   tasks:
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
+
     - name: get the latest etcd
       command: go get -u {{ item }}
       items:
@@ -24,6 +31,7 @@
         path: /etc/apt/sources.list.d/kubernetes.list
         regexp: '^deb http://apt.kubernetes.io/'
         line: 'deb http://apt.kubernetes.io/ kubernetes-xenial main'
+        validate: 'touch %s'
       become: true
 
     - name: install kubernetes packages
