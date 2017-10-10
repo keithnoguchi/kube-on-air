@@ -1,0 +1,35 @@
+---
+- name: setup ubuntu based kube node
+  hosts: master
+  gather_facts: false
+  tasks:
+    - name: get the latest etcd
+      command: go get -u {{ item }}
+      items:
+        - github.com/coreos/etcd/cmd/etcd
+        - github.com/coreos/etcd/cmd/etcdctl
+      environment:
+        GOROOT: "{{ lookup('env', 'GOROOT') }}"
+        GOPATH: "{{ lookup('env', 'GOPATH') }}"
+        PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+
+    - name: install encription key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+      become: true
+
+    - name: add gce kubernetes list
+      lineinfile:
+        path: /etc/apt/sources.list.d/kubernetes.list
+        regexp: '^deb http://apt.kubernetes.io/'
+        line: 'deb http://apt.kubernetes.io/ kubernetes-xenial main'
+      become: true
+
+    - name: install kubernetes packages
+      apt: name={{ item }} state=present update_cache=true
+      items:
+        - kubelet
+        - kubeadm
+        - kubernetes-cni
+      become: true
