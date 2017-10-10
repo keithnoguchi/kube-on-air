@@ -1,0 +1,37 @@
+---
+os: linux
+dist: trusty
+sudo: required
+# https://blog.travis-ci.com/2017-06-19-trusty-updates-2017-Q2
+# for the new trusty image.
+group: edge
+
+env:
+  global:
+    - GOROOT=$HOME/git/go
+    - GOPATH=$HOME
+  matrix:
+    # This is the k8s node environment, to check master.yml.
+    - ARCH_TRAVIS_MASTER_ENV=1
+    # This is the k8s node environment, to check node.yml.
+    - ARCH_TRAVIS_NODE_ENV=1
+
+language: c
+
+compiler:
+  - gcc
+
+arch:
+  repos:
+    - archlinuxfr=http://repo.archlinux.fr/$arch
+  packages:
+    # pacman packages
+    #- procps-ng
+    #- reflector
+    # aur
+    #- screenfetch-git
+  script:
+
+script:
+  - if [[ "${ARCH_TRAVIS_MASTER_ENV}" == "1" ]]; then sudo -E make test-master; fi
+  - if [[ "${ARCH_TRAVIS_NODE_ENV}" == "1" ]]; then sudo -E make test-node; fi
