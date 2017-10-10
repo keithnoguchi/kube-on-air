@@ -45,7 +45,7 @@
       become: true
 
     - name: install kubernetes packages
-      apt: name={{ item }} state=present upgrade=true update_cache=false
+      apt: name={{ item }} state=present update_cache=false
       items:
         - kubelet
         - kubeadm
