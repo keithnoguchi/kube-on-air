@@ -44,6 +44,10 @@
         create: true
       become: true
 
+    - name: upgrade the cache to reflect the new source
+      apt: upgrade=safe
+      become: true
+
     - name: install kubernetes packages
       apt: name={{ item }} state=present update_cache=false
       items:
