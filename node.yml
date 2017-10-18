@@ -9,6 +9,10 @@
         - init-system-helpers
       become: true
 
+    - name: disable swap on the master for kublet1.8 to run
+      command: swapoff -a
+      become: true
+
     - name: install gce encription key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg

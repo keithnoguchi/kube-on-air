@@ -14,6 +14,10 @@
         - golang-1.6
       become: true
 
+    - name: disable swap on the master for kublet1.8 to run
+      command: swapoff -a
+      become: true
+
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
 
