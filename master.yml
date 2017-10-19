@@ -5,6 +5,10 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
+    networking: flannel
+    manifest:
+      flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
   gather_facts: true
   tasks:
     - name: install apt packages
@@ -55,3 +59,21 @@
         - kubernetes-cni
       become: true
       when: ansible_distribution_version == "16.04"
+
+    - name: setup k8s networking by flannel
+      command: "kubectl apply --force=true -f {{ manifest.flannel }}"
+      when: networking == "flannel" and ansible_distribution_version == "16.04"
+
+    - name: teardown k8s networking by flannel
+      command: "kubectl delete --force=true -f {{ manifest.flannel }}"
+      when: networking != "flannel" and ansible_distribution_version == "16.04"
+      failed_when: false
+
+    - name: setup k8s networking by calico
+      command: "kubectl apply --force=true -f {{ manifest.calico }}"
+      when: networking == "calico" and ansible_distribution_version == "16.04"
+
+    - name: teardown k8s networking by calico
+      command: "kubectl delete --force=true -f {{ manifest.calico }}"
+      when: networking != "calico" and ansible_distribution_version == "16.04"
+      failed_when: false
