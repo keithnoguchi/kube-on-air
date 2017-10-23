@@ -46,6 +46,13 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
+    - name: add user to the developer groups
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        append: true
+        groups: docker
+      become: true
+
     - name: install gce encription key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
