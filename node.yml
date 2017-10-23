@@ -2,6 +2,11 @@
 - name: setup ubuntu based kube node
   hosts: node
   gather_facts: true
+  vars:
+    k8s:
+      token: 1ffe15.c6158f9a2ab7385a
+      apiserver: 10.0.0.12:6443
+      cert_hash: sha256:16cb5d8133b68bcf832d030b2e9c4b33b2b74aef8fc0b210ef104145e3b415cb
   tasks:
     - name: make console access through ttyS0
       lineinfile:
@@ -19,15 +24,27 @@
       become: true
       when: console.changed
 
+    - name: update /etc/network/interfaces
+      copy:
+        src: files/etc/network/interfaces
+        dest: /etc/network/interfaces
+        mode: 0644
+        owner: root
+        group: root
+      become: true
+
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true
       items:
         - init-system-helpers
       become: true
 
-    - name: disable swap on the master for kublet1.8 to run
-      command: swapoff -a
+    - name: install docker for ubuntu16.04 or above
+      apt: name={{ item }} state=present update_cache=false
+      items:
+        - docker.io
       become: true
+      when: ansible_distribution_version == "16.04"
 
     - name: install gce encription key
       apt_key:
@@ -50,3 +67,15 @@
         - kubernetes-cni
       become: true
       when: ansible_distribution_version == "16.04"
+
+    - name: check if the node is already joining the cluster
+      stat:
+        path: /etc/kubernetes/kubelet.conf
+      register: kubelet_conf
+
+    - name: join the k8s cluster!
+      command: |
+        kubeadm join --token "{{ k8s.token }}" "{{ k8s.apiserver }}"
+        --discovery-token-ca-cert-hash "{{ k8s.cert_hash }}"
+      become: true
+      when: kubelet_conf.stat.exists == false and ansible_distribution_version == "16.04"
