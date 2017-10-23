@@ -1,0 +1,31 @@
+---
+- name: provision the cluster
+  hosts: localhost
+  vars:
+    networking: calico
+    manifest:
+      flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
+  gather_facts: false
+  environment:
+    GOROOT: "{{ lookup('env', 'GOROOT') }}"
+    GOPATH: "{{ lookup('env', 'GOPATH') }}"
+    PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+  tasks:
+    - name: setup k8s networking by flannel
+      command: "kubectl apply --force=true -f {{ manifest.flannel }}"
+      when: networking == "flannel"
+
+    - name: teardown k8s networking by flannel
+      command: "kubectl delete --force=true -f {{ manifest.flannel }}"
+      when: networking != "flannel"
+      failed_when: false
+
+    - name: setup k8s networking by calico
+      command: "kubectl apply --force=true -f {{ manifest.calico }}"
+      when: networking == "calico"
+
+    - name: teardown k8s networking by calico
+      command: "kubectl delete --force=true -f {{ manifest.calico }}"
+      when: networking != "calico"
+      failed_when: false
