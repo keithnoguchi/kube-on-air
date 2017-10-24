@@ -1,7 +1,7 @@
-.PHONY: cluster boot bootstrap network kuard
+.PHONY: cluster boot bootstrap network teardown kuard
 all: kuard
 cluster boot: bootstrap
-bootstrap network:
+bootstrap network teardown:
 	@ansible-playbook $@.yml
 
 # Some kubectl alias targets
@@ -17,7 +17,7 @@ show-%:
 clean: clean-kuard
 clean-%:
 	kubectl delete -f manifests/pods/$*.yml
-dist-clean: clean
+dist-clean: clean teardown
 	sudo $(RM) -rf .ansible
 	$(RM) *.bak *.retry .*.sw? **/.*.sw?
 

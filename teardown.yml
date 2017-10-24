@@ -1,0 +1,7 @@
+---
+- name: teardown kubernetes cluster
+  hosts: cluster
+  tasks:
+    - name: reset the kubernetes configuration with kubeadm
+      command: kubeadm reset
+      become: true
