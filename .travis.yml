@@ -11,10 +11,12 @@ env:
     - GOROOT=$HOME/git/go
     - GOPATH=$HOME
   matrix:
-    # This is the k8s node environment, to check master.yml.
-    - ARCH_TRAVIS_MASTER_ENV=1
+    # This is the k8s cluster environment, to check bootstrap.yml.
+    - CI_TEST_CLUSTER_ENV=1
+    # This is the k8s master environment, to check master.yml.
+    - CI_TEST_MASTER_ENV=1
     # This is the k8s node environment, to check node.yml.
-    - ARCH_TRAVIS_NODE_ENV=1
+    - CI_TEST_NODE_ENV=1
 
 language: c
 
@@ -33,5 +35,6 @@ arch:
   script:
 
 script:
-  - if [[ "${ARCH_TRAVIS_MASTER_ENV}" == "1" ]]; then sudo -E make test-master; fi
-  - if [[ "${ARCH_TRAVIS_NODE_ENV}" == "1" ]]; then sudo -E make test-node; fi
+  - if [[ "${CI_TEST_CLUSTER_ENV}" == "1" ]]; then sudo -E make ci-test-bootstrap; fi
+  - if [[ "${CI_TEST_MASTER_ENV}" == "1" ]]; then sudo -E make ci-test-master; fi
+  - if [[ "${CI_TEST_NODE_ENV}" == "1" ]]; then sudo -E make ci-test-node; fi

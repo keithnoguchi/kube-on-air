@@ -1,6 +1,6 @@
 ---
 - name: bootstrap k8s master and node
-  hosts: kube
+  hosts: cluster
   gather_facts: true
   vars:
   tasks:

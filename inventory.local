@@ -1,18 +1,18 @@
 [all:vars]
-ansible_host=localhost ansible_python_interpreter=/usr/bin/python
+ansible_host=localhost
+ansible_python_interpreter=/usr/bin/python
 
 [all:children]
-kube
+cluster
 
-[kube:vars]
-cluster_netmask=255.255.0.0 cluster_broadcast=10.0.255.255
+[bootstrap:children]
+cluster
 
-[kube]
+[cluster:vars]
+cluster_node_ip=10.0.0.1
+cluster_netmask=255.255.0.0
+cluster_broadcast=10.0.255.255
+
+[cluster]
 master
 node
-
-[master:vars]
-cluster_node_ip=10.0.0.1
-
-[node:vars]
-cluster_node_ip=10.0.0.10

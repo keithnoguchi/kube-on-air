@@ -10,9 +10,9 @@ import libvirt
 def main():
     inventory = {'all': {'hosts': [],
                          'vars': {'ansible_user': os.environ['USER']}},
-                 'kube': {'hosts': [],
-                          'vars': {'cluster_netmask': '255.255.0.0',
-                                   'cluster_broadcast': '10.0.255.255'}}}
+                 'cluster': {'hosts': [],
+                             'vars': {'cluster_netmask': '255.255.0.0',
+                                      'cluster_broadcast': '10.0.255.255'}}}
     inventory['host'] = {'hosts': ['localhost'],
                          'vars': {'ansible_python_interpreter':
                                   '/usr/bin/python2'}}
@@ -24,7 +24,7 @@ def main():
         for host in inventory[type]['hosts']:
             num = int(filter(str.isdigit, host))
             inventory['all']['hosts'].append(host)
-            inventory['kube']['hosts'].append(host)
+            inventory['cluster']['hosts'].append(host)
             hostvars[host] = {'name': host,
                               'cluster_node_ip': '10.0.0.%d' % num}
 
