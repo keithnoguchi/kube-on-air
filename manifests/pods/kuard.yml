@@ -5,14 +5,14 @@ metadata:
   name: kuard
 spec:
   volumes:
-    - name: "kuard-data"
+    - name: kuard-data
       hostPath:
         path: "/var/lib/kuard"
   containers:
     - name: kuard
       image: gcr.io/kuar-demo/kuard-amd64:1
       volumeMounts:
-        - name: "kuard-data"
+        - name: kuard-data
           mountPath: "/data"
       ports:
         - name: onlya1and-only
