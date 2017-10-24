@@ -1,7 +1,8 @@
 ---
-- name: provision the cluster
+- name: provision the cluster networking
   hosts: localhost
   vars:
+    travis_ci: false
     networking: calico
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml

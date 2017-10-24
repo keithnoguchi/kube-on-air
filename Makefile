@@ -1,7 +1,7 @@
-.PHONY: cluster boot bootstrap provision
-all: provision
+.PHONY: cluster boot bootstrap network kuard
+all: kuard
 cluster boot: bootstrap
-bootstrap provision:
+bootstrap network:
 	@ansible-playbook $@.yml
 
 # Some kubectl alias targets
@@ -13,8 +13,13 @@ show-%:
 	kubectl describe $*
 
 # Some cleanup alias targets
+.PHONY: clean
+clean: clean-kuard
 clean-%:
 	kubectl delete -f manifests/pods/$*.yml
+dist-clean:
+	sudo $(RM) -rf .ansible
+	$(RM) *.bak *.retry .*.sw? **/.*.sw?
 
 # TravisCI targets
 .PHONY: ci-ansible
@@ -30,6 +35,3 @@ ci-ansible: clean
 		&& sudo pip install -r requirements.txt \
 		&& sudo python setup.py install 2>&1 > /dev/null
 
-clean:
-	sudo $(RM) -rf .ansible
-	$(RM) *.bak *.retry .*.sw? **/.*.sw?

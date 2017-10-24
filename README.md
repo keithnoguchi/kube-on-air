@@ -15,12 +15,6 @@ Bootstrap the kubernetes cluster!
 $ make cluster
 ```
 
-## Provision
-
-```sh
-$ make
-```
-
 ## Deploy pod
 
 ```sh

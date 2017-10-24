@@ -2,7 +2,6 @@
 - name: bootstrap k8s cluster
   hosts: cluster
   gather_facts: true
-  vars:
   tasks:
     - name: setup console access
       lineinfile:
@@ -86,3 +85,7 @@
 
 - name: bootstrap kube node
   import_playbook: node.yml
+
+- name: provision the cluster networking
+  import_playbook: network.yml
+  when: not travis_ci|bool
