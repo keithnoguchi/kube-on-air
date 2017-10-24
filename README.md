@@ -21,10 +21,16 @@ $ make boot
 $ make
 ```
 
-## Deploy
+## Deploy pod
 
 ```sh
 $ make kuard
+```
+
+## Cleanup pod
+
+```sh
+$ make clean-kuard
 ```
 
 ## Reference

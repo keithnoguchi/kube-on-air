@@ -4,14 +4,17 @@ boot: bootstrap
 bootstrap provision:
 	@ansible-playbook $@.yml
 
-# Some kubectl aliase
-.PHONY: kuard
+# Some kubectl alias targets
 kuard:
-	kubectl apply -f manifests/pods/kuard.yml
+	kubectl apply -f manifests/pods/$@.yml
 get-%:
 	kubectl get $*
 show-%:
 	kubectl describe $*
+
+# Some cleanup alias targets
+clean-%:
+	kubectl delete -f manifests/pods/$*.yml
 
 # TravisCI targets
 .PHONY: ci-ansible
