@@ -27,6 +27,12 @@ $ make kuard
 $ make clean-kuard
 ```
 
+## Teardown cluster
+
+```sh
+$ make teardown
+```
+
 ## Reference
 
 - [Kubernetes: Up and Running](http://shop.oreilly.com/product/0636920043874.do)
