@@ -1,6 +1,9 @@
 [all:vars]
 ansible_host=localhost ansible_python_interpreter=/usr/bin/python
 
-[all]
+[all:children]
+kube
+
+[kube]
 master
 node

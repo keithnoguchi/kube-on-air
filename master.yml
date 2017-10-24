@@ -13,7 +13,6 @@
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true
       items:
-        - init-system-helpers
         - golang-1.6
       become: true
 

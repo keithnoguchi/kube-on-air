@@ -1,7 +1,72 @@
 ---
+- name: bootstrap k8s master and node
+  hosts: kube
+  gather_facts: true
+  vars:
+  tasks:
+    - name: make console access through ttyS0
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0,38400n8"'
+        owner: root
+        group: root
+        mode: 0644
+      register: console
+      become: true
+
+    - name: update the /boot/grub/grub.cfg to reflect the previous task
+      command: grub-mkconfig -o /boot/grub/grub.cfg
+      become: true
+      when: console.changed
+
+    - name: update /etc/network/interfaces
+      copy:
+        src: files/etc/network/interfaces
+        dest: /etc/network/interfaces
+        mode: 0644
+        owner: root
+        group: root
+      become: true
+
+    - name: install docker for ubuntu16.04 or above
+      apt: name={{ item }} state=present update_cache=false
+      items:
+        - docker.io
+      become: true
+      when: ansible_distribution_version == "16.04"
+
+    - name: add user to the developer groups
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        append: true
+        groups: docker
+      become: true
+
+    - name: install gce encription key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+      become: true
+
+    - name: add gce kubernetes repository
+      apt_repository:
+        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+        filename: kubernetes.list
+      become: true
+
+    - name: install kubernetes packages
+      apt: name={{ item }} state=latest update_cache=false
+      items:
+        - kubelet
+        - kubeadm
+        - kubernetes-cni
+      become: true
+      when: ansible_distribution_version == "16.04"
+
 - name: bootstrap master
   import_playbook: master.yml
 
-- name: bootstrap nodes
+- name: bootstrap node
   import_playbook: node.yml
-

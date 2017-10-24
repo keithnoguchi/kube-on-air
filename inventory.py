@@ -9,7 +9,8 @@ import libvirt
 
 def main():
     inventory = {'all': {'hosts': [],
-                         'vars': {'ansible_user': os.environ['USER']}}}
+                         'vars': {'ansible_user': os.environ['USER']}},
+                 'kube': {'hosts': []}}
     inventory['host'] = {'hosts': ['localhost'],
                          'vars': {'ansible_python_interpreter':
                                   '/usr/bin/python2'}}
@@ -20,6 +21,7 @@ def main():
     for type in ['master', 'node']:
         for host in inventory[type]['hosts']:
             inventory['all']['hosts'].append(host)
+            inventory['kube']['hosts'].append(host)
             hostvars[host] = {'name': host}
 
     # noqa https://github.com/ansible/ansible/commit/bcaa983c2f3ab684dca6c2c2c8d1997742260761
