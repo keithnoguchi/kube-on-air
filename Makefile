@@ -1,6 +1,6 @@
-.PHONY: cluster bootstrap provision
+.PHONY: cluster boot bootstrap provision
 all: provision
-cluster: bootstrap
+cluster boot: bootstrap
 bootstrap provision:
 	@ansible-playbook $@.yml
 

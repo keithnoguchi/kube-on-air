@@ -1,10 +1,10 @@
 ---
-- name: bootstrap k8s master and node
+- name: bootstrap k8s cluster
   hosts: cluster
   gather_facts: true
   vars:
   tasks:
-    - name: make console access through ttyS0
+    - name: setup console access
       lineinfile:
         path: /etc/default/grub
         regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
@@ -15,7 +15,7 @@
       register: console
       become: true
 
-    - name: update the /boot/grub/grub.cfg to reflect the previous task
+    - name: update /boot/grub/grub.cfg to reflect the console change
       command: grub-mkconfig -o /boot/grub/grub.cfg
       become: true
       when: console.changed
@@ -29,7 +29,7 @@
         group: root
       become: true
 
-    - name: setup bond0 IP address
+    - name: assign bond0 IP address
       template:
         src: templates/etc/network/interfaces.d/bond0.j2
         dest: /etc/network/interfaces.d/bond0
@@ -52,7 +52,7 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
-    - name: add user to the developer groups
+    - name: add user to the docker group
       user:
         name: "{{ lookup('env', 'USER') }}"
         append: true
@@ -81,8 +81,8 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
-- name: bootstrap master
+- name: bootstrap kube master
   import_playbook: master.yml
 
-- name: bootstrap node
+- name: bootstrap kube node
   import_playbook: node.yml
