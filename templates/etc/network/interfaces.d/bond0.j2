@@ -1,0 +1,4 @@
+iface bond0 inet static
+	address {{ cluster_node_ip }}
+	netmask {{ cluster_netmask }}
+	broadcast {{ cluster_broadcast }}

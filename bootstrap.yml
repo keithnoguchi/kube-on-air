@@ -29,6 +29,22 @@
         group: root
       become: true
 
+    - name: setup bond0 IP address
+      template:
+        src: templates/etc/network/interfaces.d/bond0.j2
+        dest: /etc/network/interfaces.d/bond0
+        mode: 0644
+        owner: root
+        group: root
+      become: true
+      register: bond0
+
+    - name: bring up bond0 interface
+      command: ifup -a
+      become: true
+      changed_when: false
+      when: bond0.changed
+
     - name: install docker for ubuntu16.04 or above
       apt: name={{ item }} state=present update_cache=false
       items:
