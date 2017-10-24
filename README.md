@@ -21,4 +21,15 @@ $ make boot
 $ make
 ```
 
+## Deploy
+
+```sh
+$ make kuard
+```
+
+## Reference
+
+- [Kubernetes: Up and Running](http://shop.oreilly.com/product/0636920043874.do)
+  by HB&B
+
 Happy Hacking!
