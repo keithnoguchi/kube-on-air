@@ -32,6 +32,7 @@
         owner: root
         group: root
       become: true
+      when: not travis_ci|bool
 
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true

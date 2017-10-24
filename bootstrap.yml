@@ -1,0 +1,7 @@
+---
+- name: bootstrap master
+  import_playbook: master.yml
+
+- name: bootstrap nodes
+  import_playbook: node.yml
+
