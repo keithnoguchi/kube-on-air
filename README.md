@@ -12,7 +12,7 @@ Creating [kubernetes cluster] over libvirt/KVM on [Arch-on-Air]!
 Bootstrap the kubernetes cluster!
 
 ```sh
-$ make boot
+$ make cluster
 ```
 
 ## Provision
