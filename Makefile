@@ -4,6 +4,15 @@ boot: bootstrap
 bootstrap provision:
 	@ansible-playbook $@.yml
 
+# Some kubectl aliase
+.PHONY: kuard
+kuard:
+	kubectl apply -f manifests/pods/kuard.yml
+get-%:
+	kubectl get $*
+show-%:
+	kubectl describe $*
+
 # TravisCI targets
 .PHONY: ci-ansible
 ci-test-%: ci-ansible ci-ping-%
