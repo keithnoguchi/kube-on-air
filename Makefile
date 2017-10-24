@@ -12,12 +12,12 @@ get-%:
 show-%:
 	kubectl describe $*
 
-# Some cleanup alias targets
+# Some cleanup targets
 .PHONY: clean
 clean: clean-kuard
 clean-%:
 	kubectl delete -f manifests/pods/$*.yml
-dist-clean:
+dist-clean: clean
 	sudo $(RM) -rf .ansible
 	$(RM) *.bak *.retry .*.sw? **/.*.sw?
 
@@ -34,4 +34,3 @@ ci-ansible: clean
 	cd .ansible \
 		&& sudo pip install -r requirements.txt \
 		&& sudo python setup.py install 2>&1 > /dev/null
-
