@@ -3,10 +3,9 @@
   hosts: node
   gather_facts: true
   vars:
-    k8s:
-      token: ad5342.add6b659ba10fdc0
-      apiserver: 10.0.0.12:6443
-      cert_hash: sha256:3bd1b57e94eb2e43cd90d8c78b59589c4f9811d68434d0944053f54587169f2d
+    token: "{{ hostvars[master]['cluster_token'] }}"
+    server: "{{ hostvars[master]['cluster_apiserver'] }}"
+    cert: "{{ hostvars[master]['cluster_cert_hash'] }}"
     travis_ci: false
   tasks:
     - name: check if the node is already joining the cluster
@@ -14,9 +13,7 @@
         path: /etc/kubernetes/kubelet.conf
       register: kubelet
 
-    - name: join the k8s cluster!
-      command: |
-        kubeadm join --token "{{ k8s.token }}" "{{ k8s.apiserver }}"
-        --discovery-token-ca-cert-hash "{{ k8s.cert_hash }}"
+    - name: join to the cluster!
+      command: "kubeadm join --token {{ token }} {{ server }} --discovery-token-ca-cert-hash {{ cert }}"
       become: true
       when: kubelet.stat.exists == false and ansible_distribution_version == "16.04"

@@ -5,6 +5,7 @@ cluster boot: bootstrap
 	@ansible-playbook $*.yml
 
 # Some kubectl alias targets
+.PHONY: kuard
 kuard:
 	kubectl apply -f manifests/pods/$@.yml
 get-%:

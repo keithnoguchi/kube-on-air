@@ -26,6 +26,8 @@ def main():
             inventory['all']['hosts'].append(host)
             inventory['cluster']['hosts'].append(host)
             hostvars[host] = {'name': host,
+                              # Pick the first master as the master.
+                              'master': inventory['master']['hosts'][0],
                               'cluster_node_ip': '10.0.0.%d' % num}
 
     # noqa https://github.com/ansible/ansible/commit/bcaa983c2f3ab684dca6c2c2c8d1997742260761

@@ -15,8 +15,8 @@ Bootstrap the kubernetes cluster!
 $ make cluster
 ```
 
-Note that there are some hardcoded variables, cluster APIs etc, which will
-be templated soon.
+Currently, `make cluster` is not idempotent.  Please run `make teardown` before
+running `make cluster` again.
 
 ## Deploy
 

@@ -5,6 +5,7 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
+    latest: false
     k8s:
       podcidr: 10.244.0.0/16
   gather_facts: true
@@ -25,6 +26,7 @@
 
     - name: install the latest golang
       import_tasks: tasks/golang.yml
+      when: latest|bool
 
     - name: get the latest etcd
       command: go get -u {{ item }}
@@ -35,6 +37,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+      when: latest|bool
 
     - name: install encription key
       apt_key:
@@ -64,7 +67,7 @@
       register: kubelet
       changed_when: false
 
-    - name: initialize the k8s cluster!
+    - name: initialize the cluster!
       command: |
         kubeadm init --pod-network-cidr "{{ k8s.podcidr }}"
           --apiserver-advertise-address "{{ cluster_node_ip }}"
@@ -74,9 +77,10 @@
 
     - name: get API token, API server, and certificate hash
       set_fact:
-        cluster_token: "{{ kubeadm.stdout|regex_search(regexp, '\\1')}}"
-        cluster_apiserver: "{{ kubeadm.stdout|regex_search(regexp, '\\2')}}"
-        cluster_cert_hash: "{{ kubeadm.stdout|regex_search(regexp, '\\4')}}"
+        cluster_token: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
+        cluster_apiserver: "{{kubeadm.stdout|regex_search(regexp, '\\2')|list|first}}"
+        cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\4')|list|first}}"
       vars:
-        regexp: 'kubeadm join --token ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)'
+        regexp: 'kubeadm join --token (\S+) (\S+) (\S+) (\S+)'
+      when: kubeadm.changed == true and ansible_distribution_version == "16.04"
       changed_when: false
