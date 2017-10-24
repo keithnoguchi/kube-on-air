@@ -15,19 +15,28 @@ Bootstrap the kubernetes cluster!
 $ make cluster
 ```
 
-## Deploy pod
+Note that there are some hardcoded variables, cluster APIs etc, which will
+be templated soon.
+
+## Deploy
+
+Deply the pods.
 
 ```sh
 $ make kuard
 ```
 
-## Cleanup pod
+## Cleanup
+
+Cleanup the pods.
 
 ```sh
 $ make clean-kuard
 ```
 
-## Teardown cluster
+## Teardown
+
+Teardown the cluster!
 
 ```sh
 $ make teardown
