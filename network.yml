@@ -1,6 +1,7 @@
 ---
 - name: provision the cluster networking
   hosts: localhost
+  connection: local
   vars:
     travis_ci: false
     networking: calico

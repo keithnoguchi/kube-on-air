@@ -80,12 +80,12 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
-- name: bootstrap kube master
+- name: bootstrap kubernetes master
   import_playbook: master.yml
 
-- name: bootstrap kube node
+- name: bootstrap kubernetes node
   import_playbook: node.yml
 
-- name: provision the cluster networking
+- name: bootstrap kubernetes network
   import_playbook: network.yml
   when: not travis_ci|bool

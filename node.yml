@@ -3,17 +3,21 @@
   hosts: node
   gather_facts: true
   vars:
-    token: "{{ hostvars[master]['cluster_token'] }}"
-    server: "{{ hostvars[master]['cluster_apiserver'] }}"
-    cert: "{{ hostvars[master]['cluster_cert_hash'] }}"
+    cluster_token: "{{ hostvars[master]['cluster_token'] }}"
+    cluster_apiserver: "{{ hostvars[master]['cluster_apiserver'] }}"
+    cluster_cert_hash: "{{ hostvars[master]['cluster_cert_hash'] }}"
     travis_ci: false
   tasks:
-    - name: check if the node is already joining the cluster
+    - name: check if I'm already in the cluster
       stat:
         path: /etc/kubernetes/kubelet.conf
       register: kubelet
+      become: true
+      changed_when: false
 
-    - name: join to the cluster!
-      command: "kubeadm join --token {{ token }} {{ server }} --discovery-token-ca-cert-hash {{ cert }}"
+    - name: join the cluster!
+      command: |
+        kubeadm join --token "{{ cluster_token }}" "{{ cluster_apiserver }}"
+          --discovery-token-ca-cert-hash "{{ cluster_cert_hash }}"
       become: true
       when: kubelet.stat.exists == false and ansible_distribution_version == "16.04"

@@ -5,9 +5,8 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
-    latest: false
-    k8s:
-      podcidr: 10.244.0.0/16
+    latest: true
+    cluster_podcidr: 10.244.0.0/16
   gather_facts: true
   tasks:
     - name: install apt packages
@@ -67,9 +66,9 @@
       register: kubelet
       changed_when: false
 
-    - name: initialize the cluster!
+    - name: initialize the cluster master!
       command: |
-        kubeadm init --pod-network-cidr "{{ k8s.podcidr }}"
+        kubeadm init --pod-network-cidr "{{ cluster_podcidr }}"
           --apiserver-advertise-address "{{ cluster_node_ip }}"
       become: true
       register: kubeadm
@@ -82,5 +81,14 @@
         cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\4')|list|first}}"
       vars:
         regexp: 'kubeadm join --token (\S+) (\S+) (\S+) (\S+)'
-      when: kubeadm.changed == true and ansible_distribution_version == "16.04"
+      when: kubeadm.changed == true
+      changed_when: false
+
+    - name: fetch the admin.conf for kubectl to work
+      fetch:
+        src: /etc/kubernetes/admin.conf
+        dest: "{{ lookup('env', 'HOME') }}/.kube/config"
+        flat: true
+      become: yes
+      when: kubeadm.changed == true
       changed_when: false
