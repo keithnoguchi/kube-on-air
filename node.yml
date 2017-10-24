@@ -4,9 +4,10 @@
   gather_facts: true
   vars:
     k8s:
-      token: 1ffe15.c6158f9a2ab7385a
+      token: ad5342.add6b659ba10fdc0
       apiserver: 10.0.0.12:6443
-      cert_hash: sha256:16cb5d8133b68bcf832d030b2e9c4b33b2b74aef8fc0b210ef104145e3b415cb
+      cert_hash: sha256:3bd1b57e94eb2e43cd90d8c78b59589c4f9811d68434d0944053f54587169f2d
+    travis_ci: false
   tasks:
     - name: make console access through ttyS0
       lineinfile:
@@ -32,7 +33,6 @@
         owner: root
         group: root
       become: true
-      when: not travis_ci|bool
 
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true
