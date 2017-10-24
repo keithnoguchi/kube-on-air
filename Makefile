@@ -29,7 +29,7 @@ ci-test-%: ci-ansible ci-ping-%
 		-e gitsite=https://github.com/
 ci-ping-%:
 	ansible -vvv -m ping -i inventories/test/inventory.ini -c local $*
-ci-ansible: clean
+ci-ansible:
 	git clone https://github.com/ansible/ansible .ansible
 	cd .ansible \
 		&& sudo pip install -r requirements.txt \
