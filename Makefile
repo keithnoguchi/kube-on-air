@@ -1,8 +1,8 @@
-.PHONY: cluster boot bootstrap network teardown kuard
+.PHONY: cluster boot
 all: kuard
 cluster boot: bootstrap
-bootstrap network teardown:
-	@ansible-playbook $@.yml
+%:
+	@ansible-playbook $*.yml
 
 # Some kubectl alias targets
 kuard:

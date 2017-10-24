@@ -6,7 +6,6 @@
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
     k8s:
-      apiserver: 10.0.0.12
       podcidr: 10.244.0.0/16
   gather_facts: true
   tasks:
@@ -62,11 +61,22 @@
     - name: check if the master is already initialized
       stat:
         path: /etc/kubernetes/kubelet.conf
-      register: kubelet_conf
+      register: kubelet
+      changed_when: false
 
     - name: initialize the k8s cluster!
       command: |
         kubeadm init --pod-network-cidr "{{ k8s.podcidr }}"
-          --apiserver-advertise-address "{{ k8s.apiserver }}"
+          --apiserver-advertise-address "{{ cluster_node_ip }}"
       become: true
-      when: kubelet_conf.stat.exists == false and ansible_distribution_version == "16.04"
+      register: kubeadm
+      when: kubelet.stat.exists == false and ansible_distribution_version == "16.04"
+
+    - name: get API token, API server, and certificate hash
+      set_fact:
+        cluster_token: "{{ kubeadm.stdout|regex_search(regexp, '\\1')}}"
+        cluster_apiserver: "{{ kubeadm.stdout|regex_search(regexp, '\\2')}}"
+        cluster_cert_hash: "{{ kubeadm.stdout|regex_search(regexp, '\\4')}}"
+      vars:
+        regexp: 'kubeadm join --token ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)'
+      changed_when: false

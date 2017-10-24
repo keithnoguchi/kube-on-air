@@ -12,11 +12,11 @@
     - name: check if the node is already joining the cluster
       stat:
         path: /etc/kubernetes/kubelet.conf
-      register: kubelet_conf
+      register: kubelet
 
     - name: join the k8s cluster!
       command: |
         kubeadm join --token "{{ k8s.token }}" "{{ k8s.apiserver }}"
         --discovery-token-ca-cert-hash "{{ k8s.cert_hash }}"
       become: true
-      when: kubelet_conf.stat.exists == false and ansible_distribution_version == "16.04"
+      when: kubelet.stat.exists == false and ansible_distribution_version == "16.04"
