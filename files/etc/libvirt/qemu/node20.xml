@@ -7,7 +7,7 @@ or other application using the libvirt API.
 
 <domain type='kvm'>
   <name>node20</name>
-  <uuid>76ccec6f-f28a-473d-a6ce-6f65734fa082</uuid>
+  <uuid>311fb189-9530-4283-b743-ad56d844a832</uuid>
   <memory unit='KiB'>512576</memory>
   <currentMemory unit='KiB'>512576</currentMemory>
   <vcpu placement='static'>1</vcpu>
@@ -41,15 +41,25 @@ or other application using the libvirt API.
       <driver name='qemu' type='raw' cache='none' io='native'/>
       <source dev='/dev/vg1/node20'/>
       <target dev='vda' bus='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
     </disk>
     <controller type='pci' index='0' model='pci-root'/>
     <controller type='usb' index='0' model='piix3-uhci'>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x01' function='0x2'/>
     </controller>
     <interface type='network'>
-      <mac address='00:00:16:04:20:05'/>
+      <mac address='00:00:16:04:20:03'/>
       <source network='default'/>
+      <target dev='node20-ens3'/>
+      <model type='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </interface>
+    <interface type='bridge'>
+      <mac address='00:00:16:04:20:05'/>
+      <source bridge='br0'/>
+      <virtualport type='openvswitch'>
+        <parameters interfaceid='df836a73-0d74-4ef6-b551-f6ac7b36ff6b'/>
+      </virtualport>
       <target dev='node20-ens5'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
@@ -58,21 +68,11 @@ or other application using the libvirt API.
       <mac address='00:00:16:04:20:06'/>
       <source bridge='br0'/>
       <virtualport type='openvswitch'>
-        <parameters interfaceid='9951b318-2a66-477e-a8a3-8152877082c6'/>
+        <parameters interfaceid='071d6fde-55f5-45ab-8876-3ed29f76b848'/>
       </virtualport>
       <target dev='node20-ens6'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
-    </interface>
-    <interface type='bridge'>
-      <mac address='00:00:16:04:20:07'/>
-      <source bridge='br0'/>
-      <virtualport type='openvswitch'>
-        <parameters interfaceid='feae0445-8b45-4b70-a9f6-a253a1bc1ec8'/>
-      </virtualport>
-      <target dev='node20-ens7'/>
-      <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </interface>
     <serial type='pty'>
       <target port='0'/>
@@ -90,7 +90,7 @@ or other application using the libvirt API.
       <address type='pci' domain='0x0000' bus='0x00' slot='0x02' function='0x0'/>
     </video>
     <memballoon model='virtio'>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x08' function='0x0'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
     </memballoon>
   </devices>
 </domain>
