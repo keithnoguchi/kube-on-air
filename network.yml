@@ -4,10 +4,11 @@
   connection: local
   vars:
     travis_ci: false
-    networking: calico
+    networking: weave
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
       calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
+      weave: https://git.io/weave-kube-1.6
   gather_facts: false
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
