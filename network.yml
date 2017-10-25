@@ -4,7 +4,7 @@
   connection: local
   vars:
     travis_ci: false
-    networking: weave
+    networking: calico
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
       calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
