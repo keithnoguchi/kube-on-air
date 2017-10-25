@@ -53,7 +53,7 @@ def master():
     if c != None:
         for i in c.listDomainsID():
             dom = c.lookupByID(i)
-            if dom.name().startswith('node') == False:
+            if dom.name().startswith('kube') == True:
                 master['hosts'].append(dom.name())
 
     return master
