@@ -208,9 +208,11 @@ air$ make teardown
 
 ### Kubernetes manifests
 
-- [Celery-RabbitMQ] kubernetes example
+- [Celery RabbitMQ] kubernetes example
+- [RabbitMQ StatefulSets] example
 
-[celery-rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/README.md
+[celery rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/README.md
+[rabbitmq statefulsets]: https://wesmorgan.svbtle.com/rabbitmq-cluster-on-kubernetes-with-statefulsets
 
 ### Ansible playbooks
 
