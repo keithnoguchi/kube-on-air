@@ -34,7 +34,7 @@ on your host machine.
 ```
 
 I've setup a flat linux bridge based
-[network](files/etc/libvirt/qemu/network/default.yml) for the management
+[network](files/etc/libvirt/qemu/network/default.xml) for the management
 network, not the cluster network, just to keep the node reachability
 up even if I screw up the cluster network.  And the output of the
 `virsh list` after booting up those KVM/libvirt guests:
