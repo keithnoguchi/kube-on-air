@@ -7,6 +7,13 @@ Creating [kubernetes cluster] over libvirt/KVM on [Arch-on-Air]!
 [Arch-on-Air]: https://github.com/keinohguchi/arch-on-air/
 [Kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
 
+- [Topology](#topology)
+- [Bootstrap](#bootstrap)
+- [Deploy](#deploy)
+- [Cleanup](#cleanup)
+- [Teardown](#teardown)
+- [Reference](#reference)
+
 ## Topology
 
 Here is the topology I created on my air as a KVM/libvirt guests.
