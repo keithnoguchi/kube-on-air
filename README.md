@@ -206,6 +206,12 @@ air$ make teardown
 [calico]: https://github.com/projectcalico/calico/blob/master/README.md
 [fluentd]: https://www.fluentd.org/
 
+### Kubernetes manifests
+
+- [Celery-RabbitMQ] kubernetes example
+
+[celery-rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/README.md
+
 ### Ansible playbooks
 
 Here is the list of [Ansible] playbooks used in this project:
@@ -221,11 +227,5 @@ Here is the list of [Ansible] playbooks used in this project:
 [node.yml]: node.yml
 [network.yml]: network.yml
 [teardown.yml]: teardown.yml
-
-### Kubernetes manifests
-
-- [Celery-RabbitMQ] kubernetes example
-
-[celery-rabbitmq]: https://github.com/kubernetes/kubernetes/blob/master/examples/celery-rabbitmq/README.md
 
 Happy Hacking!
