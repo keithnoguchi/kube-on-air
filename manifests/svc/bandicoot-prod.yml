@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: 2017-10-26T02:18:26Z
+  labels:
+    app: bandicoot
+    env: prod
+    ver: "2"
+  name: bandicoot-prod
+  namespace: default
+  resourceVersion: "1857"
+  selfLink: /api/v1/namespaces/default/services/bandicoot-prod
+  uid: f2f2479b-b9f3-11e7-b2a4-000016041003
+spec:
+  clusterIP: 10.103.115.148
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: bandicoot
+    env: prod
+    ver: "2"
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
