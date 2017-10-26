@@ -15,7 +15,12 @@
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
     PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
   tasks:
-    - name: delete the old networking manifest
+    - name: get the kubectl
+      command: go get -u {{ item }}
+      items:
+        - k8s.io/kubernetes/cmd/kubectl
+
+    - name: delete the old networking module
       command: "kubectl delete --force=true -f {{ item.manifest }}"
       when: item.name != networking
       failed_when: false
@@ -25,7 +30,7 @@
         - { name: weave,   manifest: "{{ manifest.weave }}" }
       changed_when: false
 
-    - name: apply the new networking manifest
+    - name: apply the new networking module
       command: "kubectl apply --force=true -f {{ item.manifest }}"
       when: item.name == networking
       items:
