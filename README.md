@@ -67,17 +67,17 @@ respectively as you guess :), based on the host prefix.
 
 ## Bootstrap
 
-Bootstrap the kubernetes cluster!
+Bootstrap the kubernetes cluster, as in [bootstrap.yml](bootstrap.yml)!
 
 ```sh
 $ make cluster
 ```
 
-Once it's done, you can get those three nodes through `kubectl`
-as below:
+Once it's done, you can get those guests are correctly configured
+as the kubernetes master and nodes, as in `kubectl get nodes`
 
 ```sh
-$ kubectl get node
+$ kubectl get nodes
 NAME      STATUS    ROLES     AGE       VERSION
 kube10    Ready     master    1h        v1.8.2
 node20    Ready     <none>    1h        v1.8.2

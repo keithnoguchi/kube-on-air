@@ -3,47 +3,34 @@
   hosts: localhost
   connection: local
   vars:
-    travis_ci: false
     networking: weave
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
       calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
       weave: https://git.io/weave-kube-1.6
+    travis_ci: false
   gather_facts: false
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
     PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
   tasks:
-    - name: setup k8s networking by flannel
-      command: "kubectl apply --force=true -f {{ manifest.flannel }}"
-      when: networking == "flannel"
-      changed_when: false
-
-    - name: teardown k8s networking by flannel
-      command: "kubectl delete --force=true -f {{ manifest.flannel }}"
-      when: networking != "flannel"
+    - name: delete the old networking module
+      command: "kubectl delete --force=true -f {{ item.manifest }}"
+      when: item.name != networking
       failed_when: false
+      items:
+        - { name: flannel, manifest: "{{ manifest.flannel }}" }
+        - { name: calico,  manifest: "{{ manifest.calico }}" }
+        - { name: weave,   manifest: "{{ manifest.weave }}" }
       changed_when: false
 
-    - name: setup k8s networking by calico
-      command: "kubectl apply --force=true -f {{ manifest.calico }}"
-      when: networking == "calico"
-      changed_when: false
-
-    - name: teardown k8s networking by calico
-      command: "kubectl delete --force=true -f {{ manifest.calico }}"
-      when: networking != "calico"
+    - name: apply the new networking module
+      command: "kubectl apply --force=true -f {{ item.manifest }}"
+      when: item.name == networking
       failed_when: false
-      changed_when: false
-
-    - name: setup k8s networking by weave
-      command: "kubectl apply --force=true -f {{ manifest.weave }}"
-      when: networking == "weave"
-      changed_when: false
-
-    - name: teardown k8s networking by weave
-      command: "kubectl delete --force=true -f {{ manifest.weave }}"
-      when: networking != "weave"
-      failed_when: false
+      items:
+        - { name: flannel, manifest: "{{ manifest.flannel }}" }
+        - { name: calico,  manifest: "{{ manifest.calico }}" }
+        - { name: weave,   manifest: "{{ manifest.weave }}" }
       changed_when: false
