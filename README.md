@@ -222,4 +222,10 @@ Here is the list of [Ansible] playbooks used in this project:
 [network.yml]: network.yml
 [teardown.yml]: teardown.yml
 
+### Kubernetes manifests
+
+- [Celery-RabbitMQ] kubernetes example
+
+[celery-rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/blob/master/README.md
+
 Happy Hacking!
