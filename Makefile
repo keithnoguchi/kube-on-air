@@ -12,6 +12,10 @@ get-%:
 	kubectl get $*
 show-%:
 	kubectl describe $*
+deploy-%:
+	kubectl apply -f manifests/deploy/$*.yml
+delete-%:
+	kubectl delete -f manifests/deploy/$*.yml
 
 # Some cleanup targets
 .PHONY: clean
