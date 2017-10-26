@@ -226,6 +226,6 @@ Here is the list of [Ansible] playbooks used in this project:
 
 - [Celery-RabbitMQ] kubernetes example
 
-[celery-rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/blob/master/README.md
+[celery-rabbitmq]: https://github.com/kubernetes/kubernetes/blob/master/examples/celery-rabbitmq/README.md
 
 Happy Hacking!
