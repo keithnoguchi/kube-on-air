@@ -51,7 +51,7 @@ And the output of the `virsh list` after booting up those KVM/libvirt
 guests:
 
 ```sh
-$ sudo virsh list
+air$ sudo virsh list
  Id    Name                           State
 ----------------------------------------------------
  3     kube10                         running
@@ -70,14 +70,14 @@ respectively as you guess :), based on the host prefix.
 Bootstrap the kubernetes cluster, as in [bootstrap.yml](bootstrap.yml):
 
 ```sh
-$ make cluster
+air$ make cluster
 ```
 
 Once it's done, you can see those guests correctly configured
 as the kubernetes master and nodes, with `kubectl get nodes`:
 
 ```sh
-$ kubectl get nodes
+air$ kubectl get node
 NAME      STATUS    ROLES     AGE       VERSION
 kube10    Ready     master    1h        v1.8.2
 node20    Ready     <none>    1h        v1.8.2
@@ -89,7 +89,7 @@ I'm using [weave](https://github.com/weaveworks/weave) as a
 module, as shown in `kubectl get pod -n kube-system` output:
 
 ```sh
-$ kubectl get pod -n kube-system
+air$ kubectl get pod -n kube-system
 NAME                             READY     STATUS    RESTARTS   AGE
 etcd-kube10                      1/1       Running   0          13m
 kube-apiserver-kube10            1/1       Running   0          13m
@@ -119,7 +119,19 @@ Deploy the
 pod:
 
 ```sh
-$ make kuard
+air$ make kuard
+```
+
+You can check the kuard pod state transition with `kubectl get pod --watch` command:
+
+```sh
+air$ kubectl get pod --watch
+NAME      READY     STATUS    RESTARTS   AGE
+kuard     0/1       Pending   0          6s
+kuard     0/1       Pending   0         6s
+kuard     0/1       ContainerCreating   0         6s
+kuard     0/1       Running   0         7s
+kuard     1/1       Running   0         38s
 ```
 
 ## Cleanup
@@ -129,7 +141,7 @@ Cleanup the
 pod:
 
 ```sh
-$ make clean-kuard
+air$ make clean-kuard
 ```
 
 ## Teardown
@@ -137,7 +149,7 @@ $ make clean-kuard
 Teardown the whole cluster, as in [teardown.yml](teardown.yml):
 
 ```sh
-$ make teardown
+air$ make teardown
 ```
 
 ## Reference
