@@ -92,7 +92,7 @@ is not correctly bootstrapped.
 
 ## Deploy
 
-Deploy the pods.
+Deploy the [kuad](https://github.com/kubernetes-up-and-running/kuard/releases) pod.
 
 ```sh
 $ make kuard
@@ -100,7 +100,7 @@ $ make kuard
 
 ## Cleanup
 
-Cleanup the pods.
+Cleanup the [kuad](https://github.com/kubernetes-up-and-running/kuard/releases) pod.
 
 ```sh
 $ make clean-kuard
@@ -118,5 +118,6 @@ $ make teardown
 
 - [Kubernetes: Up and Running](http://shop.oreilly.com/product/0636920043874.do)
   by HB&B
+- [kuard: Kubernetes Up and Running demo app](https://github.com/kubernetes-up-and-running/kuard)
 
 Happy Hacking!
