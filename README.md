@@ -4,11 +4,10 @@
 
 [Build Status]: https://travis-ci.org/keinohguchi/kube-on-air.svg
 
-Creating [kubernetes cluster] over [KVM/libvirt] on [Arch-on-Air]!
+Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 
-[Kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
 [KVM/libvirt]: https://libvirt.org/drvqemu.html
-[Arch-on-Air]: https://github.com/keinohguchi/arch-on-air/
+[Arch-on-Air]: https://github.com/keinohguchi/arch-on-air/blob/master/README.md
 
 - [Topology](#topology)
 - [Bootstrap](#bootstrap)
@@ -79,8 +78,6 @@ based on the host prefix.
 
 Bootstrap the kubernetes cluster, as in [bootstrap.yml]:
 
-[bootstrap.yml]: bootstrap.yml
-
 ```sh
 air$ make cluster
 ```
@@ -96,9 +93,8 @@ node20    Ready     <none>    1h        v1.8.2
 node21    Ready     <none>    1h        v1.8.2
 ```
 
-I'm using [weave](https://github.com/weaveworks/weave) as a
-[cluster networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-achieve-this)
-module, as shown in `kubectl get pod -n kube-system` output:
+I'm using [weave] as a [kubernetes cluster networking] module, as shown in
+`kubectl get pod -n kube-system` output:
 
 ```sh
 air$ kubectl get pod -n kube-system
@@ -117,8 +113,7 @@ weave-net-zgh8z                  2/2       Running   0          14m
 ```
 
 And, thanks to k8s super clean modulality approach, changing it to other
-module, e.g. [calico](https://github.com/projectcalico/calico), is really
-simple, as shown in my [network.yml](network.yml) playbook.
+module, e.g. [calico], is really simple, as shown in my [network.yml] playbook.
 
 By the way, please note that `make cluster` command is not idempotent yet,
 meaning it won't work if you run it multiple times.  Please run `make teardown`
@@ -126,9 +121,7 @@ before running `make cluster` if the cluster is not correctly bootstrapped.
 
 ## Deploy
 
-Deploy the
-[kuard](https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md)
-pod:
+Deploy the [kuard] pod:
 
 ```sh
 air$ make kuard
@@ -148,9 +141,7 @@ kuard     1/1       Running   0         38s
 
 ## Cleanup
 
-Cleanup the
-[kuard](https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md)
-pod:
+Cleanup the [kuard] pod:
 
 ```sh
 air$ make clean-kuard
@@ -158,7 +149,7 @@ air$ make clean-kuard
 
 ## Teardown
 
-Teardown the whole cluster, as in [teardown.yml](teardown.yml):
+Teardown the whole cluster, as in [teardown.yml]:
 
 ```sh
 air$ make teardown
@@ -166,9 +157,36 @@ air$ make teardown
 
 ## Reference
 
-- [Kubernetes: Up and Running](http://shop.oreilly.com/product/0636920043874.do)
-  by HB&B
-- [kuard: Kubernetes Up And Running Deamon](https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md)
-- [Kubernetes Cluster Networking Design](https://git.k8s.io/community/contributors/design-proposals/network/networking.md)
+- [Kubernetes: Up and Running] by HB&B
+- [kuard]: Kubernetes Up And Running Deamon
+- How to create [Kubernetes Cluster] from scratch
+- [Kubernetes Cluster Networking] Concepts
+- [Kubernetes Cluster Networking Design]
+- [Weave]: A virtual network that connects Docker containers across multiple hosts
+- [Calico]: An open source system enabling cloud native application connectivity and policy
+
+[kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
+[kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
+[kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
+[kubernetes cluster networking]: https://kubernetes.io/docs/concepts/cluster-administration/networking/
+[kubernetes cluster networking design]: https://git.k8s.io/community/contributors/design-proposals/network/networking.md
+[weave]: https://github.com/weaveworks/weave/blob/master/README.md
+[calico]: https://github.com/projectcalico/calico/blob/master/README.md
+
+### Ansible playbooks
+
+Here is the list of [Ansible] playbooks used in this project:
+
+- [bootstrap.yml]: Bootstrapping the kubernetes cluster
+  - [master.yml]: Bootstrap kubernetes master
+  - [node.yml]: Bootstrap kubernetes nodes
+  - [network.yml]: Bootstrap kubernetes networking
+- [teardown.yml]: Teardown the kubernetes cluster
+
+[bootstrap.yml]: bootstrap.yml
+[master.yml]: master.yml
+[node.yml]: node.yml
+[network.yml]: network.yml
+[teardown.yml]: teardown.yml
 
 Happy Hacking!
