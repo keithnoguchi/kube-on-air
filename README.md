@@ -144,6 +144,6 @@ $ make teardown
 
 - [Kubernetes: Up and Running](http://shop.oreilly.com/product/0636920043874.do)
   by HB&B
-- [kuard: Kubernetes Up And Running Deamon](https://github.com/kubernetes-up-and-running/kuard)
+- [kuard: Kubernetes Up And Running Deamon](https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md)
 
 Happy Hacking!
