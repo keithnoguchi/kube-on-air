@@ -158,7 +158,7 @@ air$ make teardown
 ## Reference
 
 - [Kubernetes: Up and Running] by HB&B
-- [kuard]: Kubernetes Up And Running Deamon
+- [kuard]: Kubernetes Up And Running Daemon
 - How to create [Kubernetes Cluster] from scratch
 - [Kubernetes Cluster Networking] Concepts
 - [Kubernetes Cluster Networking Design]
