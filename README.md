@@ -34,10 +34,14 @@ on your host machine.
 ```
 
 I've setup a flat linux bridge based
-[network](files/etc/libvirt/qemu/network/default.xml) for the management
+[network](files/etc/libvirt/qemu/network/default.xml) as the management
 network, not the cluster network, just to keep the node reachability
-up even if I screw up the cluster network.  And the output of the
-`virsh list` after booting up those KVM/libvirt guests:
+up even if I screw up the cluster network.  And I setup
+[/etc/hosts](files/etc/hosts) so that I can access those guests through
+names, instead of IP address, from the air.
+
+And the output of the `virsh list` after booting up those KVM/libvirt
+guests:
 
 ```sh
 $ sudo virsh list
