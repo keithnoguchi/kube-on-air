@@ -121,6 +121,8 @@ before running `make cluster` if the cluster is not correctly bootstrapped.
 
 ## Deploy
 
+### Pods
+
 Deploy the [kuard] pod:
 
 ```sh
@@ -139,7 +141,37 @@ kuard     0/1       Running   0         7s
 kuard     1/1       Running   0         38s
 ```
 
+### ReplicaSets
+
+TBD
+
+### DaemonSets
+
+You can deploy [fluentd] container on all the nodes through the `DaemonSet` manifest:
+
+```sh
+air$ kubectl apply -f manifests/ds/fluentd.yml
+```
+
+You can watch if the `fluentd` up and running in the `kube-system` namespace
+by adding `-n kube-system` command line option, as below:
+
+```sh
+air$ kubectl get pod -n kube-system -l app=fluentd -o wide --watch
+NAME            READY     STATUS    RESTARTS   AGE       IP        NODE
+fluentd-nvwk5   0/1       Pending   0          6s        <none>    node21
+fluentd-thqvw   0/1       Pending   0         6s        <none>    node20
+fluentd-nvwk5   0/1       ContainerCreating   0         6s        <none>    node21
+fluentd-thqvw   0/1       ContainerCreating   0         6s        <none>    node20
+fluentd-thqvw   1/1       Running   0         7s        10.40.0.2   node20
+fluentd-nvwk5   1/1       Running   0         7s        10.32.0.3   node21
+fluentd-thqvw   1/1       Running   0         8s        10.40.0.2   node20
+fluentd-nvwk5   1/1       Running   0         8s        10.32.0.3   node21
+```
+
 ## Cleanup
+
+### Pods
 
 Cleanup the [kuard] pod:
 
@@ -166,12 +198,13 @@ air$ make teardown
 - [Calico]: An open source system enabling cloud native application connectivity and policy
 
 [kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
-[kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
 [kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
 [kubernetes cluster networking]: https://kubernetes.io/docs/concepts/cluster-administration/networking/
 [kubernetes cluster networking design]: https://git.k8s.io/community/contributors/design-proposals/network/networking.md
+[kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
 [weave]: https://github.com/weaveworks/weave/blob/master/README.md
 [calico]: https://github.com/projectcalico/calico/blob/master/README.md
+[fluentd]: https://www.fluentd.org/
 
 ### Ansible playbooks
 
