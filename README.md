@@ -67,14 +67,14 @@ respectively as you guess :), based on the host prefix.
 
 ## Bootstrap
 
-Bootstrap the kubernetes cluster, as in [bootstrap.yml](bootstrap.yml)!
+Bootstrap the kubernetes cluster, as in [bootstrap.yml](bootstrap.yml):
 
 ```sh
 $ make cluster
 ```
 
-Once it's done, you can get those guests are correctly configured
-as the kubernetes master and nodes, as in `kubectl get nodes`
+Once it's done, you can see those guests correctly configured
+as the kubernetes master and nodes, with `kubectl get nodes`:
 
 ```sh
 $ kubectl get nodes
@@ -84,14 +84,15 @@ node20    Ready     <none>    1h        v1.8.2
 node21    Ready     <none>    1h        v1.8.2
 ```
 
-Note that currently, `make cluster` is not idempotent, meaning
-you can't run `make cluster` multiple times without the side effect.
+Note that `make cluster` is not idempotent at this point, meaning
+you can't run `make cluster` multiple times and get the same result.
 
-Please run `make teardown` before running `make cluster` again.
+Please run `make teardown` before running `make cluster` if the cluster
+is not correctly bootstrapped.
 
 ## Deploy
 
-Deply the pods.
+Deploy the pods.
 
 ```sh
 $ make kuard
