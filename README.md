@@ -84,11 +84,33 @@ node20    Ready     <none>    1h        v1.8.2
 node21    Ready     <none>    1h        v1.8.2
 ```
 
-Note that `make cluster` is not idempotent at this point, meaning
-you can't run `make cluster` multiple times and get the same result.
+I'm using [weave](https://github.com/weaveworks/weave) as a
+[cluster networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/#how-to-achieve-this)
+module, as shown in `kubectl get pod -n kube-system` output:
 
-Please run `make teardown` before running `make cluster` if the cluster
-is not correctly bootstrapped.
+```sh
+$ kubectl get pod -n kube-system
+NAME                             READY     STATUS    RESTARTS   AGE
+etcd-kube10                      1/1       Running   0          13m
+kube-apiserver-kube10            1/1       Running   0          13m
+kube-controller-manager-kube10   1/1       Running   0          13m
+kube-dns-545bc4bfd4-95dt7        3/3       Running   0          14m
+kube-proxy-b9227                 1/1       Running   0          14m
+kube-proxy-ndfrc                 1/1       Running   0          14m
+kube-proxy-wnm9n                 1/1       Running   0          14m
+kube-scheduler-kube10            1/1       Running   0          13m
+weave-net-fzznm                  2/2       Running   0          14m
+weave-net-xqqhc                  2/2       Running   0          14m
+weave-net-zgh8z                  2/2       Running   0          14m
+```
+
+And, thanks to k8s super clean modulality approach, changing it to other
+module, e.g. [calico](https://github.com/projectcalico/calico), is really
+simple, as shown in my [network.yml](network.yml) playbook.
+
+By the way, please note that `make cluster` command is not idempotent yet,
+meaning it won't work if you run it multiple times.  Please run `make teardown`
+before running `make cluster` if the cluster is not correctly bootstrapped.
 
 ## Deploy
 
