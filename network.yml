@@ -4,7 +4,7 @@
   connection: local
   vars:
     travis_ci: false
-    networking: calico
+    networking: weave
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
       calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
@@ -18,17 +18,32 @@
     - name: setup k8s networking by flannel
       command: "kubectl apply --force=true -f {{ manifest.flannel }}"
       when: networking == "flannel"
+      changed_when: false
 
     - name: teardown k8s networking by flannel
       command: "kubectl delete --force=true -f {{ manifest.flannel }}"
       when: networking != "flannel"
       failed_when: false
+      changed_when: false
 
     - name: setup k8s networking by calico
       command: "kubectl apply --force=true -f {{ manifest.calico }}"
       when: networking == "calico"
+      changed_when: false
 
     - name: teardown k8s networking by calico
       command: "kubectl delete --force=true -f {{ manifest.calico }}"
       when: networking != "calico"
       failed_when: false
+      changed_when: false
+
+    - name: setup k8s networking by weave
+      command: "kubectl apply --force=true -f {{ manifest.weave }}"
+      when: networking == "weave"
+      changed_when: false
+
+    - name: teardown k8s networking by weave
+      command: "kubectl delete --force=true -f {{ manifest.weave }}"
+      when: networking != "weave"
+      failed_when: false
+      changed_when: false
