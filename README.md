@@ -108,7 +108,7 @@ $ make clean-kuard
 
 ## Teardown
 
-Teardown the cluster!
+Teardown the cluster, as in [teardown.yml](teardown.yml):
 
 ```sh
 $ make teardown
