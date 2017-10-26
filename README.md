@@ -33,10 +33,14 @@ on your host machine.
 +------------------------------------------------------+
 ```
 
-and the output of the `virsh list`:
+I've setup a flat linux bridge based
+[network](files/etc/libvirt/qemu/network/default.yml) for the management
+network, not the cluster network, just to keep the node reachability
+up even if I screw up the cluster network.  And the output of the
+`virsh list` after booting up those KVM/libvirt guests:
 
 ```sh
-air0$ sudo virsh list
+$ sudo virsh list
  Id    Name                           State
 ----------------------------------------------------
  3     kube10                         running
@@ -44,7 +48,7 @@ air0$ sudo virsh list
  5     node21                         running
 ```
 
-I've written [Ansible](https://ansible.com) dynamic
+I've also written [Ansible](https://ansible.com) dynamic
 [inventory file](inventories/local/inventory.py), which
 will pick those KVM guests dynamically and place those
 in the appropriate inventory groups, `master` and `node`
@@ -58,8 +62,21 @@ Bootstrap the kubernetes cluster!
 $ make cluster
 ```
 
-Currently, `make cluster` is not idempotent.  Please run `make teardown` before
-running `make cluster` again.
+Once it's done, you can get those three nodes through `kubectl`
+as below:
+
+```sh
+$ kubectl get node
+NAME      STATUS    ROLES     AGE       VERSION
+kube10    Ready     master    1h        v1.8.2
+node20    Ready     <none>    1h        v1.8.2
+node21    Ready     <none>    1h        v1.8.2
+```
+
+Note that currently, `make cluster` is not idempotent, meaning
+you can't run `make cluster` multiple times without the side effect.
+
+Please run `make teardown` before running `make cluster` again.
 
 ## Deploy
 
