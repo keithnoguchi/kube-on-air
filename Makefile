@@ -19,12 +19,10 @@ delete-%:
 
 # Some cleanup targets
 .PHONY: clean
-clean: clean-kuard
-clean-%:
-	kubectl delete -f manifests/pods/$*.yml
+clean:
+	@$(RM) *.bak *.retry .*.sw? **/.*.sw?
 dist-clean: clean teardown
 	sudo $(RM) -rf .ansible
-	$(RM) *.bak *.retry .*.sw? **/.*.sw?
 
 # TravisCI targets
 .PHONY: ci-ansible
