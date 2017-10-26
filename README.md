@@ -33,6 +33,17 @@ on your host machine.
 +------------------------------------------------------+
 ```
 
+and the output of the `virsh list`:
+
+```sh
+air0$ sudo virsh list
+ Id    Name                           State
+----------------------------------------------------
+ 3     kube10                         running
+ 4     node20                         running
+ 5     node21                         running
+```
+
 I've written [Ansible](https://ansible.com) dynamic
 [inventory file](inventories/local/inventory.py), which
 will pick those KVM guests dynamically and place those
