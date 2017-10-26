@@ -18,9 +18,10 @@ def main():
                                   '/usr/bin/python2'}}
     inventory['master'] = master()
     inventory['node'] = node()
+    inventory['hv'] = hv()
 
     hostvars = {}
-    for type in ['master', 'node']:
+    for type in ['master', 'node', 'hv']:
         for host in inventory[type]['hosts']:
             num = int(filter(str.isdigit, host))
             inventory['all']['hosts'].append(host)
@@ -61,7 +62,7 @@ def master():
 
 def node():
     node = {'hosts': [],
-              'vars': {'ansible_python_interpreter': '/usr/bin/python'}}
+            'vars': {'ansible_python_interpreter': '/usr/bin/python'}}
 
     c = libvirt.openReadOnly("qemu:///system")
     if c != None:
@@ -71,6 +72,20 @@ def node():
                 node['hosts'].append(dom.name())
 
     return node
+
+
+def hv():
+    hv = {'hosts': [],
+          'vars': {'ansible_python_interpreter': '/usr/bin/python'}}
+
+    c = libvirt.openReadOnly("qemu:///system")
+    if c != None:
+        for i in c.listDomainsID():
+            dom = c.lookupByID(i)
+            if dom.name().startswith('hv'):
+                hv['hosts'].append(dom.name())
+
+    return hv
 
 
 if __name__ == "__main__":
