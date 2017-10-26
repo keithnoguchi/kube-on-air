@@ -8,13 +8,15 @@ metadata:
     ver: "1"
   name: alpaca-prod
   namespace: default
-  resourceVersion: "1726"
+  resourceVersion: "4849"
   selfLink: /api/v1/namespaces/default/services/alpaca-prod
   uid: c9d172a7-b9f3-11e7-b2a4-000016041003
 spec:
   clusterIP: 10.108.251.157
+  externalTrafficPolicy: Cluster
   ports:
-  - port: 8080
+  - nodePort: 31735
+    port: 8080
     protocol: TCP
     targetPort: 8080
   selector:
@@ -22,6 +24,6 @@ spec:
     env: prod
     ver: "1"
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
 status:
   loadBalancer: {}
