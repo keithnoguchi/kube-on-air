@@ -147,7 +147,7 @@ TBD
 
 ### DaemonSets
 
-You can deploy [fluentd] container on all the nodes through the `DaemonSet` manifest:
+You can deploy [fluentd] container on all the nodes through the `DaemonSet` manifest, as in [fluentd.yml]:
 
 ```sh
 air$ kubectl apply -f manifests/ds/fluentd.yml
@@ -211,6 +211,7 @@ air$ make teardown
 - [Celery RabbitMQ] kubernetes example
 - [RabbitMQ StatefulSets] example
 
+[fluentd.yml]: manifests/ds/fluentd.yml
 [celery rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/README.md
 [rabbitmq statefulsets]: https://wesmorgan.svbtle.com/rabbitmq-cluster-on-kubernetes-with-statefulsets
 
