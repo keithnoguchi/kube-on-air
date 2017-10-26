@@ -1,11 +1,14 @@
 # Kube-on-Air
 
-[![Build Status](https://travis-ci.org/keinohguchi/kube-on-air.svg)](https://travis-ci.org/keinohguchi/kube-on-air)
+[![Build Status]](https://travis-ci.org/keinohguchi/kube-on-air)
 
-Creating [kubernetes cluster] over libvirt/KVM on [Arch-on-Air]!
+[Build Status]: https://travis-ci.org/keinohguchi/kube-on-air.svg
 
-[Arch-on-Air]: https://github.com/keinohguchi/arch-on-air/
+Creating [kubernetes cluster] over [KVM/libvirt] on [Arch-on-Air]!
+
 [Kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
+[KVM/libvirt]: https://libvirt.org/drvqemu.html
+[Arch-on-Air]: https://github.com/keinohguchi/arch-on-air/
 
 - [Topology](#topology)
 - [Bootstrap](#bootstrap)
@@ -17,11 +20,13 @@ Creating [kubernetes cluster] over libvirt/KVM on [Arch-on-Air]!
 ## Topology
 
 Here is the topology I created on my air as a KVM/libvirt guests.
-[kube10](files/etc/libvirt/qemu/kube10.xml) is the kubernetes master,
-while both [node20](files/etc/libvirt/qemu/node20.xml) and
-[node21](files/etc/libvirt/qemu/node21.xml) are the nodes.
-You can add more nodes as you wish, as long as you have enough cores
-on your host machine.
+[kube10] is the kubernetes master, while both [node20] and [node21]
+are the nodes.  You can add more nodes as you wish, as long as you
+have enough cores on your host machine.
+
+[kube10]: files/etc/libvirt/qemu/kube10.xml
+[node20]: files/etc/libvirt/qemu/node20.xml
+[node21]: files/etc/libvirt/qemu/node21.xml
 
 ```
                      +----------+
@@ -40,12 +45,14 @@ on your host machine.
 +------------------------------------------------------+
 ```
 
-I've setup a flat linux bridge based
-[network](files/etc/libvirt/qemu/network/default.xml) as the management
+I've setup a flat linux bridge based [network] as the management
 network, not the cluster network, just to keep the node reachability
-up even if I screw up the cluster network.  And I setup
-[/etc/hosts](files/etc/hosts) so that I can access those guests through
-names, instead of IP address, from the air.
+up even if I screw up the cluster network.  And I setup [/etc/hosts]
+so that I can access those guests through names, instead of IP address,
+from the air.
+
+[network]: files/etc/libvirt/qemu/network/default.xml
+[/etc/hosts]: files/etc/hosts
 
 And the output of the `virsh list` after booting up those KVM/libvirt
 guests:
@@ -59,15 +66,20 @@ air$ sudo virsh list
  5     node21                         running
 ```
 
-I've also written [Ansible](https://ansible.com) dynamic
-[inventory file](inventories/local/inventory.py), which
-will pick those KVM guests dynamically and place those
-in the appropriate inventory groups, `master` and `node`
-respectively as you guess :), based on the host prefix.
+I've also written [Ansible] dynamic [inventory file],
+which will pick those KVM guests dynamically and
+place those in the appropriate inventory groups,
+`master` and `node` respectively as you guess :),
+based on the host prefix.
+
+[Ansible]: https://ansible.com
+[inventory file]: inventories/local/inventory.py
 
 ## Bootstrap
 
-Bootstrap the kubernetes cluster, as in [bootstrap.yml](bootstrap.yml):
+Bootstrap the kubernetes cluster, as in [bootstrap.yml]:
+
+[bootstrap.yml]: bootstrap.yml
 
 ```sh
 air$ make cluster
