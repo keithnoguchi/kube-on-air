@@ -6,6 +6,9 @@
 127.0.0.1	localhost.local	localhost
 ::1		localhost.local	localhost
 
+# air.local for the local docker registry
+10.0.0.1	air.local	air
+
 192.168.122.110	kube10.local	kube10
 192.168.122.111	kube11.local	kube11
 192.168.122.112	hv12.local	hv12

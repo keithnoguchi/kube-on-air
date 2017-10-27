@@ -19,6 +19,15 @@
       become: true
       when: console.changed
 
+    - name: update /etc/hosts for air.local reachability
+      copy:
+        src: files/etc/hosts
+        dest: /etc/hosts
+        mode: 0644
+        owner: root
+        group: root
+      become: true
+
     - name: update /etc/network/interfaces
       copy:
         src: files/etc/network/interfaces
@@ -57,6 +66,14 @@
         append: true
         groups: docker
       become: true
+
+    - name: allow the insecure air.local local docker registry access
+      lineinfile:
+        path: /etc/systemd/system/multi-user.target.wants/docker.service
+        regexp: "^ExecStart"
+        line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
+      become: true
+      when: ansible_distribution_version == "16.04"
 
     - name: install gce encription key
       apt_key:
