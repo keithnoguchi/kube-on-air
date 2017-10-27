@@ -75,6 +75,14 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
+    - name: restart docker daemon to reflect the previous change
+      systemd:
+        name: docker
+        state: restarted
+        daemon_reload: true
+      become: true
+      when: ansible_distribution_version == "16.04"
+
     - name: install gce encription key
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
