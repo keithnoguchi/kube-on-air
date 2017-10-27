@@ -224,11 +224,13 @@ Here is the list of [Ansible] playbooks used in this project:
   - [node.yml]: Bootstrap kubernetes nodes
   - [network.yml]: Bootstrap kubernetes networking
 - [teardown.yml]: Teardown the kubernetes cluster
+- [registry.yml]: Run the local docker registry
 
 [bootstrap.yml]: bootstrap.yml
 [master.yml]: master.yml
 [node.yml]: node.yml
 [network.yml]: network.yml
 [teardown.yml]: teardown.yml
+[registry.yml]: registry.yml
 
 Happy Hacking!

@@ -1,0 +1,30 @@
+---
+- name: local docker registry
+  hosts: localhost
+  connection: local
+  vars:
+    travis_ci: false
+  gather_facts: false
+  tasks:
+    - name: install tools for the docker registry
+      pacman: name={{ item }} state=present update_cache=false
+      items:
+        - docker
+      become: true
+
+    - name: add user to the docker group
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        append: true
+        groups: docker
+      become: true
+
+    - name: run the local docker registry
+      docker_container:
+        name: registry
+        image: registry:2
+        state: started
+        restart: yes
+        restart_policy: always
+        ports:
+          - "5000:5000"
