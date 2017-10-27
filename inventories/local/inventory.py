@@ -67,7 +67,7 @@ def node():
     if c != None:
         for i in c.listDomainsID():
             dom = c.lookupByID(i)
-            if dom.name().startswith('node'):
+            if dom.name().startswith('node') or dom.name().startswith('hv'):
                 node['hosts'].append(dom.name())
 
     return node
