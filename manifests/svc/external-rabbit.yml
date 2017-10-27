@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: external-rabbit
+  name: rabbit
 spec:
   ports:
     - port: 5672
@@ -12,7 +12,7 @@ spec:
 apiVersion: v1
 kind: Endpoints
 metadata:
-  name: external-rabbit
+  name: rabbit
 subsets:
   - addresses:
       - ip: 10.0.0.13
