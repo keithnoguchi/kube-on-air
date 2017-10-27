@@ -141,10 +141,6 @@ kuard     0/1       Running   0         7s
 kuard     1/1       Running   0         38s
 ```
 
-### ReplicaSets
-
-TBD
-
 ### DaemonSets
 
 You can deploy [fluentd] container on all the nodes through the `DaemonSet` manifest, as in [fluentd.yml]:
