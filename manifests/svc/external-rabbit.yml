@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-rabbit
+spec:
+  ports:
+    - port: 5672
+      targetPort: 5672
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: external-rabbit
+subsets:
+  - addresses:
+      - ip: 10.0.0.13
+    ports:
+      - port: 5672
