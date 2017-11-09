@@ -6,8 +6,11 @@
 
 Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 
+[![asciicast]](https://asciinema.org/a/146661)
+
 [KVM/libvirt]: https://libvirt.org/drvqemu.html
 [Arch-on-Air]: https://github.com/keinohguchi/arch-on-air/blob/master/README.md
+[asciicast]: https://asciinema.org/a/146661.png
 
 - [Topology](#topology)
 - [Bootstrap](#bootstrap)
