@@ -22,7 +22,7 @@ def main():
     hostvars = {}
     for type in ['master', 'node']:
         for host in inventory[type]['hosts']:
-            num = int(filter(str.isdigit, host))
+            num = int(''.join(filter(str.isdigit, host)))
             inventory['all']['hosts'].append(host)
             inventory['cluster']['hosts'].append(host)
             hostvars[host] = {'name': host,
