@@ -84,7 +84,7 @@
         restart_policy: always
         ports:
           - "5000:5000"
-      become: true
+      when: not travis_ci|bool
 
     - name: install the latest golang
       import_tasks: tasks/golang.yml
