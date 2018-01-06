@@ -79,7 +79,7 @@ based on the host prefix.
 
 ## Bootstrap
 
-Bootstrap the kubernetes cluster, as in [bootstrap.yml]:
+Bootstrap the kubernetes cluster, as in [cluster.yml]:
 
 ```sh
 air$ make cluster
@@ -218,14 +218,14 @@ air$ make teardown
 
 Here is the list of [Ansible] playbooks used in this project:
 
-- [bootstrap.yml]: Bootstrapping the kubernetes cluster
+- [cluster.yml]: Bootstrapping the kubernetes cluster
   - [master.yml]: Bootstrap kubernetes master
   - [node.yml]: Bootstrap kubernetes nodes
+  - [registry.yml]: Run the local docker registry
   - [network.yml]: Bootstrap kubernetes networking
 - [teardown.yml]: Teardown the kubernetes cluster
-- [registry.yml]: Run the local docker registry
 
-[bootstrap.yml]: bootstrap.yml
+[cluster.yml]: cluster.yml
 [master.yml]: master.yml
 [node.yml]: node.yml
 [network.yml]: network.yml

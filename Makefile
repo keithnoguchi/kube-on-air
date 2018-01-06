@@ -1,7 +1,7 @@
 all: kuard
 
-.PHONY: cluster boot
-cluster boot: bootstrap
+.PHONY: boot bootstrap
+boot bootstrap: cluster
 %:
 	@ansible-playbook $*.yml -e latest=true
 
