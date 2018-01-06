@@ -66,3 +66,13 @@
         - virtlogd
         - docker
       become: true
+
+    - name: run the local docker registry
+      docker_container:
+        name: registry
+        image: registry:2
+        state: started
+        restart: yes
+        restart_policy: always
+        ports:
+          - "5000:5000"

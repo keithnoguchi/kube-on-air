@@ -114,7 +114,3 @@
 - name: bootstrap kubernetes network
   import_playbook: network.yml
   when: not travis_ci|bool
-
-- name: bootstrap the local docker registry
-  import_playbook: registry.yml
-  when: not travis_ci|bool

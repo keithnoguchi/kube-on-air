@@ -218,18 +218,19 @@ air$ make teardown
 
 Here is the list of [Ansible] playbooks used in this project:
 
+- [host.yml]: Bootstrap the KVM/libvirt host
 - [cluster.yml]: Bootstrapping the kubernetes cluster
   - [master.yml]: Bootstrap kubernetes master
   - [node.yml]: Bootstrap kubernetes nodes
-  - [registry.yml]: Run the local docker registry
   - [network.yml]: Bootstrap kubernetes networking
 - [teardown.yml]: Teardown the kubernetes cluster
 
+[host.yml]: host.yml
+[guest.yml]: guest.yml
 [cluster.yml]: cluster.yml
 [master.yml]: master.yml
 [node.yml]: node.yml
 [network.yml]: network.yml
 [teardown.yml]: teardown.yml
-[registry.yml]: registry.yml
 
 Happy Hacking!
