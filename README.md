@@ -219,7 +219,7 @@ air$ make teardown
 Here is the list of [Ansible] playbooks used in this project:
 
 - [host.yml]: Bootstrap the KVM/libvirt host
-- [cluster.yml]: Bootstrapping the kubernetes cluster
+- [cluster.yml]: Bootstrap the kubernetes cluster
   - [master.yml]: Bootstrap kubernetes master
   - [node.yml]: Bootstrap kubernetes nodes
   - [network.yml]: Bootstrap kubernetes networking

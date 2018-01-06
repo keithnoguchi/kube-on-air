@@ -3,6 +3,10 @@
   hosts: cluster
   gather_facts: true
   tasks:
+    - name: update hostname to be sync with the inventory host name
+      hostname: name={{ inventory_hostname }}
+      become: true
+
     - name: setup console access
       lineinfile:
         path: /etc/default/grub

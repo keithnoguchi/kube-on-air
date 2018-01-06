@@ -3,12 +3,6 @@
   hosts: cluster
   gather_facts: false
   tasks:
-    - name: check if the node is already joined to the cluster
-      stat:
-        path: /etc/kubernetes/kubelet.conf
-      register: kubelet
-
     - name: reset the kubernetes configuration with kubeadm
       command: kubeadm reset
       become: true
-      when: kubelet.stat.exists == true

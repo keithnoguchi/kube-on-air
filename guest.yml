@@ -16,6 +16,22 @@
       hostname: name={{ inventory_hostname }}
       become: true
 
+    - name: make console access through ttyS0
+      lineinfile:
+        path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
+        line: 'GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0,38400n8"'
+        owner: root
+        group: root
+        mode: 0644
+      register: console
+      become: true
+
+    - name: update the /boot/grub/grub.cfg to reflect the change
+      command: grub-mkconfig -o /boot/grub/grub.cfg
+      become: true
+      when: console.changed
+
     - name: update /etc/hosts for air.local reachability
       copy:
         src: files/etc/hosts
@@ -49,22 +65,6 @@
       become: true
       changed_when: false
       when: br0.changed
-
-    - name: make console access through ttyS0
-      lineinfile:
-        path: /etc/default/grub
-        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
-        line: 'GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0,38400n8"'
-        owner: root
-        group: root
-        mode: 0644
-      register: console
-      become: true
-
-    - name: update the /boot/grub/grub.cfg to reflect the change
-      command: grub-mkconfig -o /boot/grub/grub.cfg
-      become: true
-      when: console.changed
 
     - name: install console apps
       apt: name={{ item }} state=present update_cache=true
@@ -130,6 +130,13 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
+    - name: add user to the docker group
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        append: true
+        groups: libvirtd,docker
+      become: true
+
     - name: allow the insecure air.local local docker registry access
       lineinfile:
         path: /etc/systemd/system/multi-user.target.wants/docker.service
@@ -158,13 +165,6 @@
         read_priv: ".*"
         write_priv: ".*"
       when: rabbit|bool and not travis_ci|bool
-
-    - name: add user to the developer groups
-      user:
-        name: "{{ lookup('env', 'USER') }}"
-        append: true
-        groups: libvirtd,docker
-      become: true
 
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
