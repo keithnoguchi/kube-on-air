@@ -1,7 +1,6 @@
 ---
 - name: provision the cluster networking
-  hosts: localhost
-  connection: local
+  hosts: host
   vars:
     networking: weave
     manifest:
@@ -10,16 +9,7 @@
       weave: https://git.io/weave-kube-1.6
     travis_ci: false
   gather_facts: false
-  environment:
-    GOROOT: "{{ lookup('env', 'GOROOT') }}"
-    GOPATH: "{{ lookup('env', 'GOPATH') }}"
-    PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
   tasks:
-    - name: get the kubectl
-      command: go get -u {{ item }}
-      with_items:
-        - k8s.io/kubernetes/cmd/kubectl
-
     - name: delete the old networking module
       command: "kubectl delete --force=true -f {{ item.manifest }}"
       when: item.name != networking

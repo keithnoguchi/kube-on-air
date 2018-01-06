@@ -2,5 +2,5 @@
 - name: provision the host
   import_playbook: host.yml
 
-- name: provision the guest
-  import_playbook: guest.yml
+- name: bootup the cluster!
+  import_playbook: cluster.yml

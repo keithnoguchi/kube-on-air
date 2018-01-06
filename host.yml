@@ -3,6 +3,13 @@
   hosts: host
   vars:
     travis_ci: false
+    gitsite: "git@github.com:"
+    gitpath: "{{ lookup('env', 'HOME') }}/git/"
+    gobootstrap: /usr/lib/go-1.6
+  environment:
+    GOROOT: "{{ lookup('env', 'GOROOT') }}"
+    GOPATH: "{{ lookup('env', 'GOPATH') }}"
+    PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
   gather_facts: true
   tasks:
     - name: install kvm/docker to create virtual environment
@@ -16,6 +23,7 @@
         - tigervnc
         - docker
         - python2-docker
+        - python2-requests
       become: true
 
     - name: copy files under /etc
@@ -76,3 +84,11 @@
         restart_policy: always
         ports:
           - "5000:5000"
+
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
+
+    - name: get the kubectl
+      command: go get -u {{ item }}
+      with_items:
+        - k8s.io/kubernetes/cmd/kubectl
