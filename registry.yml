@@ -10,6 +10,7 @@
       pacman: name={{ item }} state=present update_cache=false
       with_items:
         - docker
+        - python2-docker
       become: true
 
     - name: add user to the docker group
