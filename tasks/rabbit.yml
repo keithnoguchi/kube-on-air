@@ -1,0 +1,51 @@
+---
+- name: install RabbitMQ packages
+  apt: name={{ item }} state=present update_cache=false
+  with_items:
+    - rabbitmq-server
+  become: true
+
+- name: add user to the rabbitmq group
+  user: name={{ ansible_user }} append=true groups=rabbitmq shell=/bin/bash
+  become: true
+
+- name: setup AMQP environment variables
+  lineinfile:
+    path: "/home/{{ ansible_user }}/.profile"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - { regexp: "^export AMQP_SCHEME=",   line: "export AMQP_SCHEME={{ scheme }}" }
+    - { regexp: "^export AMQP_USERNAME=", line: "export AMQP_USERNAME={{ username }}" }
+    - { regexp: "^export AMQP_PASSWORD=", line: "export AMQP_PASSWORD={{ password }}" }
+    - { regexp: "^export AMQP_CLUSTER=",  line: "export AMQP_CLUSTER={{ cluster }}" }
+    - { regexp: "^export AMQP_VHOST=",    line: "export AMQP_VHOST={{ vhost }}" }
+  become: true
+
+- name: create RabbitMQ required directories
+  file: path={{ item }} state=directory owner=rabbitmq group=rabbitmq mode=0755
+  with_items:
+    - /var/log/rabbitmq
+    - /var/lib/rabbitmq/mnesia/rabbit
+  become: true
+
+- name: start required services
+  service: name={{ item }} state=started
+  with_items:
+    - rabbitmq-server
+
+- name: create RabbitMQ vhost
+  rabbitmq_vhost: name={{ vhost }} state=present
+  become: true
+
+- name: create RabbitMQ user on vhost with the permissions
+  rabbitmq_user:
+    user: "{{ username }}"
+    password: "{{ password }}"
+    state: present
+    permissions:
+      - vhost: "{{ vhost }}"
+        configure_priv: "{{ configure_priv }}"
+        read_priv: "{{ read_priv }}"
+        write_priv: "{{ write_priv }}"
+  become: true

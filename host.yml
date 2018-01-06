@@ -1,0 +1,68 @@
+---
+- name: host provisioning playbook
+  hosts: host
+  vars:
+    travis_ci: false
+  gather_facts: true
+  tasks:
+    - name: install kvm/docker to create virtual environment
+      pacman: name={{ item }} state=present force=true update_cache=false
+      with_items:
+        - qemu-headless
+        - libvirt
+        - libvirt-python
+        - virt-install
+        - virt-viewer
+        - tigervnc
+        - docker
+        - python2-docker
+      become: true
+
+    - name: copy files under /etc
+      copy:
+        src: "files/etc/{{ item }}"
+        dest: "/etc/{{ item }}"
+        mode: 0644
+        owner: root
+        group: root
+      with_items:
+        - hosts
+        - modprobe.d/modprobe.conf
+        - systemd/network/br0.network
+      become: true
+
+    - name: add user to the developer groups
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        append: true
+        groups: libvirt,docker
+      become: true
+      when: not travis_ci|bool
+
+    - name: setup qemu group
+      lineinfile:
+        path: /etc/libvirt/qemu.conf
+        regexp: 'group = '
+        line: 'group = "kvm"'
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+
+    - name: setup libvirt group
+      lineinfile:
+        path: /etc/libvirt/libvirtd.conf
+        regexp: 'unix_sock_group'
+        line: 'unix_sock_group = "libvirt"'
+        owner: root
+        group: root
+        mode: 0644
+      become: true
+
+    - name: enable basic systemd services
+      systemd: name={{ item }} enabled=true
+      with_items:
+        - libvirtd
+        - virtlogd
+        - docker
+      become: true

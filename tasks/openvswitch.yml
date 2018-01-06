@@ -1,0 +1,58 @@
+---
+- name: git clone the latest OvS from github.com
+  git:
+    repo: "{{ gitsite }}openvswitch/ovs"
+    dest: "{{ gitpath }}ovs"
+    update: yes
+    ssh_opts: "-o StrictHostKeyChecking=no"
+  register: git
+
+- name: bootstrap OvS build environment
+  command: ./boot.sh
+  args:
+    chdir: "{{ gitpath }}ovs"
+  when: git.before != git.after
+
+- name: setup configure options
+  set_fact:
+    with_linux: "--with-linux=/lib/modules/{{ ansible_kernel }}/build"
+  when: ansible_kernel is version_compare('4.13', '<=') and not travis_ci|bool
+
+- name: configure OvS
+  command: >
+    ./configure --prefix=/usr --localstatedir=/var --sysconfdir=/etc
+    "{{ with_linux|default('') }}"
+  args:
+    chdir: "{{ gitpath }}ovs"
+  when: git.before != git.after
+
+- name: build OvS!
+  make:
+    chdir: "{{ gitpath }}ovs"
+  when: git.before != git.after
+
+- name: install OvS executables
+  make:
+    chdir: "{{ gitpath }}ovs"
+    target: install
+  become: true
+  when: git.before != git.after
+
+- name: install OvS kernel modules
+  make:
+    chdir: "{{ gitpath }}ovs"
+    target: modules_install
+  become: true
+  when: git.before != git.after and not travis_ci|bool
+
+- name: install ovs-ctl script
+  copy:
+    remote_src: true
+    src: "/usr/share/openvswitch/scripts/{{ item }}"
+    dest: "/usr/bin/{{ item }}"
+    mode: 0755
+  with_items:
+    - ovs-ctl
+    - ovs-lib
+  become: true
+  when: git.before != git.after

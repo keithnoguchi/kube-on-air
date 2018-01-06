@@ -14,8 +14,8 @@ def main():
                              'vars': {'cluster_netmask': '255.255.0.0',
                                       'cluster_broadcast': '10.0.255.255'}}}
     inventory['host'] = {'hosts': ['localhost'],
-                         'vars': {'ansible_python_interpreter':
-                                  '/usr/bin/python2'}}
+                         'vars': {'ansible_connection': 'local'}}
+    inventory['guest'] = guest()
     inventory['master'] = master()
     inventory['node'] = node()
 
@@ -29,6 +29,14 @@ def main():
                               # Pick the first master as the master.
                               'master': inventory['master']['hosts'][0],
                               'cluster_node_ip': '10.0.0.%d' % num}
+
+    # We'll conbine this to the above once hv also joins to the cluster.
+    for type in ['guest']:
+        for host in inventory[type]['hosts']:
+            num = int(''.join(filter(str.isdigit, host)))
+            inventory['all']['hosts'].append(host)
+            hostvars[host] = {'name': host,
+                              'hv_node_ip': '10.0.0.%d' % num}
 
     # noqa https://github.com/ansible/ansible/commit/bcaa983c2f3ab684dca6c2c2c8d1997742260761
     inventory['_meta'] = {'hostvars': hostvars}
@@ -45,9 +53,22 @@ def main():
         print(json.dumps(hostvars.get(args.host, {})))
 
 
+def guest():
+    guest = {'hosts': [],
+             'vars': {'hv_node_netmask': '255.255.0.0',
+                      'hv_node_broadcast': '10.0.255.255'}}
+    c = libvirt.openReadOnly("qemu:///system")
+    if c != None:
+        for i in c.listDomainsID():
+            dom = c.lookupByID(i)
+            if dom.name().startswith('hv'):
+                guest['hosts'].append(dom.name())
+
+    return guest
+
+
 def master():
-    master = {'hosts': [],
-              'vars': {'ansible_python_interpreter': '/usr/bin/python'}}
+    master = {'hosts': []}
 
     c = libvirt.openReadOnly("qemu:///system")
     if c != None:
@@ -60,8 +81,7 @@ def master():
 
 
 def node():
-    node = {'hosts': [],
-            'vars': {'ansible_python_interpreter': '/usr/bin/python'}}
+    node = {'hosts': []}
 
     c = libvirt.openReadOnly("qemu:///system")
     if c != None:

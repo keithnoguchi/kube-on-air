@@ -1,8 +1,9 @@
-.PHONY: cluster boot
 all: kuard
+
+.PHONY: cluster boot
 cluster boot: bootstrap
 %:
-	@ansible-playbook $*.yml
+	@ansible-playbook $*.yml -e latest=true
 
 # https://github.com/kubernetes-up-and-running/kuard target
 .PHONY: kuard
