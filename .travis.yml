@@ -35,6 +35,7 @@ arch:
     # pacman packages
     - openssh
     - git
+    - go
     - python
     - python-setuptools
     - python-pip
