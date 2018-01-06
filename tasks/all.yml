@@ -11,8 +11,8 @@
 - name: install the latest golang
   import_tasks: tasks/golang.yml
 
-- name: install the OpenTracing
-  import_tasks: tasks/tracing.yml
+- name: install the latest golang packages
+  import_tasks: tasks/gopkg.yml
 
 - name: install the latest terraform
   import_tasks: tasks/terraform.yml
