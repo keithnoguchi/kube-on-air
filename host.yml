@@ -5,7 +5,7 @@
     travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
-    gobootstrap: /usr/lib/go-1.6
+    gobootstrap: /usr/lib/go
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
