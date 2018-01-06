@@ -11,7 +11,7 @@
   tasks:
     - name: install apt packages
       apt: name={{ item }} state=present update_cache=true
-      items:
+      with_items:
         - golang-1.6
       become: true
 
@@ -29,7 +29,7 @@
 
     - name: get the latest etcd
       command: go get -u {{ item }}
-      items:
+      with_items:
         - github.com/coreos/etcd/cmd/etcd
         - github.com/coreos/etcd/cmd/etcdctl
       environment:
@@ -53,7 +53,7 @@
 
     - name: install kubernetes packages
       apt: name={{ item }} state=latest update_cache=false
-      items:
+      with_items:
         - kubelet
         - kubeadm
         - kubernetes-cni

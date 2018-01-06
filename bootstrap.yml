@@ -55,7 +55,7 @@
 
     - name: install docker for ubuntu16.04 or above
       apt: name={{ item }} state=present update_cache=false
-      items:
+      with_items:
         - docker.io
       become: true
       when: ansible_distribution_version == "16.04"
@@ -98,7 +98,7 @@
 
     - name: install kubernetes packages
       apt: name={{ item }} state=latest update_cache=false
-      items:
+      with_items:
         - kubelet
         - kubeadm
         - kubernetes-cni

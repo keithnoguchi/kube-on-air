@@ -8,7 +8,7 @@
   tasks:
     - name: install tools for the docker registry
       pacman: name={{ item }} state=present update_cache=false
-      items:
+      with_items:
         - docker
       become: true
 
