@@ -11,6 +11,11 @@ env:
     - GOROOT=$HOME/git/go
     - GOPATH=$HOME
   matrix:
+    # This is the chrooted archlinux environemnt to check host.yml.
+    # https://github.com/mikkeloscar/arch-travis/blob/master/README.md
+    - ARCH_TRAVIS_ARCH=x86_64 ARCH_TRAVIS_CLEAN_CHROOT=1 ARCH_TRAVIS_CONFIRM_YES=1
+    # This is the ubuntu environment, to check guest.yml.
+    - CI_TEST_GUEST_ENV=1
     # This is the k8s cluster environment, to check bootstrap.yml.
     - CI_TEST_CLUSTER_ENV=1
     # This is the k8s master environment, to check master.yml.
@@ -28,13 +33,24 @@ arch:
     - archlinuxfr=http://repo.archlinux.fr/$arch
   packages:
     # pacman packages
+    - openssh
+    - git
+    - python
+    - python-setuptools
+    - python-pip
     #- procps-ng
     #- reflector
     # aur
     #- screenfetch-git
   script:
+    # script run under chrooted environment
+    #- "sudo screenfetch"
+    #- "reflector --verbose -l 20 --sort rate -p https"
+    - "sudo -E make ci-test-host"
 
 script:
+  - if [[ "${ARCH_TRAVIS_CLEAN_CHROOT}" == "1" ]]; then curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash; fi
+  - if [[ "${CI_TEST_GUEST_ENV}" == "1" ]]; then sudo -E make ci-test-guest; fi
   - if [[ "${CI_TEST_CLUSTER_ENV}" == "1" ]]; then sudo -E make ci-test-bootstrap; fi
   - if [[ "${CI_TEST_MASTER_ENV}" == "1" ]]; then sudo -E make ci-test-master; fi
   - if [[ "${CI_TEST_NODE_ENV}" == "1" ]]; then sudo -E make ci-test-node; fi
