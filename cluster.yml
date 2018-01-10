@@ -33,15 +33,23 @@
         owner: root
         group: root
       with_items:
-        - hosts
         - network/interfaces
-        - network/interfaces.d/bond0
       become: true
 
-    - name: bring up bond0 interface
+    - name: assign ens5 IP address
+      template:
+        src: templates/etc/network/interfaces.d/ens5.j2
+        dest: /etc/network/interfaces.d/ens5
+        mode: 0644
+        owner: root
+        group: root
+      register: ens5
+
+    - name: bring up ens5 interface
       command: ifup -a
       become: true
       changed_when: false
+      when: ens5.changed
 
     - name: install docker for ubuntu16.04 or above
       apt: name={{ item }} state=present update_cache=false
@@ -56,51 +64,3 @@
         append: true
         groups: docker
       become: true
-
-    - name: allow the insecure air.local local docker registry access
-      lineinfile:
-        path: /etc/systemd/system/multi-user.target.wants/docker.service
-        regexp: "^ExecStart"
-        line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-    - name: restart docker daemon to reflect the previous change
-      systemd:
-        name: docker
-        state: restarted
-        daemon_reload: true
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-    - name: install gce encription key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-      become: true
-
-    - name: add gce kubernetes repository
-      apt_repository:
-        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
-        state: present
-        filename: kubernetes.list
-      become: true
-
-    - name: install kubernetes packages
-      apt: name={{ item }} state=latest update_cache=false
-      with_items:
-        - kubelet
-        - kubeadm
-        - kubernetes-cni
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-- name: bootstrap kubernetes master
-  import_playbook: master.yml
-
-- name: bootstrap kubernetes node
-  import_playbook: node.yml
-
-- name: bootstrap kubernetes network
-  import_playbook: network.yml
-  when: not travis_ci|bool
