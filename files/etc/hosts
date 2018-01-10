@@ -18,5 +18,22 @@
 192.168.122.121	node21.local	node21
 192.168.122.122	node22.local	node22
 192.168.122.123	node23.local	node23
+192.168.122.124	node24.local	node24
+192.168.122.125	node25.local	node25
+192.168.122.126	node26.local	node26
+192.168.122.127	node27.local	node27
+192.168.122.128	node28.local	node28
+192.168.122.129	node29.local	node29
+
+192.168.122.130	node30.local	node30
+192.168.122.131	node31.local	node31
+192.168.122.132	node32.local	node32
+192.168.122.133	node33.local	node33
+192.168.122.134	node34.local	node34
+192.168.122.135	node35.local	node35
+192.168.122.136	node36.local	node36
+192.168.122.137	node37.local	node37
+192.168.122.138	node38.local	node38
+192.168.122.139	node39.local	node39
 
 # End of file

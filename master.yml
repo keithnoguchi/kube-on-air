@@ -15,7 +15,7 @@
         - golang-1.6
       become: true
 
-    - name: disable swap on the master for kublet1.8 to run
+    - name: disable swap on the master for kubelet1.8 or above to run
       command: swapoff -a
       become: true
       changed_when: false
