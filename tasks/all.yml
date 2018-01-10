@@ -5,6 +5,9 @@
 - name: install the latest python packages
   import_tasks: tasks/python.yml
 
+- name: install the latest ansible
+  import_tasks: tasks/ansible.yml
+
 - name: install the latest Open vSwitch
   import_tasks: tasks/openvswitch.yml
 

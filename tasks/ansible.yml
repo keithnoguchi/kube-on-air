@@ -1,0 +1,21 @@
+---
+- name: clone the ansible git repo
+  git:
+    repo: "{{ gitsite }}ansible/ansible"
+    dest: "{{ gitpath }}ansible"
+    update: yes
+    ssh_opts: "-o StrictHostKeyChecking=no"
+  register: git
+
+- name: install python packages for ansible
+  pip:
+    requirements: "{{ gitpath }}ansible/requirements.txt"
+  become: true
+  when: git.before != git.after
+
+- name: install the latest ansible
+  command: python setup.py install
+  args:
+    chdir: "{{ gitpath }}ansible"
+  become: true
+  when: git.before != git.after
