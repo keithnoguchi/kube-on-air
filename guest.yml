@@ -70,6 +70,8 @@
       apt: name={{ item }} state=present update_cache=true
       with_items:
         - vim
+        - tmux
+        - cscope
         - tree
         - jq
         - aspell
@@ -97,7 +99,6 @@
         - libtool
         - bzip2
         - unzip
-        - cscope
         - golang-1.6
         - cpanminus
         - python-all
