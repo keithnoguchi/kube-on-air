@@ -55,7 +55,8 @@ def main():
 
 def guest():
     guest = {'hosts': [],
-             'vars': {'hv_node_netmask': '255.255.0.0',
+             'vars': {'ansible_python_interpreter': 'python3',
+                      'hv_node_netmask': '255.255.0.0',
                       'hv_node_broadcast': '10.0.255.255'}}
     c = libvirt.openReadOnly("qemu:///system")
     if c != None:
