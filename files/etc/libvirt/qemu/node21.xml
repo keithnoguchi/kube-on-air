@@ -42,12 +42,14 @@
     <interface type='network'>
       <mac address='00:00:bb:16:04:21'/>
       <source network='default'/>
+      <target dev='ens3node21'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
     <interface type='bridge'>
       <mac address='00:00:16:04:21:04'/>
       <source bridge='br0'/>
+      <target dev='ens4node21'/>
       <virtualport type='openvswitch'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
@@ -55,6 +57,7 @@
     <interface type='bridge'>
       <mac address='00:00:16:04:21:05'/>
       <source bridge='br0'/>
+      <target dev='ens5node21'/>
       <virtualport type='openvswitch'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
