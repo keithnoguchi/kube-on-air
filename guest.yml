@@ -97,6 +97,7 @@
         - libtool
         - bzip2
         - unzip
+        - cscope
         - golang-1.6
         - cpanminus
         - python-all
