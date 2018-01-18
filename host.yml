@@ -2,6 +2,7 @@
 - name: host provisioning playbook
   hosts: host
   vars:
+    force: true
     travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
@@ -27,6 +28,11 @@
         - python2-requests
       become: true
 
+    - name: undefine libvirt default network
+      virt_net: name=default state=absent
+      become: true
+      when: force|bool and not travis_ci|bool
+
     - name: update files under /etc
       template:
         src: "templates/etc/{{ item }}.j2"
@@ -39,6 +45,14 @@
         - modprobe.d/modprobe.conf
         - systemd/network/br0.network
       become: true
+
+    - name: update libvirt default network
+      virt_net:
+        name: default
+        state: present
+        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
+      become: true
+      when: force|bool and not travis_ci|bool
 
     - name: add user to the developer groups
       user:
