@@ -41,6 +41,7 @@
         group: root
       with_items:
         - hosts
+        - libvirt/qemu/networks/default.xml
       become: true
 
     - name: update /etc/network/interfaces

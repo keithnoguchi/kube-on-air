@@ -1,0 +1,41 @@
+<network>
+  <name>default</name>
+  <forward mode='nat'/>
+  <bridge name='mgmt0' stp='off' delay='0'/>
+  <mac address='00:00:bb:00:00:00'/>
+  <ip address='{{ guest_management_network }}.1' netmask='255.255.255.0'>
+    <dhcp>
+      <range start='{{ guest_management_network }}.192' end='{{ guest_management_network }}.254'/>
+      <host mac='00:00:bb:16:04:10' ip='{{ guest_management_network }}.110'/>
+      <host mac='00:00:bb:16:04:11' ip='{{ guest_management_network }}.111'/>
+      <host mac='00:00:bb:16:04:12' ip='{{ guest_management_network }}.112'/>
+      <host mac='00:00:bb:16:04:13' ip='{{ guest_management_network }}.113'/>
+      <host mac='00:00:bb:16:04:14' ip='{{ guest_management_network }}.114'/>
+      <host mac='00:00:bb:16:04:15' ip='{{ guest_management_network }}.115'/>
+      <host mac='00:00:bb:16:04:16' ip='{{ guest_management_network }}.116'/>
+      <host mac='00:00:bb:16:04:17' ip='{{ guest_management_network }}.117'/>
+      <host mac='00:00:bb:16:04:18' ip='{{ guest_management_network }}.118'/>
+      <host mac='00:00:bb:16:04:19' ip='{{ guest_management_network }}.119'/>
+      <host mac='00:00:bb:16:04:20' ip='{{ guest_management_network }}.120'/>
+      <host mac='00:00:bb:16:04:21' ip='{{ guest_management_network }}.121'/>
+      <host mac='00:00:bb:16:04:22' ip='{{ guest_management_network }}.122'/>
+      <host mac='00:00:bb:16:04:23' ip='{{ guest_management_network }}.123'/>
+      <host mac='00:00:bb:16:04:24' ip='{{ guest_management_network }}.124'/>
+      <host mac='00:00:bb:16:04:25' ip='{{ guest_management_network }}.125'/>
+      <host mac='00:00:bb:16:04:26' ip='{{ guest_management_network }}.126'/>
+      <host mac='00:00:bb:16:04:27' ip='{{ guest_management_network }}.127'/>
+      <host mac='00:00:bb:16:04:28' ip='{{ guest_management_network }}.128'/>
+      <host mac='00:00:bb:16:04:29' ip='{{ guest_management_network }}.129'/>
+      <host mac='00:00:bb:16:04:30' ip='{{ guest_management_network }}.130'/>
+      <host mac='00:00:bb:16:04:31' ip='{{ guest_management_network }}.131'/>
+      <host mac='00:00:bb:16:04:32' ip='{{ guest_management_network }}.132'/>
+      <host mac='00:00:bb:16:04:33' ip='{{ guest_management_network }}.133'/>
+      <host mac='00:00:bb:16:04:34' ip='{{ guest_management_network }}.134'/>
+      <host mac='00:00:bb:16:04:35' ip='{{ guest_management_network }}.135'/>
+      <host mac='00:00:bb:16:04:36' ip='{{ guest_management_network }}.136'/>
+      <host mac='00:00:bb:16:04:37' ip='{{ guest_management_network }}.137'/>
+      <host mac='00:00:bb:16:04:38' ip='{{ guest_management_network }}.138'/>
+      <host mac='00:00:bb:16:04:39' ip='{{ guest_management_network }}.139'/>
+    </dhcp>
+  </ip>
+</network>
