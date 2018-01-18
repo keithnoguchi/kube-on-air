@@ -7,6 +7,7 @@
     latest: false
     travis_ci: false
     host_ip: "192.168.122.1"
+    guest_management_network: 192.168.122
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
@@ -32,13 +33,15 @@
       become: true
       when: console.changed
 
-    - name: update /etc/hosts for air.local reachability
-      copy:
-        src: files/etc/hosts
-        dest: /etc/hosts
+    - name: update files under /etc
+      template:
+        src: "templates/etc/{{ item }}.j2"
+        dest: "/etc/{{ item }}"
         mode: 0644
         owner: root
         group: root
+      with_items:
+        - hosts
       become: true
 
     - name: update /etc/network/interfaces

@@ -1,0 +1,41 @@
+#
+# /etc/hosts: static lookup table for host names
+#
+
+#<ip-address>	<hostname.domain.org>	<hostname>
+127.0.0.1	localhost.local	localhost
+::1		localhost.local	localhost
+127.0.0.1	{{ ansible_hostname }}.local {{ ansible_hostname }}
+::1		{{ ansible_hostname }}.local {{ ansible_hostname }}
+
+# air.local for the local docker registry
+10.0.0.1	air.local	air
+
+{{ guest_management_network }}.110	kube10.local	kube10
+{{ guest_management_network }}.111	kube11.local	kube11
+{{ guest_management_network }}.112	hv12.local	hv12
+{{ guest_management_network }}.113	hv13.local	hv13
+
+{{ guest_management_network }}.120	node20.local	node20
+{{ guest_management_network }}.121	node21.local	node21
+{{ guest_management_network }}.122	node22.local	node22
+{{ guest_management_network }}.123	node23.local	node23
+{{ guest_management_network }}.124	node24.local	node24
+{{ guest_management_network }}.125	node25.local	node25
+{{ guest_management_network }}.126	node26.local	node26
+{{ guest_management_network }}.127	node27.local	node27
+{{ guest_management_network }}.128	node28.local	node28
+{{ guest_management_network }}.129	node29.local	node29
+
+{{ guest_management_network }}.130	node30.local	node30
+{{ guest_management_network }}.131	node31.local	node31
+{{ guest_management_network }}.132	node32.local	node32
+{{ guest_management_network }}.133	node33.local	node33
+{{ guest_management_network }}.134	node34.local	node34
+{{ guest_management_network }}.135	node35.local	node35
+{{ guest_management_network }}.136	node36.local	node36
+{{ guest_management_network }}.137	node37.local	node37
+{{ guest_management_network }}.138	node38.local	node38
+{{ guest_management_network }}.139	node39.local	node39
+
+# End of file

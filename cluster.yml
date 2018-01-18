@@ -2,6 +2,8 @@
 - name: bootstrap k8s cluster
   hosts: cluster
   gather_facts: true
+  vars:
+    guest_management_network: 192.168.122
   tasks:
     - name: update hostname to be sync with the inventory host name
       hostname: name={{ inventory_hostname }}
@@ -23,13 +25,15 @@
       become: true
       when: console.changed
 
-    - name: update /etc/hosts for air.local reachability
-      copy:
-        src: files/etc/hosts
-        dest: /etc/hosts
+    - name: update files under /etc
+      template:
+        src: "templates/etc/{{ item }}.j2"
+        dest: "/etc/{{ item }}"
         mode: 0644
         owner: root
         group: root
+      with_items:
+        - hosts
       become: true
 
     - name: update /etc/network/interfaces

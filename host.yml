@@ -6,6 +6,7 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
+    guest_management_network: 192.168.122
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
@@ -26,6 +27,17 @@
         - python2-requests
       become: true
 
+    - name: update files under /etc
+      template:
+        src: "templates/etc/{{ item }}.j2"
+        dest: "/etc/{{ item }}"
+        mode: 0644
+        owner: root
+        group: root
+      with_items:
+        - hosts
+      become: true
+
     - name: copy files under /etc
       copy:
         src: "files/etc/{{ item }}"
@@ -34,7 +46,6 @@
         owner: root
         group: root
       with_items:
-        - hosts
         - modprobe.d/modprobe.conf
         - systemd/network/br0.network
       become: true
