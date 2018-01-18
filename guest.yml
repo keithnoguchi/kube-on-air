@@ -2,8 +2,6 @@
 - name: setup ubuntu guest
   hosts: guest
   vars:
-    rabbit: true
-    ansible: true
     latest: false
     travis_ci: false
     guest_management_network: 192.168.122

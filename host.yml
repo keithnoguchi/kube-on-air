@@ -2,8 +2,8 @@
 - name: host provisioning playbook
   hosts: host
   vars:
+    latest: true
     travis_ci: false
-    libvirt_reset: true
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
@@ -41,55 +41,6 @@
         - systemd/network/br0.network
       become: true
 
-    - name: undefine libvirt default network
-      virt_net: name=default state=absent
-      become: true
-      when: libvirt_reset|bool and not travis_ci|bool
-
-    - name: define libvirt default network
-      virt_net:
-        name: default
-        state: present
-        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
-      become: true
-      when: libvirt_reset|bool and not travis_ci|bool
-
-    - name: undefine libvirt guest
-      virt:
-        name: "{{ item.type }}{{ item.id }}"
-        command: undefine
-      with_items:
-        - { type: kube, id: 10 }
-        - { type: kube, id: 11 }
-        - { type: hv,   id: 12 }
-        - { type: hv,   id: 13 }
-        - { type: node, id: 20 }
-        - { type: node, id: 21 }
-        - { type: node, id: 22 }
-        - { type: node, id: 23 }
-        - { type: node, id: 24 }
-      become: true
-      ignore_errors: true
-      when: libvirt_reset|bool and not travis_ci|bool
-
-    - name: define libvirt guest
-      virt:
-        name: "{{ item.type }}{{ item.id }}"
-        command: define
-        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
-      with_items:
-        - { type: kube, id: 10 }
-        - { type: kube, id: 11 }
-        - { type: hv,   id: 12 }
-        - { type: hv,   id: 13 }
-        - { type: node, id: 20 }
-        - { type: node, id: 21 }
-        - { type: node, id: 22 }
-        - { type: node, id: 23 }
-        - { type: node, id: 24 }
-      become: true
-      when: libvirt_reset|bool and not travis_ci|bool
-
     - name: add user to the developer groups
       user:
         name: "{{ lookup('env', 'USER') }}"
@@ -125,6 +76,55 @@
         - virtlogd
         - docker
       become: true
+
+    - name: undefine libvirt default network
+      virt_net: name=default state=absent
+      become: true
+      when: latest|bool and not travis_ci|bool
+
+    - name: define libvirt default network
+      virt_net:
+        name: default
+        state: present
+        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
+      become: true
+      when: latest|bool and not travis_ci|bool
+
+    - name: undefine libvirt guest
+      virt:
+        name: "{{ item.type }}{{ item.id }}"
+        command: undefine
+      with_items:
+        - { type: kube, id: 10 }
+        - { type: kube, id: 11 }
+        - { type: hv,   id: 12 }
+        - { type: hv,   id: 13 }
+        - { type: node, id: 20 }
+        - { type: node, id: 21 }
+        - { type: node, id: 22 }
+        - { type: node, id: 23 }
+        - { type: node, id: 24 }
+      become: true
+      ignore_errors: true
+      when: latest|bool and not travis_ci|bool
+
+    - name: define libvirt guest
+      virt:
+        name: "{{ item.type }}{{ item.id }}"
+        command: define
+        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
+      with_items:
+        - { type: kube, id: 10 }
+        - { type: kube, id: 11 }
+        - { type: hv,   id: 12 }
+        - { type: hv,   id: 13 }
+        - { type: node, id: 20 }
+        - { type: node, id: 21 }
+        - { type: node, id: 22 }
+        - { type: node, id: 23 }
+        - { type: node, id: 24 }
+      become: true
+      when: latest|bool and not travis_ci|bool
 
     - name: run the local docker registry
       docker_container:

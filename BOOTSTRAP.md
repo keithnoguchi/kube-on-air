@@ -1,14 +1,19 @@
-# Clouster on KVM/Libvirt
+# KVM/Libvirt cluster on Arch-on-Air!
 
-Let's have a virtualized cluster on Air!
+[![Build Status]](https://travis-ci.org/keinohguchi/kube-on-air)
+
+Let's prepare your air as KVM/Libvirt host for the kubernetes cluster.
 
 - [KVM/Libvirt](#kvmlibvirt)
 - [Open vSwitch](#open-vswitch)
 - [Docker](#docker)
 
-This is a spin off of the [Arch-on-Air]'s HACK section.
+There is an [Ansible] [playbook](host.yml) to automate the following
+steps.  Please run it at your own risk, though, as it re-define libvirt
+default network as well as guest description files.
 
-[Arch-on-Air]: https://github.com/keinohguchi/arch-on-air
+[Build Status]: https://travis-ci.org/keinohguchi/kube-on-air.svg
+[Ansible]: https://ansible.com
 
 ## KVM/Libvirt
 
