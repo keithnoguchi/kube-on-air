@@ -61,6 +61,8 @@
       with_items:
         - { type: kube, id: 10 }
         - { type: kube, id: 11 }
+        - { type: hv,   id: 12 }
+        - { type: hv,   id: 13 }
         - { type: node, id: 20 }
         - { type: node, id: 21 }
         - { type: node, id: 22 }
@@ -78,6 +80,8 @@
       with_items:
         - { type: kube, id: 10 }
         - { type: kube, id: 11 }
+        - { type: hv,   id: 12 }
+        - { type: hv,   id: 13 }
         - { type: node, id: 20 }
         - { type: node, id: 21 }
         - { type: node, id: 22 }
