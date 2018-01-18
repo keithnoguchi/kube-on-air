@@ -28,11 +28,6 @@
         - python2-requests
       become: true
 
-    - name: undefine libvirt default network
-      virt_net: name=default state=absent
-      become: true
-      when: libvirt_reset|bool and not travis_ci|bool
-
     - name: update files under /etc
       template:
         src: "templates/etc/{{ item }}.j2"
@@ -46,11 +41,48 @@
         - systemd/network/br0.network
       become: true
 
-    - name: update libvirt default network
+    - name: undefine libvirt default network
+      virt_net: name=default state=absent
+      become: true
+      when: libvirt_reset|bool and not travis_ci|bool
+
+    - name: define libvirt default network
       virt_net:
         name: default
         state: present
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
+      become: true
+      when: libvirt_reset|bool and not travis_ci|bool
+
+    - name: undefine libvirt guest
+      virt:
+        name: "{{ item.type }}{{ item.id }}"
+        command: undefine
+      with_items:
+        - { type: kube, id: 10 }
+        - { type: kube, id: 11 }
+        - { type: node, id: 20 }
+        - { type: node, id: 21 }
+        - { type: node, id: 22 }
+        - { type: node, id: 23 }
+        - { type: node, id: 24 }
+      become: true
+      ignore_errors: true
+      when: libvirt_reset|bool and not travis_ci|bool
+
+    - name: define libvirt guest
+      virt:
+        name: "{{ item.type }}{{ item.id }}"
+        command: define
+        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
+      with_items:
+        - { type: kube, id: 10 }
+        - { type: kube, id: 11 }
+        - { type: node, id: 20 }
+        - { type: node, id: 21 }
+        - { type: node, id: 22 }
+        - { type: node, id: 23 }
+        - { type: node, id: 24 }
       become: true
       when: libvirt_reset|bool and not travis_ci|bool
 
