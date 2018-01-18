@@ -36,16 +36,6 @@
         group: root
       with_items:
         - hosts
-      become: true
-
-    - name: copy files under /etc
-      copy:
-        src: "files/etc/{{ item }}"
-        dest: "/etc/{{ item }}"
-        mode: 0644
-        owner: root
-        group: root
-      with_items:
         - modprobe.d/modprobe.conf
         - systemd/network/br0.network
       become: true
