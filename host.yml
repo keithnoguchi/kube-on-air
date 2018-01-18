@@ -11,7 +11,7 @@
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
     PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
-  gather_facts: true
+  gather_facts: false
   tasks:
     - name: install kvm/docker to create virtual environment
       pacman: name={{ item }} state=present force=true update_cache=false
