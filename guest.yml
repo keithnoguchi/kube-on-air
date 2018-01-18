@@ -108,17 +108,9 @@
         group: root
       with_items:
         - hosts
+        - network/interfaces
         - network/interfaces.d/br0
         - libvirt/qemu/networks/default.xml
-      become: true
-
-    - name: update /etc/network/interfaces
-      copy:
-        src: files/etc/network/interfaces
-        dest: /etc/network/interfaces
-        mode: 0644
-        owner: root
-        group: root
       become: true
 
     - name: bring up br0 interface
