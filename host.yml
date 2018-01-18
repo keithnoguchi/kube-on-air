@@ -95,15 +95,15 @@
         name: "{{ item.type }}{{ item.id }}"
         command: undefine
       with_items:
-        - { type: kube, id: 10 }
-        - { type: kube, id: 11 }
-        - { type: hv,   id: 12 }
-        - { type: hv,   id: 13 }
-        - { type: node, id: 20 }
-        - { type: node, id: 21 }
-        - { type: node, id: 22 }
-        - { type: node, id: 23 }
-        - { type: node, id: 24 }
+        - { id: 10, type: kube }
+        - { id: 11, type: kube }
+        - { id: 12, type: hv }
+        - { id: 13, type: hv }
+        - { id: 20, type: node }
+        - { id: 21, type: node }
+        - { id: 22, type: node }
+        - { id: 23, type: node }
+        - { id: 24, type: node }
       become: true
       ignore_errors: true
       when: latest|bool and not travis_ci|bool
@@ -114,15 +114,15 @@
         command: define
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
       with_items:
-        - { type: kube, id: 10 }
-        - { type: kube, id: 11 }
-        - { type: hv,   id: 12 }
-        - { type: hv,   id: 13 }
-        - { type: node, id: 20 }
-        - { type: node, id: 21 }
-        - { type: node, id: 22 }
-        - { type: node, id: 23 }
-        - { type: node, id: 24 }
+        - { id: 10, type: kube }
+        - { id: 11, type: kube }
+        - { id: 12, type: hv }
+        - { id: 13, type: hv }
+        - { id: 20, type: node }
+        - { id: 21, type: node }
+        - { id: 22, type: node }
+        - { id: 23, type: node }
+        - { id: 24, type: node }
       become: true
       when: latest|bool and not travis_ci|bool
 
