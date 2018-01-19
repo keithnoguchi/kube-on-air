@@ -24,6 +24,7 @@
         - virt-viewer
         - tigervnc
         - docker
+        - python-lxml
         - python2-docker
         - python2-requests
       become: true

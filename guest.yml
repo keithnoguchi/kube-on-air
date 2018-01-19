@@ -48,6 +48,7 @@
         - python-all
         - python-pip
         - python-six
+        - python-lxml
         - python3-pip
         - python3-setuptools
         - graphviz
