@@ -13,6 +13,9 @@
     guest_disk_type: file
     guest_disk_path: /var/lib/libvirt/images
     guest_disk_source_type: file
+    guest_intf0_dev_prefix: ens3-
+    guest_intf1_dev_prefix: ens4-
+    guest_intf2_dev_prefix: ens5-
     guest_management_network: 192.168.123
     guests:
       - { id: 20, type: node }
