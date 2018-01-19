@@ -11,13 +11,26 @@
     guests:
       - { id: 10, type: kube }
       - { id: 11, type: kube }
-      - { id: 12, type: hv }
-      - { id: 13, type: hv }
       - { id: 20, type: node }
       - { id: 21, type: node }
       - { id: 22, type: node }
       - { id: 23, type: node }
       - { id: 24, type: node }
+      - { id: 25, type: node }
+      - { id: 26, type: node }
+      - { id: 27, type: node }
+      - { id: 28, type: node }
+      - { id: 29, type: node }
+      - { id: 30, type: node }
+      - { id: 31, type: node }
+      - { id: 32, type: node }
+      - { id: 33, type: node }
+      - { id: 34, type: node }
+      - { id: 35, type: node }
+      - { id: 36, type: node }
+      - { id: 37, type: node }
+      - { id: 38, type: node }
+      - { id: 39, type: node }
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
@@ -88,12 +101,12 @@
         - docker
       become: true
 
-    - name: undefine libvirt default network
+    - name: undefine libvirt guest network
       virt_net: name=default state=absent
       become: true
       when: latest|bool and not travis_ci|bool
 
-    - name: define libvirt default network
+    - name: define libvirt guest network
       virt_net:
         name: default
         state: present
