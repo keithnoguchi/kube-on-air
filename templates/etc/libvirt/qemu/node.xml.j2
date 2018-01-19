@@ -29,7 +29,7 @@
   </pm>
   <devices>
     <emulator>{{ guest_emulator }}</emulator>
-    <disk type='block' device='disk'>
+    <disk type='{{ guest_disk_type }}' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
       <source dev='/dev/vg1/{{ item.type }}{{ item.id }}'/>
       <target dev='vda' bus='virtio'/>
