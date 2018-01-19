@@ -5,6 +5,8 @@
 #<ip-address>	<hostname.domain.org>	<hostname>
 127.0.0.1	localhost.local	localhost
 ::1		localhost.local	localhost
+127.0.0.1	{{ inventory_hostname_short }}.local	{{ inventory_hostname_short }}
+::1		{{ inventory_hostname_short }}.local	{{ inventory_hostname_short }}
 
 # air.local for the local docker registry
 10.0.0.1	air.local	air
