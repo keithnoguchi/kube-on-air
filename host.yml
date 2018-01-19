@@ -7,6 +7,7 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
+    guest_emulator: /usr/bin/qemu-system-x86_64
     guest_management_network: 192.168.122
     guests:
       - { id: 10, type: kube }
