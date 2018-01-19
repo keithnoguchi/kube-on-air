@@ -94,7 +94,7 @@
       become: true
 
     - name: enable basic systemd services
-      systemd: name={{ item }} enabled=true
+      systemd: name={{ item }} enabled=true state=started
       with_items:
         - libvirtd
         - virtlogd
