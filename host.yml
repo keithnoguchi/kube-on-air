@@ -2,12 +2,22 @@
 - name: host provisioning playbook
   hosts: host
   vars:
-    latest: true
+    latest: false
     travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
     guest_management_network: 192.168.122
+    guests:
+      - { id: 10, type: kube }
+      - { id: 11, type: kube }
+      - { id: 12, type: hv }
+      - { id: 13, type: hv }
+      - { id: 20, type: node }
+      - { id: 21, type: node }
+      - { id: 22, type: node }
+      - { id: 23, type: node }
+      - { id: 24, type: node }
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
@@ -95,16 +105,7 @@
       virt:
         name: "{{ item.type }}{{ item.id }}"
         command: undefine
-      with_items:
-        - { id: 10, type: kube }
-        - { id: 11, type: kube }
-        - { id: 12, type: hv }
-        - { id: 13, type: hv }
-        - { id: 20, type: node }
-        - { id: 21, type: node }
-        - { id: 22, type: node }
-        - { id: 23, type: node }
-        - { id: 24, type: node }
+      with_items: "{{ guests }}"
       become: true
       ignore_errors: true
       when: latest|bool and not travis_ci|bool
@@ -114,16 +115,7 @@
         name: "{{ item.type }}{{ item.id }}"
         command: define
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
-      with_items:
-        - { id: 10, type: kube }
-        - { id: 11, type: kube }
-        - { id: 12, type: hv }
-        - { id: 13, type: hv }
-        - { id: 20, type: node }
-        - { id: 21, type: node }
-        - { id: 22, type: node }
-        - { id: 23, type: node }
-        - { id: 24, type: node }
+      with_items: "{{ guests }}"
       become: true
       when: latest|bool and not travis_ci|bool
 
