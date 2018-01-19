@@ -164,6 +164,9 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
+    - name: install python packages
+      import_tasks: tasks/python.yml
+
     - name: undefine libvirt guest network
       virt_net: name=default state=absent
       become: true
