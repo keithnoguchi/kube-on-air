@@ -10,10 +10,9 @@
     guest_emulator: /usr/bin/kvm-spice
     guest_disk_type: file
     guest_disk_path: /var/lib/libvirt/images
+    guest_disk_source_type: file
     guest_management_network: 192.168.122
     guests:
-      - { id: 10, type: kube }
-      - { id: 11, type: kube }
       - { id: 20, type: node }
       - { id: 21, type: node }
       - { id: 22, type: node }
@@ -188,7 +187,7 @@
       with_items: "{{ guests }}"
       become: true
       ignore_errors: true
-      when: latest|bool and not travis_ci|bool
+      when: latest|bool
 
     - name: define libvirt guest
       virt:
@@ -197,7 +196,7 @@
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
       with_items: "{{ guests }}"
       become: true
-      when: latest|bool and not travis_ci|bool
+      when: latest|bool
 
     - name: setup RabbitMQ environment
       import_tasks: tasks/rabbit.yml
