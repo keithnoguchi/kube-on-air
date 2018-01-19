@@ -81,6 +81,7 @@
         - libffi-dev
         - openssl
         - procps
+        - qemu-kvm
         - libvirt-dev
         - libvirt-bin
         - libcap-ng-dev
