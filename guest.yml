@@ -51,7 +51,6 @@
       apt: name={{ item }} state=present update_cache=false
       with_items:
         - curl
-        - w3m
         - elinks
       become: true
 
