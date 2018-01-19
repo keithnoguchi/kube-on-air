@@ -104,7 +104,7 @@
       when: ansible_distribution_version == "16.04"
 
     - name: update hostname to be sync with the inventory host name
-      hostname: name={{ inventory_hostname }}
+      hostname: name={{ inventory_hostname_short }}
       become: true
 
     - name: make console access through ttyS0

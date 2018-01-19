@@ -6,7 +6,7 @@
     guest_management_network: 192.168.122
   tasks:
     - name: update hostname to be sync with the inventory host name
-      hostname: name={{ inventory_hostname }}
+      hostname: name={{ inventory_hostname_short }}
       become: true
 
     - name: setup console access
