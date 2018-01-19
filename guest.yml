@@ -103,6 +103,12 @@
       become: true
       when: ansible_distribution_version == "16.04"
 
+    - name: uninstall obsolete packages
+      apt: name={{ item }} state=absent update_cache=false
+      with_items:
+        - python-cryptography
+      become: true
+
     - name: update hostname to be sync with the inventory host name
       hostname: name={{ inventory_hostname_short }}
       become: true
