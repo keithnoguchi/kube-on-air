@@ -100,11 +100,12 @@
         - virtlogd
         - docker
       become: true
+      when: not travis_ci|bool
 
     - name: undefine libvirt guest network
       virt_net: name=default state=absent
       become: true
-      when: latest|bool
+      when: latest|bool and not travis_ci|bool
 
     - name: define libvirt guest network
       virt_net:
@@ -112,7 +113,7 @@
         state: present
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
       become: true
-      when: latest|bool
+      when: latest|bool and not travis_ci|bool
 
     - name: undefine libvirt guest
       virt:
