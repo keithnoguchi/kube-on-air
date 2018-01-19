@@ -8,6 +8,8 @@
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
     guest_emulator: /usr/bin/qemu-system-x86_64
+    guest_arch: x86_64
+    guest_machine: pc-i440fx-2.11
     guest_disk_type: block
     guest_disk_path: /dev/vg1
     guest_disk_source_type: dev
@@ -43,7 +45,7 @@
     PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
   gather_facts: false
   tasks:
-    - name: install kvm/docker to create virtual environment
+    - name: install kvm/container to create virtual environment
       pacman: name={{ item }} state=present force=true update_cache=false
       with_items:
         - qemu-headless
@@ -71,7 +73,7 @@
         - systemd/network/br0.network
       become: true
 
-    - name: add user to the developer groups
+    - name: add user to the libvirt/container groups
       user:
         name: "{{ lookup('env', 'USER') }}"
         append: true

@@ -4,7 +4,7 @@
   <currentMemory unit='KiB'>512152</currentMemory>
   <vcpu placement='static'>1</vcpu>
   <os>
-    <type arch='x86_64' machine='pc-i440fx-2.11'>hvm</type>
+    <type arch='{{ guest_arch }}' machine='{{ guest_machine }}'>hvm</type>
     <boot dev='hd'/>
   </os>
   <features>

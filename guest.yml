@@ -8,10 +8,12 @@
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
     guest_emulator: /usr/bin/kvm-spice
+    guest_arch: x86_64
+    guest_machine: ubuntu
     guest_disk_type: file
     guest_disk_path: /var/lib/libvirt/images
     guest_disk_source_type: file
-    guest_management_network: 192.168.122
+    guest_management_network: 192.168.123
     guests:
       - { id: 20, type: node }
       - { id: 21, type: node }
@@ -146,28 +148,12 @@
       become: true
       changed_when: false
 
-    - name: add user to the docker group
+    - name: add user to the libvirt/container group
       user:
         name: "{{ lookup('env', 'USER') }}"
         append: true
         groups: libvirtd,docker
       become: true
-
-    - name: allow the insecure air.local local docker registry access
-      lineinfile:
-        path: /etc/systemd/system/multi-user.target.wants/docker.service
-        regexp: "^ExecStart"
-        line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-    - name: restart docker daemon to reflect the previous change
-      systemd:
-        name: docker
-        state: restarted
-        daemon_reload: true
-      become: true
-      when: ansible_distribution_version == "16.04"
 
     - name: install python packages
       import_tasks: tasks/python.yml
@@ -202,6 +188,22 @@
       with_items: "{{ guests }}"
       become: true
       when: latest|bool
+
+    - name: allow the insecure air.local local docker registry access
+      lineinfile:
+        path: /etc/systemd/system/multi-user.target.wants/docker.service
+        regexp: "^ExecStart"
+        line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
+      become: true
+      when: ansible_distribution_version == "16.04"
+
+    - name: restart docker daemon to reflect the previous change
+      systemd:
+        name: docker
+        state: restarted
+        daemon_reload: true
+      become: true
+      when: ansible_distribution_version == "16.04"
 
     - name: setup RabbitMQ environment
       import_tasks: tasks/rabbit.yml
