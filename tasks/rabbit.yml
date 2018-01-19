@@ -30,9 +30,10 @@
   become: true
 
 - name: start required services
-  service: name={{ item }} state=started
+  service: name={{ item }} state=restarted
   with_items:
     - rabbitmq-server
+  become: true
 
 - name: create RabbitMQ vhost
   rabbitmq_vhost: name={{ vhost }} state=present
