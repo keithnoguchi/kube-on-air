@@ -1,0 +1,27 @@
+---
+all:
+  vars:
+    ansible_host: localhost
+    ansible_connection: local
+    master: master
+  children:
+    cluster:
+      children:
+        master:
+          hosts: localhost
+        node:
+          hosts: localhost
+      vars:
+        cluster_node_ip: 10.0.0.1
+        cluster_netmask: 255.255.0.0
+        cluster_broadcast: 10.0.255.255
+    host:
+      hosts: localhost
+    guest:
+      hosts: localhost
+      vars:
+        hv_node_ip: 1.1.1.1
+        hv_node_netmask: 255.255.255.0
+        hv_node_broadcast: 1.1.1.255
+bootstrap:
+  children: cluster
