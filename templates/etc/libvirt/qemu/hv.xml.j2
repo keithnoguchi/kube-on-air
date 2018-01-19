@@ -31,7 +31,7 @@
     <emulator>{{ guest_emulator }}</emulator>
     <disk type='{{ guest_disk_type }}' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source dev='/dev/vg1/{{ item.type }}{{ item.id }}'/>
+      <source dev='{{ guest_disk_path }}/{{ item.type }}{{ item.id }}'/>
       <target dev='vda' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
     </disk>
