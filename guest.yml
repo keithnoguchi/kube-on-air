@@ -63,6 +63,7 @@
       apt: name={{ item }} state=present update_cache=false
       with_items:
         - binutils
+        - bc
         - g++
         - git
         - gdb
