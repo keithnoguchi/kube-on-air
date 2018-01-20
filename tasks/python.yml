@@ -3,7 +3,7 @@
   pip:
     name: "{{ item }}"
   with_items:
-    - py-mysql
+    - MySQL-python
     - csvkit
     - libvirt-python
     - lxml
