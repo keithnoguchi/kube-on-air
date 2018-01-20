@@ -57,6 +57,7 @@
       with_items:
         - curl
         - elinks
+        - iputils-arping
       become: true
 
     - name: install developer tools
