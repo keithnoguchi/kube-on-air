@@ -1,0 +1,7 @@
+---
+- name: install ruby gems
+  gem: name={{ item }}
+  with_items:
+    - "knife-spork"
+  environment:
+    PATH: "{{ lookup('env', 'PATH') }}"

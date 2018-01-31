@@ -5,6 +5,9 @@
 - name: install the latest python packages
   import_tasks: tasks/python.yml
 
+- name: install the latest ruby packages
+  import_tasks: tasks/ruby.yml
+
 - name: install the latest ansible
   import_tasks: tasks/ansible.yml
 
