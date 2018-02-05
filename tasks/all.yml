@@ -20,6 +20,9 @@
 - name: install the latest golang packages
   import_tasks: tasks/gopkg.yml
 
+- name: install the latest terraform
+  import_tasks: tasks/terraform.yml
+
 - name: configure the docker-compose environment
   import_tasks: tasks/docker-compose.yml
   when: latest|bool and not travis_ci|bool
