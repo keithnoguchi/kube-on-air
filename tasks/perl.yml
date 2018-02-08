@@ -1,7 +1,8 @@
 ---
-- name: install perl packages for the unit testing
+- name: install perl packages for good
   cpanm: name={{ item }}
   with_items:
     - "Test::MockModule"
+    - "NetAddr::IP"
   environment:
     PATH: "{{ lookup('env', 'PATH') }}"
