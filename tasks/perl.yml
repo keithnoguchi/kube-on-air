@@ -5,4 +5,5 @@
     - "Test::MockModule"
     - "NetAddr::IP"
   environment:
-    PATH: "{{ lookup('env', 'PATH') }}"
+    PATH: "{{ lookup('env', 'PATH') }}:/bin"
+  become: true
