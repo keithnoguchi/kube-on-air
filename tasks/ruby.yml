@@ -6,3 +6,4 @@
   environment:
     PATH: "{{ lookup('env', 'PATH') }}"
   beome: true
+  when: ansible_distribution_version == "16.04"
