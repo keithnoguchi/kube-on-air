@@ -4,7 +4,8 @@
     name: "{{ item }}"
   with_items:
     - docker
-    - MySQL-python
+    - ConfigParser
+    - py-mysql
     - csvkit
     - libvirt-python
     - lxml
