@@ -5,3 +5,4 @@
     - "knife-spork"
   environment:
     PATH: "{{ lookup('env', 'PATH') }}"
+  beome: true
