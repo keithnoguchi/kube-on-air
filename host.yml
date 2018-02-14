@@ -58,10 +58,12 @@
         - virt-viewer
         - tigervnc
         - docker
-        - python-lxml
         - python2-docker
         - python2-requests
       become: true
+
+    - name: install python packages
+      import_tasks: tasks/python.yml
 
     - name: update files under /etc
       template:

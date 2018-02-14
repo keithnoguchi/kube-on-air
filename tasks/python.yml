@@ -3,6 +3,7 @@
   pip:
     name: "{{ item }}"
   with_items:
+    - docker
     - MySQL-python
     - csvkit
     - libvirt-python
