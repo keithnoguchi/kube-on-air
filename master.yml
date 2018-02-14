@@ -30,8 +30,8 @@
     - name: get the latest etcd
       command: go get -u {{ item }}
       with_items:
-        - github.com/coreos/etcd/cmd/etcd
-        - github.com/coreos/etcd/cmd/etcdctl
+        - github.com/coreos/etcd
+        - github.com/coreos/etcd/etcdctl
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
