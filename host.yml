@@ -59,7 +59,6 @@
         - tigervnc
         - docker
         - python-lxml
-        - python-docker
         - python2-docker
         - python2-requests
       become: true
