@@ -8,5 +8,4 @@
     - py-mysql
     - csvkit
     - libvirt-python
-    - lxml
   become: true
