@@ -1,0 +1,17 @@
+---
+- name: get promethous
+  command: go get -u {{ item }}
+  with_items:
+    - github.com/prometheus/prometheus/...
+  environment:
+    GOROOT: "{{ lookup('env', 'GOROOT') }}"
+    GOPATH: "{{ lookup('env', 'GOPATH') }}"
+    PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+
+- name: build & install the latest prometheous
+  make:
+    chdir: "{{ lookup('env', 'GOPATH') }}/src/github.com/{{ item.path }}"
+    target: "{{ item.target }}"
+  with_items:
+    - { path: prometheus/prometheus, target: build }
+  when: git.before != git.after

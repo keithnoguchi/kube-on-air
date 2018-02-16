@@ -160,6 +160,9 @@
     - name: install the latest golang
       import_tasks: tasks/golang.yml
 
+    - name: install the prometheus
+      import_tasks: tasks/prometheus.yml
+
     - name: get the kubectl
       command: go get -u {{ item }}
       with_items:
