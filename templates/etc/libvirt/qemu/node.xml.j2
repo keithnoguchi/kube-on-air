@@ -40,7 +40,7 @@
     </controller>
     <controller type='pci' index='0' model='pci-root'/>
     <interface type='network'>
-      <mac address='00:00:bb:16:04:{{ item.id }}'/>
+      <mac address='00:00:bb:00:{{ item.id }}:03'/>
       <source network='default'/>
       <target dev='{{ guest_intf0_dev_prefix }}{{ item.id }}'/>
       <model type='virtio'/>
