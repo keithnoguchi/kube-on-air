@@ -1,12 +1,19 @@
 ---
-- name: install python standard packages
+- name: install python packages
   pip:
     name: "{{ item }}"
   with_items:
     - docker
     - ConfigParser
     - py-mysql
-    - MySQL-python
     - csvkit
     - libvirt-python
   become: true
+
+- name: install python2 packages
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - MySQL-python
+  become: true
+  when: ansible_python_version is version_compare('3', '<')
