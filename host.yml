@@ -46,7 +46,7 @@
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
     PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
-  gather_facts: true
+  gather_facts: false
   tasks:
     - name: install kvm/container to create virtual environment
       pacman: name={{ item }} state=present force=true update_cache=false
@@ -61,9 +61,6 @@
         - python2-docker
         - python2-requests
       become: true
-
-    - name: install python packages
-      import_tasks: tasks/python.yml
 
     - name: update files under /etc
       template:
