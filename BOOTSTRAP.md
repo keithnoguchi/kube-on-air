@@ -128,7 +128,7 @@ As we setup a storage pool, we can finally create a storage volumes
 for the guest OS:
 
 ```
-air$ sudo virsh vol-create-as images hv10 12G --format qcow2
+air$ sudo virsh vol-create-as images hv10 12G
 ```
 
 Cool, now let's check it both from `virsh` as well as `lvs`
