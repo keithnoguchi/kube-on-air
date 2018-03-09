@@ -234,4 +234,3 @@ Here is the list of [Ansible] playbooks used in this project:
 [teardown.yml]: teardown.yml
 
 Happy Hacking!
-
