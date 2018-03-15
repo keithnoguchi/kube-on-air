@@ -2,6 +2,7 @@
 - name: install RabbitMQ packages
   apt: name={{ item }} state=present update_cache=false
   with_items:
+    - amqp-tools
     - rabbitmq-server
   become: true
 
