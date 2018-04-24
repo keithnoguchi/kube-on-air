@@ -87,7 +87,7 @@ As we allocate separate partition for storage pool before, let's define
 the *volume group* as a new *storage pool*:
 
 ```
-air$ sudo virsh pool-define-as images logical - - /dev/sda5 vg1
+air$ sudo virsh pool-define-as images logical - - /dev/sda5 images
 air$ sudo virsh pool-build images
 air$ sudo virsh pool-start images
 ```
@@ -110,9 +110,9 @@ Check it through the *LVM* command line tool, *vgs*
 
 ```
 air$ sudo vgs
-VG  #PV #LV #SN Attr   VSize   VFree
-vg0   1   3   0 wz--n- 160.00g      0
-vg1   1   0   0 wz--n- 125.71g 125.71g
+VG     #PV #LV #SN Attr   VSize   VFree
+vg0      1   3   0 wz--n- 160.00g      0
+images   1   0   0 wz--n- 125.71g 125.71g
 air$
 ```
 
@@ -147,7 +147,7 @@ air$ sudo lvs
   home vg0 -wi-ao---- 32.00g
   root vg0 -wi-ao---- 32.00g
   var  vg0 -wi-ao---- 32.00g
-  hv10 vg1 swi-a-s--- 12.00g
+  hv10 images swi-a-s--- 12.00g
 air$
 ```
 
@@ -208,7 +208,7 @@ air$ sudo pacman -S virt-install virt-viewer tigervnc
 Let's install the guest, after downloading the image of your choise.  I usually play with [Ubuntu LTS](http://mirror.pnl.gov/releases/16.04.3/), just to see what they're up to. :)
 
 ```
-air$ sudo virt-install --name hv10 --disk /dev/vg1/hv10 \
+air$ sudo virt-install --name hv10 --disk /dev/images/hv10 \
 --cdrom /var/lib/libvirt/boot/ubuntu-16.04.3-server-amd64.iso \
 --hvm --memory 2048 --cpu host,require=vmx --graphics vnc
 Starting install...
@@ -220,7 +220,7 @@ I've focus on the minimum required setup in the command line above, which
 doesn't slow down the installation process.  Here is the break down:
 
 1. `--name hv10`: Specify new guest name, e.g. `hv10`, a.k.a `-n`
-2. `--disk /dev/vg1/hv10`: Specify the guest local hard disk.
+2. `--disk /dev/images/hv10`: Specify the guest local hard disk.
 3. `--cdrom /var/lib/...`: Specify the boot image (ISO), a.k.a `-c`
 4. `--hvm`: Does hardware virtualization, a.k.a `-v` (*optional*)
 5. `--memory 2048`: Allocate 2G of memory to the guest. (*optional*)
