@@ -34,20 +34,6 @@
     PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
   gather_facts: false
   tasks:
-    - name: install kvm/container to create virtual environment
-      pacman: name={{ item }} state=present force=true update_cache=false
-      with_items:
-        - qemu-headless
-        - libvirt
-        - libvirt-python
-        - virt-install
-        - virt-viewer
-        - tigervnc
-        - docker
-        - python2-docker
-        - python2-requests
-      become: true
-
     - name: update files under /etc
       template:
         src: "templates/etc/{{ item }}.j2"
@@ -59,43 +45,6 @@
         - hosts
         - modprobe.d/modprobe.conf
         - systemd/network/br0.network
-      become: true
-      when: not travis_ci|bool
-
-    - name: add user to the libvirt/container groups
-      user:
-        name: "{{ lookup('env', 'USER') }}"
-        append: true
-        groups: libvirt,docker
-      become: true
-      when: not travis_ci|bool
-
-    - name: setup qemu group
-      lineinfile:
-        path: /etc/libvirt/qemu.conf
-        regexp: 'group = '
-        line: 'group = "kvm"'
-        owner: root
-        group: root
-        mode: 0644
-      become: true
-
-    - name: setup libvirt group
-      lineinfile:
-        path: /etc/libvirt/libvirtd.conf
-        regexp: 'unix_sock_group'
-        line: 'unix_sock_group = "libvirt"'
-        owner: root
-        group: root
-        mode: 0644
-      become: true
-
-    - name: enable basic systemd services
-      systemd: name={{ item }} enabled=true state=started
-      with_items:
-        - libvirtd
-        - virtlogd
-        - docker
       become: true
       when: not travis_ci|bool
 
