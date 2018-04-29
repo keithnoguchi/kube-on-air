@@ -100,3 +100,4 @@
       command: go get -u {{ item }}
       with_items:
         - k8s.io/kubernetes/cmd/kubectl
+      when: not travis_ci|bool
