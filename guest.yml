@@ -152,6 +152,10 @@
       become: true
       when: console.changed
 
+    - name: make sure /etc/network/interfaces.d exists
+      file: path=/etc/network/interfaces.d state=directory
+      become: true
+
     - name: update files under /etc
       template:
         src: "templates/etc/{{ item }}.j2"
@@ -169,6 +173,7 @@
       command: ifup -a
       become: true
       changed_when: false
+      when: ansible_distribution_version != "18.04"
 
     - name: add user to the libvirt/container group
       user:
