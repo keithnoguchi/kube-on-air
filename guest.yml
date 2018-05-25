@@ -74,7 +74,6 @@
         - libtool
         - bzip2
         - unzip
-        - golang-1.6
         - cpanminus
         - python-all
         - python-pip
@@ -99,9 +98,10 @@
         - virtinst
       become: true
 
-    - name: install tools available ubuntu16.04 or above
+    - name: install tools available on ubuntu-16.04
       apt: name={{ item }} state=present update_cache=false
       with_items:
+        - golang-1.6
         - asciinema
         - cgroup-tools
         - docker.io
@@ -111,6 +111,20 @@
         - chef-zero
       become: true
       when: ansible_distribution_version == "16.04"
+
+    - name: install tools available on ubuntu-18.04
+      apt: name={{ item }} state=present update_cache=false
+      with_items:
+        - golang-1.10
+        - asciinema
+        - cgroup-tools
+        - docker.io
+        - vagrant
+        - virtualbox
+        - chef
+        - chef-zero
+      become: true
+      when: ansible_distribution_version == "18.04"
 
     - name: uninstall obsolete packages
       apt: name={{ item }} state=absent update_cache=false
