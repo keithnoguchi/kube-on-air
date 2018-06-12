@@ -104,7 +104,6 @@
         - golang-1.6
         - asciinema
         - cgroup-tools
-        - docker.io
         - vagrant
         - virtualbox
         - chef
