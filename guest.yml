@@ -96,7 +96,6 @@
         - libvirt-bin
         - libcap-ng-dev
         - virtinst
-        - nodejs
       become: true
 
     - name: install tools available on ubuntu-16.04

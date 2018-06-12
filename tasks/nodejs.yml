@@ -1,0 +1,19 @@
+---
+- name: clone the nodejs git repo
+  git:
+    repo: "{{ gitsite }}nodejs/node"
+    dest: "{{ gitpath }}node"
+    update: yes
+    ssh_opts: "-o StrictHostKeyChecking=no"
+  register: git
+
+- name: configure nodejs
+  shell: ./configure --prefix=/usr/local
+  args:
+    chdir: "{{ gitpath }}node"
+  when: git.before != git.after
+
+- name: build nodejs!
+  make:
+    chdir: "{{ gitpath }}node"
+  when: git.before != git.after
