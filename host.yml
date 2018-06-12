@@ -22,8 +22,8 @@
       - { id: '02', type: arch }
       - { id: '10', type: kube }
       - { id: '11', type: kube }
-      - { id: '12', type: hv   }
-      - { id: '13', type: hv   }
+      - { id: '12', type: cam  }
+      - { id: '13', type: cam  }
       - { id: '20', type: node }
       - { id: '21', type: node }
       - { id: '30', type: node }
