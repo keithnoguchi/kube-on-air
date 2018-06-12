@@ -3,6 +3,7 @@
   git:
     repo: "{{ gitsite }}nodejs/node"
     dest: "{{ gitpath }}node"
+    version: v8.x
     update: yes
     ssh_opts: "-o StrictHostKeyChecking=no"
   register: git
