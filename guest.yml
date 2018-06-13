@@ -117,7 +117,6 @@
         - golang-1.10
         - asciinema
         - cgroup-tools
-        - docker.io
         - vagrant
         - virtualbox
         - chef
@@ -173,6 +172,9 @@
       become: true
       changed_when: false
       when: ansible_distribution_version != "18.04"
+
+    - name: install docker packages
+      import_tasks: tasks/docker.yml
 
     - name: add user to the libvirt/container group
       user:
