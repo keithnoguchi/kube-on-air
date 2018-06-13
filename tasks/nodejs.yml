@@ -1,20 +1,21 @@
 ---
-- name: clone the nodejs git repo
-  git:
-    repo: "{{ gitsite }}nodejs/node"
-    dest: "{{ gitpath }}node"
-    version: v8.x
-    update: yes
-    ssh_opts: "-o StrictHostKeyChecking=no"
-  register: git
+- name: update the apt for node repo
+  shell: curl -sL https://deb.nodesource.com/setup_8.x | bash -
+  become: true
 
-- name: configure nodejs
-  shell: ./configure --prefix=/usr/local
-  args:
-    chdir: "{{ gitpath }}node"
-  when: git.before != git.after
+- name: update the apt key for yarn js package manager
+  apt_key:
+    url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    state: present
+  become: true
 
-- name: build nodejs!
-  make:
-    chdir: "{{ gitpath }}node"
-  when: git.before != git.after
+- name: update the apt repository for yarn js package manager
+  apt_repository:
+    repo: deb https://dl.yarnpkg.com/debian stable main
+  become: true
+
+- name: install node and yarn through apt
+  apt:
+    name: [nodejs, yarn]
+    update_cache: true
+  become: true

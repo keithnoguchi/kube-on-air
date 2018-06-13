@@ -8,14 +8,14 @@
 - name: install the latest ruby packages
   import_tasks: tasks/ruby.yml
 
+- name: install the latest nodejs
+  import_tasks: tasks/nodejs.yml
+
 - name: install the latest ansible
   import_tasks: tasks/ansible.yml
 
 - name: install the latest Open vSwitch
   import_tasks: tasks/openvswitch.yml
-
-- name: install the latest nodejs
-  import_tasks: tasks/nodejs.yml
 
 - name: install the latest golang
   import_tasks: tasks/golang.yml
