@@ -11,17 +11,17 @@
 - name: install the latest nodejs
   import_tasks: tasks/nodejs.yml
 
-- name: install the latest ansible
-  import_tasks: tasks/ansible.yml
-
-- name: install the latest Open vSwitch
-  import_tasks: tasks/openvswitch.yml
-
 - name: install the latest golang
   import_tasks: tasks/golang.yml
 
 - name: install the latest golang packages
   import_tasks: tasks/gopkg.yml
+
+- name: install the latest ansible
+  import_tasks: tasks/ansible.yml
+
+- name: install the latest Open vSwitch
+  import_tasks: tasks/openvswitch.yml
 
 - name: install the latest prometheus
   import_tasks: tasks/prometheus.yml
