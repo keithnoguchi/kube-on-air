@@ -58,6 +58,7 @@
         - curl
         - elinks
         - iputils-arping
+        - wpasupplicant
       become: true
 
     - name: install developer tools
