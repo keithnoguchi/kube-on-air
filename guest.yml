@@ -80,8 +80,10 @@
         - python-pip
         - python-six
         - python-lxml
+        - python-virtualenv
         - python3-pip
         - python3-setuptools
+        - python3-virtualenv
         - ruby
         - rubygems-integration
         - graphviz
