@@ -23,6 +23,10 @@
 - name: install the latest Open vSwitch
   import_tasks: tasks/openvswitch.yml
 
+- name: install the latest protobuf
+  import_tasks: tasks/protobuf.yml
+  when: not travis_ci|bool
+
 - name: install the latest prometheus
   import_tasks: tasks/prometheus.yml
 
@@ -31,8 +35,4 @@
 
 - name: configure the docker-compose environment
   import_tasks: tasks/docker-compose.yml
-  when: latest|bool and not travis_ci|bool
-
-- name: install the latest protobuf
-  import_tasks: tasks/protobuf.yml
   when: latest|bool and not travis_ci|bool
