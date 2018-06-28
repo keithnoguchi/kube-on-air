@@ -59,6 +59,7 @@
         - elinks
         - iputils-arping
         - wpasupplicant
+        - tcpdump
       become: true
 
     - name: install developer tools
