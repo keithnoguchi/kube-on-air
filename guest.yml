@@ -45,6 +45,7 @@
       with_items:
         - vim
         - tmux
+        - mutt
         - cscope
         - tree
         - jq
