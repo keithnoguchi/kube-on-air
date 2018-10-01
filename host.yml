@@ -93,13 +93,8 @@
     - name: install the latest golang
       import_tasks: tasks/golang.yml
 
+    - name: install the kubectl
+      import_tasks: tasks/kubectl.yml
+
     - name: install the prometheus
       import_tasks: tasks/prometheus.yml
-
-    - name: get the kubectl
-      git:
-        repo: "{{ gitsite }}kubernetes/kubernetes"
-        dest: "{{ gitpath }}kubernetes"
-        update: yes
-        ssh_opts: "-o StrictHostKeyChecking=no"
-      register: git
