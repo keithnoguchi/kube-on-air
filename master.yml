@@ -49,11 +49,11 @@
 
     - name: get API token, API server, and certificate hash
       set_fact:
-        cluster_token: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
-        cluster_apiserver: "{{kubeadm.stdout|regex_search(regexp, '\\2')|list|first}}"
-        cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\4')|list|first}}"
+        cluster_apiserver: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
+        cluster_token: "{{kubeadm.stdout|regex_search(regexp, '\\2')|list|first}}"
+        cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\3')|list|first}}"
       vars:
-        regexp: 'kubeadm join --token (\S+) (\S+) (\S+) (\S+)'
+        regexp: 'kubeadm join (\S+) --token (\S+) --discovery-token-ca-cert-hash (\S+)'
       when: kubeadm.changed == true
       changed_when: false
 
