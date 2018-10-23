@@ -51,7 +51,7 @@
     - name: undefine libvirt guest network
       virt_net: name=default state=absent
       become: true
-      when: latest|bool and not travis_ci|bool
+      when: not travis_ci|bool
 
     - name: define libvirt guest network
       virt_net:
@@ -59,7 +59,7 @@
         state: present
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
       become: true
-      when: latest|bool and not travis_ci|bool
+      when: not travis_ci|bool
 
     - name: undefine libvirt guest
       virt:
@@ -68,7 +68,7 @@
       with_items: "{{ guests }}"
       become: true
       ignore_errors: true
-      when: latest|bool and not travis_ci|bool
+      when: not travis_ci|bool
 
     - name: define libvirt guest
       virt:
@@ -77,7 +77,7 @@
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
       with_items: "{{ guests }}"
       become: true
-      when: latest|bool and not travis_ci|bool
+      when: not travis_ci|bool
 
     - name: run the local docker registry
       docker_container:
