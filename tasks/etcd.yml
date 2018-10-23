@@ -11,7 +11,7 @@
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
 
 - name: build & install the latest etcd
-  shell: "go install {{ item }}"
+  shell: "go install {{ item }} && rm -rf on"
   args:
     chdir: "{{ lookup('env', 'GOPATH') }}/src/go.etcd.io/etcd"
   with_items:
