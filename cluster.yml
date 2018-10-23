@@ -108,11 +108,13 @@
       become: true
 
     - name: install kubernetes packages
-      apt: name={{ item }} state=latest update_cache=false
-      with_items:
-        - kubelet
-        - kubeadm
-        - kubernetes-cni
+      apt:
+        state: latest
+        update_cache: false
+        name:
+          - kubelet
+          - kubeadm
+          - kubernetes-cni
       become: true
       when: ansible_distribution_version == "18.04"
 

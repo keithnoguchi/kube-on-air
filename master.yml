@@ -33,30 +33,6 @@
       import_tasks: tasks/etcd.yml
       when: latest|bool
 
-    - name: install encription key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
-      become: true
-
-    - name: add gce kubernetes repository
-      apt_repository:
-        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
-        state: present
-        filename: kubernetes.list
-      become: true
-
-    - name: install kubernetes packages
-      apt:
-        state: latest
-        update_cache: false
-        name:
-          - kubelet
-          - kubeadm
-          - kubernetes-cni
-      become: true
-      when: ansible_distribution_version == "18.04"
-
     - name: check if the master is already initialized
       stat:
         path: /etc/kubernetes/kubelet.conf
