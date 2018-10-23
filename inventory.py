@@ -28,7 +28,7 @@ def main():
             hostvars[host] = {'name': host,
                               # Pick the first master as the master.
                               'master': inventory['master']['hosts'][0],
-                              'cluster_node_ip': '10.0.0.%d' % num}
+                              'cluster_node_ip': '10.0.0.%d/16' % num}
 
     # We'll conbine this to the above once hv also joins to the cluster.
     for type in ['guest']:

@@ -205,11 +205,11 @@ VNC client package, `tigervnc`, through `pacman`:
 air$ sudo pacman -S virt-install virt-viewer tigervnc
 ```
 
-Let's install the guest, after downloading the image of your choise.  I usually play with [Ubuntu LTS](http://mirror.pnl.gov/releases/16.04.3/), just to see what they're up to. :)
+Let's install the guest, after downloading the image of your choise.  I usually play with [Ubuntu LTS](https://www.ubuntu.com/download/server/), just to see what they're up to. :)
 
 ```
 air$ sudo virt-install --name kube10 --disk /dev/images/kube10 \
---cdrom /var/lib/libvirt/boot/ubuntu-18.04.3-live-server-amd64.iso \
+--cdrom /var/lib/libvirt/boot/ubuntu-18.04.1-live-server-amd64.iso \
 --hvm --memory 2048 --cpu host,require=vmx --graphics vnc
 Starting install...
 Creating domain...

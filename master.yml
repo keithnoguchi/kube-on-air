@@ -4,15 +4,17 @@
   vars:
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
-    gobootstrap: /usr/lib/go-1.6
+    gobootstrap: /usr/lib/go-1.10
     latest: true
     cluster_podcidr: 10.244.0.0/16
   gather_facts: true
   tasks:
     - name: install apt packages
-      apt: name={{ item }} state=present update_cache=true
-      with_items:
-        - golang-1.6
+      apt:
+        state: present
+        update_cache: true
+        name:
+          - golang-1.10
       become: true
 
     - name: disable swap on the master for kubelet1.8 or above to run
@@ -27,15 +29,8 @@
       import_tasks: tasks/golang.yml
       when: latest|bool
 
-    - name: get the latest etcd
-      command: go get -u {{ item }}
-      with_items:
-        - github.com/coreos/etcd
-        - github.com/coreos/etcd/etcdctl
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+    - name: install the latest etcd
+      import_tasks: tasks/etcd.yml
       when: latest|bool
 
     - name: install encription key
@@ -52,13 +47,15 @@
       become: true
 
     - name: install kubernetes packages
-      apt: name={{ item }} state=latest update_cache=false
-      with_items:
-        - kubelet
-        - kubeadm
-        - kubernetes-cni
+      apt:
+        state: latest
+        update_cache: false
+        name:
+          - kubelet
+          - kubeadm
+          - kubernetes-cni
       become: true
-      when: ansible_distribution_version == "16.04"
+      when: ansible_distribution_version == "18.04"
 
     - name: check if the master is already initialized
       stat:
@@ -72,7 +69,7 @@
           --apiserver-advertise-address "{{ cluster_node_ip }}"
       become: true
       register: kubeadm
-      when: kubelet.stat.exists == false and ansible_distribution_version == "16.04"
+      when: kubelet.stat.exists == false and ansible_distribution_version == "18.04"
 
     - name: get API token, API server, and certificate hash
       set_fact:

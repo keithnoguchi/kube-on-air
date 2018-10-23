@@ -1,10 +1,22 @@
 ---
-- name: get etcd
-  command: go get {{ item }}
-  with_items:
-    - github.com/coreos/etcd/cmd/etcd
-    - github.com/coreos/etcd/cmd/etcdctl
+# https://github.com/etcd-io/etcd/blob/master/Documentation/dl_build.md#build-the-latest-version
+- name: clone the etcd repo
+  git:
+    repo: "{{ gitsite }}etcd-io/etcd"
+    dest: "{{ lookup('env', 'GOPATH') }}/src/go.etcd.io/etcd"
+    update: yes
+    ssh_opts: "-o StrictHostKeyChecking=no"
+  register: git
   environment:
-    GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
-    PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+
+- name: build & install the latest etcd
+  shell: "go install {{ item }}"
+  args:
+    chdir: "{{ lookup('env', 'GOPATH') }}/src/go.etcd.io/etcd"
+  with_items:
+    - .
+    - ./etcdctl
+  when: git.before != git.after
+  environment:
+    GOPATH: "{{ lookup('env', 'GOPATH') }}"

@@ -34,21 +34,42 @@
         group: root
       with_items:
         - hosts
-        - network/interfaces
-        - network/interfaces.d/bond0
+        - systemd/network/bond0.netdev
+        - systemd/network/bond0.network
+        - systemd/network/ens4.network
+        - systemd/network/ens5.network
       become: true
 
     - name: bring up bond0 interface
-      command: ifup -a
+      systemd:
+        name: systemd-networkd
+        state: restarted
+        daemon_reload: true
       become: true
+      when: ansible_distribution_version == "18.04"
       changed_when: false
 
-    - name: install docker for ubuntu16.04 or above
-      apt: name={{ item }} state=present update_cache=false
-      with_items:
-        - docker.io
+    - name: install encription key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
       become: true
-      when: ansible_distribution_version == "16.04"
+
+    - name: add docker repository
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu/ bionic stable"
+        state: present
+        filename: docker.list
+      become: true
+
+    - name: install docker package(s)
+      apt:
+        state: latest
+        update_cache: false
+        name:
+          - docker-ce
+      become: true
+      when: ansible_distribution_version == "18.04"
 
     - name: add user to the docker group
       user:
@@ -63,7 +84,7 @@
         regexp: "^ExecStart"
         line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
       become: true
-      when: ansible_distribution_version == "16.04"
+      when: ansible_distribution_version == "18.04"
 
     - name: restart docker daemon to reflect the previous change
       systemd:
@@ -71,7 +92,7 @@
         state: restarted
         daemon_reload: true
       become: true
-      when: ansible_distribution_version == "16.04"
+      when: ansible_distribution_version == "18.04"
 
     - name: install gce encription key
       apt_key:
@@ -93,7 +114,7 @@
         - kubeadm
         - kubernetes-cni
       become: true
-      when: ansible_distribution_version == "16.04"
+      when: ansible_distribution_version == "18.04"
 
 - name: bootstrap kubernetes master
   import_playbook: master.yml
