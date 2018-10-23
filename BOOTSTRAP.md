@@ -295,7 +295,7 @@ of the guest OS:
 
 ```sh
 guest$ grep ttyS0 /boot/grub/grub.cfg
-        linux   /boot/vmlinuz-4.4.0-87-generic root=UUID=c2f4d4a7-8b9b-445a-a51d-f703abc51bdb ro console=tty0 console=ttyS0,115200n8
+        linux   /boot/vmlinuz-4.4.0-87-generic root=UUID=c2f4d4a7-8b9b-445a-a51d-f703abc51bdb ro console=ttyS0,115200n8
 guest$
 ```
 
