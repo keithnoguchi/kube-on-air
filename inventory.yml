@@ -13,8 +13,7 @@ all:
           hosts: localhost
       vars:
         cluster_node_ip: 10.0.0.1
-        cluster_netmask: 255.255.0.0
-        cluster_broadcast: 10.0.255.255
+        cluster_node_prefixlen: 16
     host:
       hosts: localhost
     guest:

@@ -11,8 +11,7 @@ def main():
     inventory = {'all': {'hosts': [],
                          'vars': {'ansible_user': os.environ['USER']}},
                  'cluster': {'hosts': [],
-                             'vars': {'cluster_netmask': '255.255.0.0',
-                                      'cluster_broadcast': '10.0.255.255'}}}
+                             'vars': {'cluster_node_prefixlen': 16}}}
     inventory['host'] = {'hosts': ['localhost'],
                          'vars': {'ansible_connection': 'local'}}
     inventory['guest'] = guest()
@@ -28,7 +27,7 @@ def main():
             hostvars[host] = {'name': host,
                               # Pick the first master as the master.
                               'master': inventory['master']['hosts'][0],
-                              'cluster_node_ip': '10.0.0.%d/16' % num}
+                              'cluster_node_ip': '10.0.0.%d' % num}
 
     # We'll conbine this to the above once hv also joins to the cluster.
     for type in ['guest']:
