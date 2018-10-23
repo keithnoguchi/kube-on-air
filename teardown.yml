@@ -4,5 +4,5 @@
   gather_facts: false
   tasks:
     - name: reset the kubernetes configuration with kubeadm
-      command: kubeadm reset
+      command: kubeadm reset -f
       become: true
