@@ -13,7 +13,7 @@ all:
           hosts: localhost
       vars:
         cluster_node_ip: 10.0.0.1
-        cluster_node_prefixlen: 16
+        cluster_node_prefixlen: 24
     host:
       hosts: localhost
     guest:

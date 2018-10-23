@@ -11,7 +11,7 @@ def main():
     inventory = {'all': {'hosts': [],
                          'vars': {'ansible_user': os.environ['USER']}},
                  'cluster': {'hosts': [],
-                             'vars': {'cluster_node_prefixlen': 16}}}
+                             'vars': {'cluster_node_prefixlen': 24}}}
     inventory['host'] = {'hosts': ['localhost'],
                          'vars': {'ansible_connection': 'local'}}
     inventory['guest'] = guest()

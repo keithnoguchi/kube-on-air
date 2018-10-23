@@ -12,8 +12,8 @@
     - name: setup console access
       lineinfile:
         path: /etc/default/grub
-        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT'
-        line: 'GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0,38400n8"'
+        regexp: '^GRUB_CMDLINE_LINUX'
+        line: 'GRUB_CMDLINE_LINUX="console=ttyS0,38400n8"'
         owner: root
         group: root
         mode: 0644
