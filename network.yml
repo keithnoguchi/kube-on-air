@@ -5,8 +5,8 @@
     networking: weave
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
-      calico:  https://docs.projectcalico.org/v2.6/getting-started/kubernetes/installation/hosted/kubeadm/1.6/calico.yaml
-      weave: https://git.io/weave-kube-1.6
+      calico:  https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml
+      weave: https://git.io/weave-kube
     travis_ci: false
   gather_facts: false
   tasks:
