@@ -128,14 +128,14 @@ As we setup a storage pool, we can finally create a storage volumes
 for the guest OS:
 
 ```
-air$ sudo virsh vol-create-as images hv10 12G
+air$ sudo virsh vol-create-as images kube10 12G
 ```
 
 Cool, now let's check it both from `virsh` as well as `lvs`
 
 ```
-air$ sudo virsh vol-info hv10 images
-Name:           hv10
+air$ sudo virsh vol-info kube10 images
+Name:           kube10
 Type:           block
 Capacity:       12.00 GiB
 Allocation:     12.00 GiB
@@ -147,7 +147,7 @@ air$ sudo lvs
   home vg0 -wi-ao---- 32.00g
   root vg0 -wi-ao---- 32.00g
   var  vg0 -wi-ao---- 32.00g
-  hv10 images swi-a-s--- 12.00g
+  kube10 images swi-a-s--- 12.00g
 air$
 ```
 
@@ -208,8 +208,8 @@ air$ sudo pacman -S virt-install virt-viewer tigervnc
 Let's install the guest, after downloading the image of your choise.  I usually play with [Ubuntu LTS](http://mirror.pnl.gov/releases/16.04.3/), just to see what they're up to. :)
 
 ```
-air$ sudo virt-install --name hv10 --disk /dev/images/hv10 \
---cdrom /var/lib/libvirt/boot/ubuntu-16.04.3-server-amd64.iso \
+air$ sudo virt-install --name kube10 --disk /dev/images/kube10 \
+--cdrom /var/lib/libvirt/boot/ubuntu-18.04.3-live-server-amd64.iso \
 --hvm --memory 2048 --cpu host,require=vmx --graphics vnc
 Starting install...
 Creating domain...
@@ -219,8 +219,8 @@ Domain installation still in progress. Waiting for installation to complete.
 I've focus on the minimum required setup in the command line above, which
 doesn't slow down the installation process.  Here is the break down:
 
-1. `--name hv10`: Specify new guest name, e.g. `hv10`, a.k.a `-n`
-2. `--disk /dev/images/hv10`: Specify the guest local hard disk.
+1. `--name kube10`: Specify new guest name, e.g. `kube10`, a.k.a `-n`
+2. `--disk /dev/images/kube10`: Specify the guest local hard disk.
 3. `--cdrom /var/lib/...`: Specify the boot image (ISO), a.k.a `-c`
 4. `--hvm`: Does hardware virtualization, a.k.a `-v` (*optional*)
 5. `--memory 2048`: Allocate 2G of memory to the guest. (*optional*)
@@ -231,10 +231,10 @@ Out of all, `--cpu host,require=vmx` is the most important thing to remember,
 if you're planing to run KVM inside your guest OS.
 
 Check the IP address and the port to connect to the new guest OS by
-`virsh vncdisplay hv10`:
+`virsh vncdisplay kube10`:
 
 ```
-air$ sudo virsh vncdisplay hv10
+air$ sudo virsh vncdisplay kube10
 127.0.0.1:0
 ```
 
@@ -254,7 +254,7 @@ below:
 First setup guest network MAC address through `virsh edit` command:
 
 ```
-air$ sudo virsh dumpxml hv10 | grep '04:10'
+air$ sudo virsh dumpxml kube10 | grep '04:10'
       <mac address='00:00:bb:16:04:10'/>
 ```
 
@@ -269,20 +269,20 @@ and setup the host `/etc/hosts` file to do the name to address
 resolution:
 
 ```
-air$ grep hv10 /etc/hosts
-192.168.122.110 hv10
+air$ grep kube10 /etc/hosts
+192.168.122.110 kube10
 air$
 ```
 
-Now, you can ping with the shorter names, e.g. `hv10`, as below:
+Now, you can ping with the shorter names, e.g. `kube10`, as below:
 
 ```
-air$ ping -c2 hv10
-PING hv10 (192.168.122.110) 56(84) bytes of data.
-64 bytes from hv10 (192.168.122.110): icmp_seq=1 ttl=64 time=0.127 ms
-64 bytes from hv10 (192.168.122.110): icmp_seq=2 ttl=64 time=0.187 ms
+air$ ping -c2 kube10
+PING kube10 (192.168.122.110) 56(84) bytes of data.
+64 bytes from kube10 (192.168.122.110): icmp_seq=1 ttl=64 time=0.127 ms
+64 bytes from kube10 (192.168.122.110): icmp_seq=2 ttl=64 time=0.187 ms
 
---- hv10 ping statistics ---
+--- kube10 ping statistics ---
 2 packets transmitted, 2 received, 0% packet loss, time 1015ms
 rtt min/avg/max/mdev = 0.127/0.157/0.187/0.030 ms
 air$
@@ -302,11 +302,11 @@ guest$
 then, you can login through the console via `sudo virsh console`:
 
 ```
-air$ sudo virsh console guest
-Connected to domain guest
+air$ sudo virsh console kube10
+Connected to domain kube10
 Escape character is ^]
 
-Ubuntu 16.04.3 LTS hv10 ttyS0
+Ubuntu 18.04.4 LTS kube10 ttyS0
 
 guest login:
 ```
@@ -393,7 +393,7 @@ air$ sudo ovs-vsctl add-br br1
 and edit libvirt XML file for the VMs to attach to that bridge:
 
 ```
-air$ sudo virsh dumpxml hv0 | grep -A 10 "interface type='bridge'"
+air$ sudo virsh dumpxml kube10 | grep -A 10 "interface type='bridge'"
 <interface type='bridge'>
   <mac address='00:00:00:14:04:00'/>
   <source bridge='br1'/>
@@ -407,10 +407,10 @@ air$ sudo virsh dumpxml hv0 | grep -A 10 "interface type='bridge'"
 </interface>
 ```
 
-and same for *hv1*
+and same for *node20*
 
 ```
-air$ sudo virsh dumpxml hv1 | grep -A 10 "interface type='bridge'"
+air$ sudo virsh dumpxml node20 | grep -A 10 "interface type='bridge'"
 <interface type='bridge'>
   <mac address='00:00:00:16:04:00'/>
   <source bridge='br1'/>
@@ -424,7 +424,7 @@ air$ sudo virsh dumpxml hv1 | grep -A 10 "interface type='bridge'"
 </interface>
 ```
 
-Once you `sudo virsh start hv0` and `sudo virsh start hv1`, those guests are
+Once you `sudo virsh start node20` and `sudo virsh start node21`, those guests are
 connected through the `br1` OvS switch, as shown below.
 
 ```
