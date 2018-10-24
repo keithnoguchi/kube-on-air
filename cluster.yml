@@ -54,6 +54,20 @@
       when: ansible_distribution_version == "18.04"
       changed_when: false
 
+    - name: install build tool for ipvs kernel modules
+      apt:
+        state: latest
+        update_cache: false
+        name:
+          - gcc
+          - make
+          - bison
+          - flex
+          - libssl-dev
+          - libncurses-dev
+      become: true
+      when: ansible_distribution_version == "18.04"
+
     - name: install encription key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
