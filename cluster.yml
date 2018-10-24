@@ -9,6 +9,11 @@
       hostname: name={{ inventory_hostname_short }}
       become: true
 
+    - name: disable swap both on master and nodes for kubelet1.8+
+      command: swapoff -a
+      become: true
+      changed_when: false
+
     - name: setup console access
       lineinfile:
         path: /etc/default/grub

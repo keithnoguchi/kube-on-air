@@ -20,4 +20,4 @@
         kubeadm join --token "{{ cluster_token }}" "{{ cluster_apiserver }}"
           --discovery-token-ca-cert-hash "{{ cluster_cert_hash }}"
       become: true
-      when: kubelet.stat.exists == false and ansible_distribution_version == "16.04"
+      when: kubelet.stat.exists == false and ansible_distribution_version == "18.04"
