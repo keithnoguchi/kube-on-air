@@ -6,6 +6,7 @@
     travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
+    gobootstrap: /usr/lib/go-1.6
     guest_management_network: 192.168.123
   gather_facts: true
   tasks:
@@ -50,6 +51,7 @@
           - libtool
           - bzip2
           - unzip
+          - golang-1.6
           - python-all
           - python-pip
           - python-lxml
@@ -100,6 +102,9 @@
 
     - name: install docker-compose package
       import_tasks: tasks/docker-compose.yml
+
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
 
     - name: add user to the docker group
       user:
