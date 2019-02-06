@@ -4,6 +4,8 @@
   vars:
     latest: false
     travis_ci: false
+    gitsite: "git@github.com:"
+    gitpath: "{{ lookup('env', 'HOME') }}/git/"
     guest_management_network: 192.168.123
   gather_facts: true
   tasks:
@@ -48,6 +50,11 @@
           - libtool
           - bzip2
           - unzip
+          - python-all
+          - python-pip
+          - python-lxml
+          - libssl-dev
+          - libffi-dev
       become: true
 
     - name: update hostname to be sync with the inventory host name
@@ -85,10 +92,16 @@
         - hosts
       become: true
 
-    - name: install docker packages
+    - name: create git root directory
+      file: path={{ gitpath }} state=directory mode=0700
+
+    - name: install docker package
       import_tasks: tasks/docker.yml
 
-    - name: add user to the libvirt/container group
+    - name: install docker-compose package
+      import_tasks: tasks/docker-compose.yml
+
+    - name: add user to the docker group
       user:
         name: "{{ lookup('env', 'USER') }}"
         append: true
