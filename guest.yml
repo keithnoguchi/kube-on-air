@@ -1,138 +1,60 @@
 ---
-- name: setup ubuntu guest
+- name: setup MVP ubuntu guest
   hosts: guest
   vars:
     latest: false
     travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
-    gobootstrap: /usr/lib/go-1.6
-    guest_emulator: /usr/bin/kvm-spice
-    guest_arch: x86_64
-    guest_machine: ubuntu
-    guest_disk_type: file
-    guest_disk_path: /var/lib/libvirt/images
-    guest_disk_source_type: file
-    guest_intf0_dev_prefix: ens3-
-    guest_intf1_dev_prefix: ens4-
-    guest_intf2_dev_prefix: ens5-
     guest_management_network: 192.168.123
-    guests:
-      - { id: 20, type: node }
-      - { id: 21, type: node }
-      - { id: 22, type: node }
-      - { id: 23, type: node }
-      - { id: 24, type: node }
-      - { id: 25, type: node }
-      - { id: 26, type: node }
-      - { id: 27, type: node }
-      - { id: 28, type: node }
-      - { id: 29, type: node }
-      - { id: 30, type: node }
-      - { id: 31, type: node }
-      - { id: 32, type: node }
-      - { id: 33, type: node }
-      - { id: 34, type: node }
-      - { id: 35, type: node }
-      - { id: 36, type: node }
-      - { id: 37, type: node }
-      - { id: 38, type: node }
-      - { id: 39, type: node }
   gather_facts: true
   tasks:
     - name: install console apps
-      apt: name={{ item }} state=present update_cache=true
-      with_items:
-        - vim
-        - tmux
-        - mutt
-        - cscope
-        - tree
-        - jq
-        - aspell
-        - aspell-en
+      apt:
+        state: present
+        update_cache: true
+        name:
+          - vim
+          - tmux
+          - mutt
+          - cscope
+          - tree
+          - jq
+          - aspell
+          - aspell-en
       become: true
 
     - name: install network tools
-      apt: name={{ item }} state=present update_cache=false
-      with_items:
-        - curl
-        - elinks
-        - iputils-arping
-        - wpasupplicant
-        - tcpdump
+      apt:
+        state: present
+        update_cache: false
+        name:
+          - curl
+          - elinks
+          - tcpdump
       become: true
 
     - name: install developer tools
-      apt: name={{ item }} state=present update_cache=false
-      with_items:
-        - binutils
-        - bc
-        - g++
-        - git
-        - gdb
-        - make
-        - autoconf
-        - automake
-        - libtool
-        - bzip2
-        - unzip
-        - cpanminus
-        - python-all
-        - python-pip
-        - python-six
-        - python-lxml
-        - python-virtualenv
-        - python3-pip
-        - python3-setuptools
-        - python3-virtualenv
-        - ruby
-        - rubygems-integration
-        - graphviz
-        - debhelper
-        - dh-autoreconf
-        - libmysqlclient-dev
-        - libssl-dev
-        - libffi-dev
-        - openssl
-        - procps
-        - qemu-kvm
-        - libvirt-dev
-        - libvirt-bin
-        - libcap-ng-dev
-        - virtinst
-      become: true
-
-    - name: install tools available on ubuntu-16.04
-      apt: name={{ item }} state=present update_cache=false
-      with_items:
-        - golang-1.6
-        - asciinema
-        - cgroup-tools
-        - vagrant
-        - virtualbox
-        - chef
-        - chef-zero
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-    - name: install tools available on ubuntu-18.04
-      apt: name={{ item }} state=present update_cache=false
-      with_items:
-        - golang-1.10
-        - asciinema
-        - cgroup-tools
-        - vagrant
-        - virtualbox
-        - chef
-        - chef-zero
-      become: true
-      when: ansible_distribution_version == "18.04"
-
-    - name: uninstall obsolete packages
-      apt: name={{ item }} state=absent update_cache=false
-      with_items:
-        - python-cryptography
+      apt:
+        state: present
+        update_cache: false
+        name:
+          - binutils
+          - bc
+          - g++
+          - git
+          - gdb
+          - make
+          - autoconf
+          - automake
+          - libtool
+          - bzip2
+          - unzip
+          - python-all
+          - python-pip
+          - python-lxml
+          - libssl-dev
+          - libffi-dev
       become: true
 
     - name: update hostname to be sync with the inventory host name
@@ -168,91 +90,20 @@
         group: root
       with_items:
         - hosts
-        - network/interfaces
-        - network/interfaces.d/br0
       become: true
-
-    - name: bring up br0 interface
-      command: ifup -a
-      become: true
-      changed_when: false
-      when: ansible_distribution_version != "18.04"
-
-    - name: install docker packages
-      import_tasks: tasks/docker.yml
-
-    - name: add user to the libvirt/container group
-      user:
-        name: "{{ lookup('env', 'USER') }}"
-        append: true
-        groups: libvirtd,docker
-      become: true
-
-    - name: install python packages
-      import_tasks: tasks/python.yml
-
-    - name: undefine libvirt guest network
-      virt_net: name=default state=absent
-      become: true
-      when: latest|bool
-
-    - name: define libvirt guest network
-      virt_net:
-        name: default
-        state: present
-        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
-      become: true
-      when: latest|bool
-
-    - name: undefine libvirt guest
-      virt:
-        name: "{{ item.type }}{{ item.id }}"
-        command: undefine
-      with_items: "{{ guests }}"
-      become: true
-      ignore_errors: true
-      when: latest|bool
-
-    - name: define libvirt guest
-      virt:
-        name: "{{ item.type }}{{ item.id }}"
-        command: define
-        xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
-      with_items: "{{ guests }}"
-      become: true
-      when: latest|bool
-
-    - name: allow the insecure air.local local docker registry access
-      lineinfile:
-        path: /etc/systemd/system/multi-user.target.wants/docker.service
-        regexp: "^ExecStart"
-        line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-    - name: restart docker daemon to reflect the previous change
-      systemd:
-        name: docker
-        state: restarted
-        daemon_reload: true
-      become: true
-      when: ansible_distribution_version == "16.04"
-
-    - name: setup RabbitMQ environment
-      import_tasks: tasks/rabbit.yml
-      vars:
-        scheme: amqp
-        username: rabbit
-        password: RabbitMQ
-        cluster: "localhost:5672"
-        vhost: hole
-        configure_priv: ".*"
-        read_priv: ".*"
-        write_priv: ".*"
-      when: not travis_ci|bool
 
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
 
-    - name: light the fire!
-      import_tasks: tasks/all.yml
+    - name: install docker package
+      import_tasks: tasks/docker.yml
+
+    - name: install docker-compose package
+      import_tasks: tasks/docker-compose.yml
+
+    - name: add user to the docker group
+      user:
+        name: "{{ lookup('env', 'USER') }}"
+        append: true
+        groups: docker
+      become: true
