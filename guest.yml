@@ -1,5 +1,5 @@
 ---
-- name: setup MVP ubuntu guest
+- name: setup ubuntu guest
   hosts: guest
   vars:
     latest: false

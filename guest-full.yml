@@ -1,5 +1,5 @@
 ---
-- name: setup ubuntu guest
+- name: setup full ubuntu guest
   hosts: guest
   vars:
     latest: false
