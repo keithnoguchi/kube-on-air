@@ -106,6 +106,9 @@
     - name: install the latest golang
       import_tasks: tasks/golang.yml
 
+    - name: install the latest nodejs
+      import_tasks: tasks/nodejs.yml
+
     - name: add user to the docker group
       user:
         name: "{{ lookup('env', 'USER') }}"
