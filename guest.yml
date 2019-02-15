@@ -109,6 +109,9 @@
     - name: install the latest nodejs
       import_tasks: tasks/nodejs.yml
 
+    - name: install the latest gcloud
+      import_tasks: tasks/gcloud.yml
+
     - name: add user to the docker group
       user:
         name: "{{ lookup('env', 'USER') }}"

@@ -1,0 +1,21 @@
+---
+- name: install gce encription key
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+  become: true
+
+- name: add gcloud repository
+  apt_repository:
+    repo: "deb http://packages.cloud.google.com/apt cloud-sdk-{{ ansible_distribution_release }} main"
+    state: present
+    filename: google-cloud-sdk.list
+  become: true
+
+- name: install gcloud packages
+  apt:
+    state: latest
+    update_cache: true
+    name:
+      - google-cloud-sdk
+  become: true
