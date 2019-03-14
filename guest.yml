@@ -118,3 +118,9 @@
         append: true
         groups: docker
       become: true
+
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
+
+    - name: install the google cloud SDK
+      import_tasks: tasks/gcloud.yml

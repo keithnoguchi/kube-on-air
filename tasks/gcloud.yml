@@ -1,21 +1,15 @@
 ---
-- name: install gce encription key
-  apt_key:
-    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-    state: present
-  become: true
+- name: install gcloud SDK
+  get_url:
+    url: https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-233.0.0-linux-x86_64.tar.gz
+    dest: /tmp/gcloud.tgz
+    mode: 0744
 
-- name: add gcloud repository
-  apt_repository:
-    repo: "deb http://packages.cloud.google.com/apt cloud-sdk-{{ ansible_distribution_release }} main"
-    state: present
-    filename: google-cloud-sdk.list
-  become: true
+- name: untar the gcloud SDK
+  unarchive:
+    src: /tmp/gcloud.tgz
+    dest: "{{ lookup('env', 'HOME') }}/src/"
+    remote_src: true
 
-- name: install gcloud packages
-  apt:
-    state: latest
-    update_cache: true
-    name:
-      - google-cloud-sdk
-  become: true
+- name: install the gcloud SDK
+  shell: "{{ lookup('env', 'HOME') }}/src/google-cloud-sdk/install.sh"
