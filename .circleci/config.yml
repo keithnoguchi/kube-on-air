@@ -1,0 +1,47 @@
+---
+version: 2
+default: &defaults
+  working_directory: /home/circleci/project/kube-on-air
+  docker:
+    - image: archlinux/base:latest
+workflows:
+  version: 2
+  checkout_ansible_host:
+    jobs:
+      - checkout
+      - ansible:
+          requires:
+            - checkout
+      - host:
+          requires:
+            - checkout
+jobs:
+  checkout:
+    <<: *defaults
+    steps:
+      - run:
+          name: install tar and git/ssh to checkout and create a workspace
+          command: pacman -Sy --noconfirm tar git openssh
+      - checkout
+      - persist_to_workspace:
+          root: /home/circleci/project/kube-on-air
+          paths:
+            - .
+  ansible:
+    <<: *defaults
+    steps:
+      - run:
+          name: install tar and other tools to build the latest ansible
+          command: pacman -Sy --noconfirm tar make git python python-pip
+      - attach_workspace:
+          at: .
+      - run: make ci-ansible
+  host:
+    <<: *defaults
+    steps:
+      - run:
+          name: install tar and other tools to run the test
+          command: pacman -Sy --noconfirm tar make git go ansible
+      - attach_workspace:
+          at: .
+      - run: GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-host
