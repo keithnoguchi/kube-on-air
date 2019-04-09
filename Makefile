@@ -1,3 +1,4 @@
+SUDO ?= sudo
 all: kuard
 
 .PHONY: boot bootstrap
@@ -27,7 +28,7 @@ delete-%:
 clean:
 	@$(RM) *.bak *.retry .*.sw? **/.*.sw?
 dist-clean: clean teardown
-	sudo $(RM) -rf .ansible
+	$(SUDO) $(RM) -rf .ansible
 
 # TravisCI targets
 .PHONY: ci-ansible
@@ -40,5 +41,5 @@ ci-ping-%:
 ci-ansible:
 	git clone https://github.com/ansible/ansible .ansible
 	cd .ansible \
-		&& sudo pip install -r requirements.txt \
-		&& sudo python setup.py install 2>&1 > /dev/null
+		&& $(SUDO) pip install -r requirements.txt \
+		&& $(SUDO) python setup.py install 2>&1 > /dev/null

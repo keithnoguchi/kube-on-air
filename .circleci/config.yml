@@ -35,7 +35,7 @@ jobs:
           command: pacman -Sy --noconfirm tar make git python python-pip
       - attach_workspace:
           at: .
-      - run: make ci-ansible
+      - run: SUDO= make ci-ansible
   host:
     <<: *defaults
     steps:
@@ -44,4 +44,4 @@ jobs:
           command: pacman -Sy --noconfirm tar make git go ansible
       - attach_workspace:
           at: .
-      - run: GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-host
+      - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-host
