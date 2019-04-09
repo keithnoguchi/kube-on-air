@@ -72,7 +72,6 @@
 
     - name: define libvirt guest
       virt:
-        name: "{{ item.type }}{{ item.id }}"
         command: define
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
       with_items: "{{ guests }}"
