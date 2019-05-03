@@ -59,6 +59,18 @@
           - libffi-dev
       become: true
 
+    # https://ownyourbits.com/2018/06/13/transparently-running-binaries-from-any-architecture-in-linux-with-qemu-and-binfmt_misc/
+    - name: install Qemu based cross environment
+      apt:
+        state: present
+        update_cache: false
+        name:
+          - qemu
+          - qemu-user-static
+          - qemu-user
+          - binfmt-support
+      become: true
+
     - name: update hostname to be sync with the inventory host name
       hostname: name={{ inventory_hostname_short }}
       become: true
