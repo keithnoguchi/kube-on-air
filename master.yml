@@ -4,25 +4,22 @@
   vars:
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
-    gobootstrap: /usr/lib/go-1.10
+    gobootstrap: /usr/lib/go
     latest: true
     cluster_podcidr: 10.244.0.0/16
   gather_facts: true
   tasks:
-    - name: install apt packages
-      apt:
+    - name: install package(s)
+      pacman:
         state: present
         update_cache: true
         name:
-          - golang-1.10
+          - go
+          - make
       become: true
 
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
-
-    - name: install the latest golang
-      import_tasks: tasks/golang.yml
-      when: latest|bool
 
     - name: install the latest etcd
       import_tasks: tasks/etcd.yml
