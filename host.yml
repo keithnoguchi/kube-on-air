@@ -48,6 +48,14 @@
       become: true
       when: not travis_ci|bool
 
+    - name: install package(s)
+      pacman:
+        state: present
+        update_cache: true
+        name:
+          - kubectl
+      become: true
+
     - name: undefine libvirt guest network
       virt_net: name=default state=absent
       become: true
@@ -91,9 +99,6 @@
 
     - name: install the latest golang
       import_tasks: tasks/golang.yml
-
-    - name: install the kubectl
-      import_tasks: tasks/kubectl.yml
 
     - name: install the prometheus
       import_tasks: tasks/prometheus.yml

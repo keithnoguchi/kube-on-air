@@ -21,6 +21,12 @@
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
 
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
+
+    - name: install the kubenetes
+      import_tasks: tasks/kubernetes.yml
+
     - name: install the latest etcd
       import_tasks: tasks/etcd.yml
       when: latest|bool
