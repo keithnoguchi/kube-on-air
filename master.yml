@@ -2,6 +2,7 @@
 - name: setup arch based kube master
   hosts: master
   vars:
+    gobootstrap: /usr/lib/go
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     cluster_podcidr: 10.244.0.0/16
