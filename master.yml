@@ -1,35 +1,38 @@
 ---
-- name: setup ubuntu based kube master
+- name: setup arch based kube master
   hosts: master
   vars:
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
-    gobootstrap: /usr/lib/go
-    latest: true
     cluster_podcidr: 10.244.0.0/16
   gather_facts: true
   tasks:
-    - name: install package(s)
-      pacman:
-        state: present
-        update_cache: true
-        name:
-          - go
-          - make
-      become: true
-
-    - name: create git root directory
-      file: path={{ gitpath }} state=directory mode=0700
-
-    - name: install the latest golang
-      import_tasks: tasks/golang.yml
-
-    - name: install the kubenetes
-      import_tasks: tasks/kubernetes.yml
-
-    - name: install the latest etcd
+    - name: install etcd
       import_tasks: tasks/etcd.yml
-      when: latest|bool
+
+    - name: get the kubernetes
+      git:
+        repo: "{{ gitsite }}kubernetes/kubernetes"
+        dest: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
+        update: yes
+        ssh_opts: "-o StrictHostKeyChecking=no"
+      register: git
+      environment:
+        GOPATH: "{{ lookup('env', 'GOPATH') }}"
+
+    - name: install kubeadm, kubelet, kube-apiserver
+      command: go install "./cmd/{{ item }}"
+      args:
+        chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
+      with_items:
+        - kubeadm
+        - kubelet
+        - kube-apiserver
+      when: git.before != git.after
+      environment:
+        GOROOT: "{{ lookup('env', 'GOROOT') }}"
+        GOPATH: "{{ lookup('env', 'GOPATH') }}"
+        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
 
     - name: check if the master is already initialized
       stat:

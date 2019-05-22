@@ -77,6 +77,9 @@ def master():
             if dom.name().startswith('kube') == True:
                 master['hosts'].append(dom.name())
 
+    if len(master['hosts']) == 0:
+        master['hosts'].append('kube10')
+
     return master
 
 

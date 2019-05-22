@@ -3,32 +3,13 @@
   hosts: cluster
   gather_facts: true
   vars:
+    gitsite: "git@github.com:"
+    gitpath: "{{ lookup('env', 'HOME') }}/git/"
     guest_management_network: 192.168.122
   tasks:
     - name: update hostname to be in sync with the inventory host name
       hostname: name={{ inventory_hostname_short }}
       become: true
-
-    - name: disable swap both on master and nodes for kubelet1.8+
-      command: swapoff -a
-      become: true
-      changed_when: false
-
-    - name: setup console access
-      lineinfile:
-        path: /etc/default/grub
-        regexp: '^GRUB_CMDLINE_LINUX'
-        line: 'GRUB_CMDLINE_LINUX="console=ttyS0,38400n8"'
-        owner: root
-        group: root
-        mode: 0644
-      register: console
-      become: true
-
-    - name: update /boot/grub/grub.cfg to reflect the console change
-      command: grub-mkconfig -o /boot/grub/grub.cfg
-      become: true
-      when: console.changed
 
     - name: update files under /etc
       template:
@@ -45,50 +26,16 @@
         - systemd/network/ens5.network
       become: true
 
-    - name: bring up bond0 interface
-      systemd:
-        name: systemd-networkd
-        state: restarted
-        daemon_reload: true
-      become: true
-      when: ansible_distribution_version == "18.04"
-      changed_when: false
-
-    - name: install build tool for ipvs kernel modules
-      apt:
-        state: latest
-        update_cache: false
+    - name: install package(s)
+      pacman:
+        state: present
+        update_cache: true
         name:
-          - gcc
+          - go
           - make
-          - bison
-          - flex
-          - libssl-dev
-          - libncurses-dev
+          - docker
+          - rng-tools
       become: true
-      when: ansible_distribution_version == "18.04"
-
-    - name: install encription key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-      become: true
-
-    - name: add docker repository
-      apt_repository:
-        repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu/ bionic stable"
-        state: present
-        filename: docker.list
-      become: true
-
-    - name: install docker package(s)
-      apt:
-        state: latest
-        update_cache: false
-        name:
-          - docker-ce
-      become: true
-      when: ansible_distribution_version == "18.04"
 
     - name: add user to the docker group
       user:
@@ -97,45 +44,34 @@
         groups: docker
       become: true
 
+    - name: enable/start services
+      systemd: name={{ item }} enabled=true status=started
+      with_items:
+        - systemd-networkd
+        - systemd-resolved
+        - sshd
+        - rngd
+        - docker
+      become: true
+
     - name: allow the insecure air.local local docker registry access
       lineinfile:
         path: /etc/systemd/system/multi-user.target.wants/docker.service
         regexp: "^ExecStart"
         line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
       become: true
-      when: ansible_distribution_version == "18.04"
 
-    - name: restart docker daemon to reflect the previous change
-      systemd:
-        name: docker
-        state: restarted
-        daemon_reload: true
-      become: true
-      when: ansible_distribution_version == "18.04"
-
-    - name: install gce encription key
-      apt_key:
-        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-        state: present
+    - name: restart docker service
+      systemd: name={{ item }} enabled=true status=restarted
+      with_items:
+        - docker
       become: true
 
-    - name: add gce kubernetes repository
-      apt_repository:
-        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
-        state: present
-        filename: kubernetes.list
-      become: true
+    - name: create git root directory
+      file: path={{ gitpath }} state=directory mode=0700
 
-    - name: install kubernetes packages
-      apt:
-        state: latest
-        update_cache: false
-        name:
-          - kubelet
-          - kubeadm
-          - kubernetes-cni
-      become: true
-      when: ansible_distribution_version == "18.04"
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
 
 - name: bootstrap kubernetes master
   import_playbook: master.yml
