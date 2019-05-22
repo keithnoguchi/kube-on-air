@@ -94,6 +94,15 @@
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
       when: latest|bool
 
+    - name: download the kubeadm and kubelet for nodes
+      fetch:
+        src: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
+        dest: "/tmp/{{ ansible_user_id }}/{{ item }}"
+        flat: yes
+      with_items:
+        - kubeadm
+        - kubelet
+
     - name: check if the master is already initialized
       stat:
         path: /etc/kubernetes/kubelet.conf
