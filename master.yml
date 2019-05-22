@@ -6,7 +6,7 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     cluster_podcidr: 10.244.0.0/16
-    latest: true
+    latest: false
   gather_facts: true
   tasks:
     - name: install package(s)
@@ -18,9 +18,11 @@
           - gcc
           - make
       become: true
+      when: latest|bool
 
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
+      when: latest|bool
 
     - name: install the latest golang
       import_tasks: tasks/golang.yml
@@ -70,7 +72,7 @@
           BIN_DIR:       "{{ lookup('env', 'GOPATH') }}/bin"
       when: latest|bool
 
-    - name: copy openapiinstall ovs-ctl script
+    - name: copy generated openapi.go
       copy:
         remote_src: true
         src:  "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes/_output/local/go/src/{{ item }}"
@@ -104,7 +106,7 @@
           --apiserver-advertise-address "{{ cluster_node_ip }}"
       become: true
       register: kubeadm
-      when: kubelet.stat.exists == false and ansible_distribution_version == "18.04"
+      when: kubelet.stat.exists == false
 
     - name: get API token, API server, and certificate hash
       set_fact:
