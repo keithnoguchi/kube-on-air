@@ -3,8 +3,6 @@
   hosts: cluster
   gather_facts: true
   vars:
-    gitsite: "git@github.com:"
-    gitpath: "{{ lookup('env', 'HOME') }}/git/"
     guest_management_network: 192.168.122
   tasks:
     - name: update hostname to be in sync with the inventory host name
@@ -31,8 +29,6 @@
         state: present
         update_cache: true
         name:
-          - go
-          - make
           - docker
           - rng-tools
       become: true
@@ -45,7 +41,7 @@
       become: true
 
     - name: enable/start services
-      systemd: name={{ item }} enabled=true status=started
+      systemd: name={{ item }} enabled=true state=started
       with_items:
         - systemd-networkd
         - systemd-resolved
@@ -62,16 +58,10 @@
       become: true
 
     - name: restart docker service
-      systemd: name={{ item }} enabled=true status=restarted
+      systemd: name={{ item }} enabled=true state=restarted
       with_items:
         - docker
       become: true
-
-    - name: create git root directory
-      file: path={{ gitpath }} state=directory mode=0700
-
-    - name: install the latest golang
-      import_tasks: tasks/golang.yml
 
 - name: bootstrap kubernetes master
   import_playbook: master.yml

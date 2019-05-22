@@ -7,6 +7,22 @@
     cluster_podcidr: 10.244.0.0/16
   gather_facts: true
   tasks:
+    - name: install package(s)
+      pacman:
+        state: present
+        update_cache: true
+        name:
+          - go
+          - gcc
+          - make
+      become: true
+
+    - name: create git root directory
+      file: path={{ gitpath }} state=directory mode=0700
+
+    - name: install the latest golang
+      import_tasks: tasks/golang.yml
+
     - name: install etcd
       import_tasks: tasks/etcd.yml
 
@@ -28,6 +44,7 @@
         - kubeadm
         - kubelet
         - kube-apiserver
+        - kube-controller-manager
       when: git.before != git.after
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
