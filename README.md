@@ -195,6 +195,9 @@ air$ make teardown
 - [Kubernetes Cluster Networking Design]
 - [Weave]: A virtual network that connects Docker containers across multiple hosts
 - [Calico]: An open source system enabling cloud native application connectivity and policy
+- [kubelet]: What even is a kubelet? by [Kamal Marhubi]
+- [kube-apiserver]: Kubernetes from the ground up: the API server by [Kamal Marhubi]
+- [kube-scheduler]: Kubernetes from the ground up: the scheduler by [Kamal Marhubi]
 
 [kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
 [kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
@@ -204,6 +207,10 @@ air$ make teardown
 [weave]: https://github.com/weaveworks/weave/blob/master/README.md
 [calico]: https://github.com/projectcalico/calico/blob/master/README.md
 [fluentd]: https://www.fluentd.org/
+[Kamal Marhubi]: http://kamalmarhubi.com/
+[kubelet]: http://kamalmarhubi.com/blog/2015/08/27/what-even-is-a-kubelet/
+[kube-apiserver]: http://kamalmarhubi.com/blog/2015/09/06/kubernetes-from-the-ground-up-the-api-server/
+[kube-scheduler]: http://kamalmarhubi.com/blog/2015/11/17/kubernetes-from-the-ground-up-the-scheduler/
 
 ### Kubernetes manifests
 
