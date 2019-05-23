@@ -126,12 +126,14 @@
         owner: root
         group: root
       with_items:
+        - etcd.service
         - kubelet.service
       become: true
 
     - name: enable/start services
       systemd: name={{ item }} enabled=true
       with_items:
+        - etcd
         - kubelet
       become: true
 
