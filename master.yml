@@ -42,26 +42,23 @@
         dest: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
         update: yes
         ssh_opts: "-o StrictHostKeyChecking=no"
-      register: git
+      register: k8s
       environment:
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
       when: latest|bool
 
-    - name: install kubeadm, kubectl, kubelet, openapi-gen and go2make
+    - name: build openapi-gen and go2make for openapi.go generation
       command: go install -ldflags "{{ ldflags }}" "{{ item }}"
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:
-        - ./cmd/kubeadm
-        - ./cmd/kubectl
-        - ./cmd/kubelet
         - ./vendor/k8s.io/kube-openapi/cmd/openapi-gen
         - ./hack/make-rules/helpers/go2make
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
+      when: k8s.before != k8s.after and latest|bool
 
     - name: generate openapi.go
       make:
@@ -75,7 +72,7 @@
           META_DIR:     .make
           OUT_DIR:      _output
           BIN_DIR:       "{{ lookup('env', 'GOPATH') }}/bin"
-      when: latest|bool
+      when: k8s.before != k8s.after and latest|bool
 
     - name: copy generated openapi.go
       copy:
@@ -85,19 +82,26 @@
         mode: 0755
       with_items:
         - pkg/generated/openapi/openapi.go
-      when: latest|bool
+      when: k8s.before != k8s.after and latest|bool
 
-    - name: install kube-apiserver
-      command: go install "{{ item }}"
+    # https://kubernetes.io/docs/concepts/overview/components/
+    - name: build k8s components
+      command: go install -ldflags "{{ ldflags }}" "{{ item }}"
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:
+        - ./cmd/kubeadm
+        - ./cmd/kubectl
+        - ./cmd/kubelet
+        - ./cmd/kube-proxy
         - ./cmd/kube-apiserver
+        - ./cmd/kube-scheduler
+        - ./cmd/kube-controller-manager
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
+      when: k8s.before != k8s.after and latest|bool
 
     - name: download the kubeadm and kubelet for nodes
       fetch:
