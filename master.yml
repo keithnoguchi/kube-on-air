@@ -43,7 +43,7 @@
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
       when: latest|bool
 
-    - name: install kubeadm, kubectl, kubelet and openapi-gen
+    - name: install kubeadm, kubectl, kubelet, openapi-gen and go2make
       command: go install "{{ item }}"
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
@@ -52,6 +52,7 @@
         - ./cmd/kubectl
         - ./cmd/kubelet
         - ./vendor/k8s.io/kube-openapi/cmd/openapi-gen
+        - ./hack/make-rules/helpers/go2make
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
@@ -65,10 +66,10 @@
         file:   ./Makefile.generated_files
         params:
           CALLED_FROM_MAIN_MAKEFILE: 1
-          KUBE_VERBOSE:  2
-          PROJ_SRC_PATH: .
-          META_DIR:      .make
-          OUT_DIR:       _output
+          KUBE_VERBOSE: 2
+          PRJ_SRC_PATH: .
+          META_DIR:     .make
+          OUT_DIR:      _output
           BIN_DIR:       "{{ lookup('env', 'GOPATH') }}/bin"
       when: latest|bool
 
@@ -114,6 +115,10 @@
         kubeadm init --pod-network-cidr "{{ cluster_podcidr }}"
           --apiserver-advertise-address "{{ cluster_node_ip }}"
       become: true
+      environment:
+        GOROOT: "{{ lookup('env', 'GOROOT') }}"
+        GOPATH: "{{ lookup('env', 'GOPATH') }}"
+        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
       register: kubeadm
       when: kubelet.stat.exists == false
 
