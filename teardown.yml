@@ -5,4 +5,8 @@
   tasks:
     - name: reset the kubernetes configuration with kubeadm
       command: kubeadm reset -f
+      environment:
+        GOROOT: "{{ lookup('env', 'GOROOT') }}"
+        GOPATH: "{{ lookup('env', 'GOPATH') }}"
+        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
       become: true

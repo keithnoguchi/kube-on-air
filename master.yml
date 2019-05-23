@@ -58,7 +58,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: k8s.before != k8s.after and latest|bool
+      when: latest|bool and k8s.before != k8s.after
 
     - name: generate openapi.go
       make:
@@ -72,7 +72,7 @@
           META_DIR:     .make
           OUT_DIR:      _output
           BIN_DIR:       "{{ lookup('env', 'GOPATH') }}/bin"
-      when: k8s.before != k8s.after and latest|bool
+      when: latest|bool and k8s.before != k8s.after
 
     - name: copy generated openapi.go
       copy:
@@ -82,7 +82,7 @@
         mode: 0755
       with_items:
         - pkg/generated/openapi/openapi.go
-      when: k8s.before != k8s.after and latest|bool
+      when: latest|bool and k8s.before != k8s.after
 
     # https://kubernetes.io/docs/concepts/overview/components/
     - name: build k8s components
@@ -101,7 +101,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: k8s.before != k8s.after and latest|bool
+      when: latest|bool and k8s.before != k8s.after
 
     - name: download the kubeadm and kubelet for nodes
       fetch:
@@ -117,6 +117,23 @@
         path: /etc/kubernetes/kubelet.conf
       register: kubelet
       changed_when: false
+
+    - name: copy k8s systemd unit files
+      template:
+        src:  "templates/lib/systemd/system/{{ item }}.j2"
+        dest: "/lib/systemd/system/{{ item }}"
+        mode: 0644
+        owner: root
+        group: root
+      with_items:
+        - kubelet.service
+      become: true
+
+    - name: enable/start services
+      systemd: name={{ item }} enabled=true
+      with_items:
+        - kubelet
+      become: true
 
     - name: initialize the cluster master!
       command: |
