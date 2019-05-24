@@ -7,8 +7,6 @@
     update: yes
     ssh_opts: "-o StrictHostKeyChecking=no"
   register: git
-  environment:
-    GOPATH: "{{ lookup('env', 'GOPATH') }}"
 
 - name: build & install the latest etcd
   shell: "go install {{ item }} && rm -rf on"
@@ -17,7 +15,8 @@
   with_items:
     - .
     - ./etcdctl
-  when: git.before != git.after
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
+    PATH:   "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
+  when: git.before != git.after
