@@ -153,7 +153,7 @@
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
       register: kubeadm
-      when: kubelet.stat.exists == false
+      when: not ci|bool and not kubelet.stat.exists|bool
 
     - name: get API token and API server
       set_fact:
@@ -161,16 +161,16 @@
         cluster_token: "{{kubeadm.stdout|regex_search(regexp, '\\2')|list|first}}"
       vars:
         regexp: 'kubeadm join (\S+) --token (\S+) '
-      when: kubeadm.changed == true
       changed_when: false
+      when: not ci|bool and kubeadm.changed|bool
 
     - name: get CA certificate hash
       set_fact:
         cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
       vars:
         regexp: '    --discovery-token-ca-cert-hash (\S+)'
-      when: kubeadm.changed == true
       changed_when: false
+      when: not ci|bool and kubeadm.changed|bool
 
     - name: fetch the admin.conf for kubectl to work
       fetch:
@@ -178,5 +178,5 @@
         dest: "{{ lookup('env', 'HOME') }}/.kube/config"
         flat: true
       become: yes
-      when: kubeadm.changed == true
       changed_when: false
+      when: not ci|bool kubeadm.changed|bool
