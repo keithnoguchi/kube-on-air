@@ -19,4 +19,5 @@
     - ./etcdctl
   when: git.before != git.after
   environment:
+    GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
