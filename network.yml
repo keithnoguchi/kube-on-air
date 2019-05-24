@@ -2,7 +2,7 @@
 - name: provision the cluster networking
   hosts: host
   vars:
-    networking: weave
+    networking: flannel
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
       calico:  https://docs.projectcalico.org/v3.2/getting-started/kubernetes/installation/hosted/kubeadm/calico.yaml
