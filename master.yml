@@ -104,7 +104,7 @@
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:
         - ./cmd/kubeadm
-        - ./cmd/kubectl
+        - ./cmd/kubelet
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
@@ -117,7 +117,7 @@
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:
-        - ./cmd/kubelet
+        - ./cmd/kubectl
         - ./cmd/kube-proxy
         - ./cmd/kube-apiserver
         - ./cmd/kube-scheduler
