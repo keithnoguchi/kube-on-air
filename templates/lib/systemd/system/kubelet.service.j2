@@ -3,7 +3,7 @@ Description=kubelet: The Kubernetes Node Agent
 Documentation=https://kubernetes.io/docs/home/
 
 [Service]
-ExecStart="{{ lookup('env', 'GOPATH') }}"/bin/kubelet --kubeconfig /etc/kubernetes/kubelet.conf
+ExecStart="{{ lookup('env', 'GOPATH') }}"/bin/kubelet --pod-manifest-path /etc/kubernetes/manifests
 Restart=always
 StartLimitInterval=0
 RestartSec=10
