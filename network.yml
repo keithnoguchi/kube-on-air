@@ -27,4 +27,3 @@
         - { name: calico,  manifest: "{{ manifest.calico }}" }
         - { name: weave,   manifest: "{{ manifest.weave }}" }
       changed_when: false
-      when: not ci|bool
