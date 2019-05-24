@@ -63,6 +63,17 @@
         - docker
       become: true
 
+    - name: copy k8s systemd unit file(s)
+      template:
+        src:  "templates/lib/systemd/system/{{ item }}.j2"
+        dest: "/lib/systemd/system/{{ item }}"
+        mode: 0644
+        owner: root
+        group: root
+      with_items:
+        - kubelet.service
+      become: true
+
 - name: bootstrap kubernetes master
   import_playbook: master.yml
 

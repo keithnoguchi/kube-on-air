@@ -122,32 +122,22 @@
         - kubeadm
         - kubelet
 
+    - name: copy kubelet master specific systemd unit file(s)
+      template:
+        src:  "templates/etc/systemd/system/kubelet.service.d/{{ item }}.j2"
+        dest: "/etc/systemd/system/kubelet.service.d/{{ item }}"
+        mode: 0644
+        owner: root
+        group: root
+      with_items:
+        - 10-kubeadm.conf
+      become: true
+
     - name: check if the master is already initialized
       stat:
         path: /etc/kubernetes/kubelet.conf
       register: kubelet
       changed_when: false
-
-    - name: copy k8s systemd unit files
-      template:
-        src:  "templates/lib/systemd/system/{{ item }}.j2"
-        dest: "/lib/systemd/system/{{ item }}"
-        mode: 0644
-        owner: root
-        group: root
-      with_items:
-        - etcd.service
-        - kubelet.service
-        - kube-apiserver.service
-      become: true
-
-    - name: enable/start services
-      systemd: name={{ item }} enabled=true
-      with_items:
-        - etcd
-        - kubelet
-        - kube-apiserver
-      become: true
 
     - name: initialize the cluster master!
       command: |
@@ -161,13 +151,20 @@
       register: kubeadm
       when: kubelet.stat.exists == false
 
-    - name: get API token, API server, and certificate hash
+    - name: get API token and API server
       set_fact:
         cluster_apiserver: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
         cluster_token: "{{kubeadm.stdout|regex_search(regexp, '\\2')|list|first}}"
-        cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\3')|list|first}}"
       vars:
-        regexp: 'kubeadm join (\S+) --token (\S+) --discovery-token-ca-cert-hash (\S+)'
+        regexp: 'kubeadm join (\S+) --token (\S+) '
+      when: kubeadm.changed == true
+      changed_when: false
+
+    - name: get CA certificate hash
+      set_fact:
+        cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
+      vars:
+        regexp: '    --discovery-token-ca-cert-hash (\S+)'
       when: kubeadm.changed == true
       changed_when: false
 
