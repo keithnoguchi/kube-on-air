@@ -1,6 +1,8 @@
 # KVM/Libvirt cluster on Arch-on-Air!
 
-[![Build Status]](https://travis-ci.org/keinohguchi/kube-on-air)
+[![CircleCI]](https://circleci.com/gh/keinohguchi/workflows/kube-on-air)
+
+[CircleCI]: https://circleci.com/gh/keinohguchi/kube-on-air.svg?style=svg
 
 Let's prepare your air as KVM/Libvirt host for the kubernetes cluster.
 
@@ -12,7 +14,6 @@ There is an [Ansible] [playbook](host.yml) to automate the following
 steps.  Please run it at your own risk, though, as it re-define libvirt
 default network as well as guest description files.
 
-[Build Status]: https://travis-ci.org/keinohguchi/kube-on-air.svg
 [Ansible]: https://ansible.com
 
 ## KVM/Libvirt
