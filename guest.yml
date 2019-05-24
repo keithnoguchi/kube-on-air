@@ -3,7 +3,6 @@
   hosts: guest
   vars:
     latest: false
-    travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6

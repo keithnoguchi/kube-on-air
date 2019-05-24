@@ -3,7 +3,6 @@
   hosts: guest
   vars:
     latest: false
-    travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go-1.6
@@ -193,7 +192,7 @@
         configure_priv: ".*"
         read_priv: ".*"
         write_priv: ".*"
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: light the fire!
       import_tasks: tasks/all.yml
