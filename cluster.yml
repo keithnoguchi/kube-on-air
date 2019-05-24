@@ -121,4 +121,4 @@
 
 - name: bootstrap kubernetes network
   import_playbook: network.yml
-  when: not travis_ci|bool
+  when: not ci|bool

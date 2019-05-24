@@ -3,7 +3,6 @@
   hosts: host
   gather_facts: false
   vars:
-    ci: false
     networking: flannel
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -12,7 +11,7 @@
   tasks:
     - name: delete the old networking module
       command: "kubectl delete --force=true -f {{ item.manifest }}"
-      when: not ci|bool and item.name != networking
+      when: item.name != networking
       failed_when: false
       with_items:
         - { name: flannel, manifest: "{{ manifest.flannel }}" }
@@ -22,7 +21,7 @@
 
     - name: apply the new networking module
       command: "kubectl apply --force=true -f {{ item.manifest }}"
-      when: not ci|bool and item.name == networking
+      when: item.name == networking
       with_items:
         - { name: flannel, manifest: "{{ manifest.flannel }}" }
         - { name: calico,  manifest: "{{ manifest.calico }}" }
