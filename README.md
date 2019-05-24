@@ -22,13 +22,12 @@ Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 ## Topology
 
 Here is the topology I created on my air as a KVM/libvirt guests.
-[kube10] is the kubernetes master, while both [node20] and [node21]
-are the nodes.  You can add more nodes as you wish, as long as you
-have enough cores on your host machine.
+[kube10] template file is for the kubernetes master, while [node20]
+one is for the nodes.  You can add more nodes as you wish, as long
+as you have enough cores on your host machine.
 
-[kube10]: files/etc/libvirt/qemu/kube10.xml
-[node20]: files/etc/libvirt/qemu/node20.xml
-[node21]: files/etc/libvirt/qemu/node21.xml
+[kube10]: templates/etc/libvirt/qemu/kube.xml.j2
+[node20]: templates/etc/libvirt/qemu/node.xml.j2
 
 ```
                      +----------+
@@ -75,7 +74,7 @@ place those in the appropriate inventory groups,
 based on the host prefix.
 
 [Ansible]: https://ansible.com
-[inventory file]: inventories/local/inventory.py
+[inventory file]: inventory.py
 
 ## Bootstrap
 
