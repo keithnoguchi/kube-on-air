@@ -1,8 +1,8 @@
 # Kube-on-Air
 
-[![Build Status]](https://travis-ci.org/keinohguchi/kube-on-air)
+[![CircleCI]](https://circleci.com/gh/keinohguchi/workflows/kube-on-air)
 
-[Build Status]: https://travis-ci.org/keinohguchi/kube-on-air.svg
+[CircleCI]: https://circleci.com/gh/keinohguchi/kube-on-air.svg?style=svg
 
 Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 

@@ -15,6 +15,9 @@ workflows:
       - host:
           requires:
             - checkout
+      - cluster:
+          requires:
+            - checkout
 jobs:
   checkout:
     <<: *defaults
@@ -45,3 +48,12 @@ jobs:
       - attach_workspace:
           at: .
       - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-host
+  cluster:
+    <<: *defaults
+    steps:
+      - run:
+          name: install tar and other tools to run the test
+          command: pacman -Sy --noconfirm tar make git gcc go python python-pip
+      - attach_workspace:
+          at: .
+      - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-cluster

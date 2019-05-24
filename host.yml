@@ -2,8 +2,8 @@
 - name: host provisioning playbook
   hosts: host
   vars:
+    ci: false
     latest: false
-    travis_ci: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
@@ -46,7 +46,7 @@
         - modprobe.d/modprobe.conf
         - systemd/network/br0.network
       become: true
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: install package(s)
       pacman:
@@ -59,7 +59,7 @@
     - name: undefine libvirt guest network
       virt_net: name=default state=absent
       become: true
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: define libvirt guest network
       virt_net:
@@ -67,7 +67,7 @@
         state: present
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/networks/default.xml.j2') }}"
       become: true
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: undefine libvirt guest
       virt:
@@ -76,7 +76,7 @@
       with_items: "{{ guests }}"
       become: true
       ignore_errors: true
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: define libvirt guest
       virt:
@@ -84,7 +84,7 @@
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
       with_items: "{{ guests }}"
       become: true
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: run the local docker registry
       docker_container:
@@ -95,7 +95,7 @@
         restart_policy: always
         ports:
           - "5000:5000"
-      when: not travis_ci|bool
+      when: not ci|bool
 
     - name: install the latest golang
       import_tasks: tasks/golang.yml

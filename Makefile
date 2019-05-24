@@ -34,7 +34,7 @@ dist-clean: clean teardown
 .PHONY: ci-ansible
 ci-test-%: ci-ansible ci-ping-%
 	ansible-playbook -vvv $*.yml \
-		-i inventory.yml -c local -e travis_ci=true \
+		-i inventory.yml -c local -e ci=true \
 		-e latest=true -e gitsite=https://github.com/
 ci-ping-%:
 	ansible -vvv -m ping -i inventory.yml -c local $*
