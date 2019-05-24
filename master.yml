@@ -122,6 +122,15 @@
         - kubeadm
         - kubelet
 
+    - name: make sure /etc/systemd/system/kubelet.service.d directory exists
+      file:
+        path:  /etc/systemd/system/kubelet.service.d
+        state: directory
+        mode:  0755
+        owner: root
+        group: root
+      become: true
+
     - name: copy kubelet master specific systemd unit file(s)
       template:
         src:  "templates/etc/systemd/system/kubelet.service.d/{{ item }}.j2"

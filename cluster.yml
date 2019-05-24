@@ -65,11 +65,21 @@
 
     - name: copy k8s systemd unit file(s)
       template:
-        src:  "templates/lib/systemd/system/{{ item }}.j2"
-        dest: "/lib/systemd/system/{{ item }}"
-        mode: 0644
+        src:   "templates/lib/systemd/system/{{ item }}.j2"
+        dest:  "/lib/systemd/system/{{ item }}"
+        mode:  0644
         owner: root
         group: root
+      with_items:
+        - kubelet.service
+      become: true
+
+    - name: make sure kubelet is not running
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: true
+        daemon_reload: true
       with_items:
         - kubelet.service
       become: true
