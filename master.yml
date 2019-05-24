@@ -179,4 +179,4 @@
         flat: true
       become: yes
       changed_when: false
-      when: not ci|bool kubeadm.changed|bool
+      when: not ci|bool and kubeadm.changed|bool
