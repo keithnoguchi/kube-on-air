@@ -3,7 +3,7 @@
   hosts: master
   gather_facts: true
   vars:
-    full: false
+    full: true
     latest: false
     gobootstrap: /usr/lib/go
     gitsite: "git@github.com:"
