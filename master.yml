@@ -36,6 +36,15 @@
       import_tasks: tasks/etcd.yml
       when: latest|bool
 
+    - name: install crictl
+      command: go get -u {{ item }}
+      with_items:
+        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
+      environment:
+        GOROOT: "{{ lookup('env', 'GOROOT') }}"
+        GOPATH: "{{ lookup('env', 'GOPATH') }}"
+        PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+
     - name: get the kubernetes
       git:
         repo: "{{ gitsite }}kubernetes/kubernetes"
