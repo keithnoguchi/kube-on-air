@@ -44,7 +44,7 @@ jobs:
     steps:
       - run:
           name: install tar and other tools to run the test
-          command: pacman -Sy --noconfirm tar make git gcc go python python-pip
+          command: pacman -Sy --noconfirm tar make ansible
       - attach_workspace:
           at: .
       - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-host
@@ -53,7 +53,7 @@ jobs:
     steps:
       - run:
           name: install tar and other tools to run the test
-          command: pacman -Sy --noconfirm tar make git gcc go python python-pip
+          command: pacman -Sy --noconfirm tar make ansible
       - attach_workspace:
           at: .
       - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-cluster

@@ -3,11 +3,13 @@
   hosts: cluster
   gather_facts: false
   vars:
+    ci: false
     guest_management_network: 192.168.122
   tasks:
     - name: update hostname to be in sync with the inventory host name
       hostname: name={{ inventory_hostname_short }}
       become: true
+      when: not ci|bool
 
     - name: update files under /etc
       template:
