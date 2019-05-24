@@ -53,6 +53,7 @@
         state: present
         update_cache: true
         name:
+          - git
           - kubectl
       become: true
 

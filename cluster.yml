@@ -25,6 +25,7 @@
         - systemd/network/ens4.network
         - systemd/network/ens5.network
       become: true
+      when: not ci|bool
 
     - name: install package(s)
       pacman:
@@ -41,6 +42,7 @@
         append: true
         groups: docker
       become: true
+      when: not ci|bool
 
     - name: enable/start services
       systemd: name={{ item }} enabled=true state=started
@@ -51,6 +53,7 @@
         - rngd
         - docker
       become: true
+      when: not ci|bool
 
     - name: allow the insecure air.local local docker registry access
       lineinfile:
@@ -58,12 +61,14 @@
         regexp: "^ExecStart"
         line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
       become: true
+      when: not ci|bool
 
     - name: restart docker service
       systemd: name={{ item }} enabled=true state=restarted
       with_items:
         - docker
       become: true
+      when: not ci|bool
 
     - name: copy k8s systemd unit file(s)
       template:
@@ -75,6 +80,7 @@
       with_items:
         - kubelet.service
       become: true
+      when: not ci|bool
 
     - name: make sure kubelet is not running
       systemd:
@@ -85,6 +91,7 @@
       with_items:
         - kubelet.service
       become: true
+      when: not ci|bool
 
     - name: make sure /etc/systemd/system/kubelet.service.d directory exists
       file:
@@ -105,7 +112,6 @@
       with_items:
         - 10-kubeadm.conf
       become: true
-
 
 - name: bootstrap kubernetes master
   import_playbook: master.yml
