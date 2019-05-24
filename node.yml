@@ -3,35 +3,18 @@
   hosts: node
   gather_facts: true
   vars:
-    gitsite: "git@github.com:"
-    gitpath: "{{ lookup('env', 'HOME') }}/git/"
     cluster_token: "{{ hostvars[master]['cluster_token'] }}"
     cluster_apiserver: "{{ hostvars[master]['cluster_apiserver'] }}"
     cluster_cert_hash: "{{ hostvars[master]['cluster_cert_hash'] }}"
-    travis_ci: false
   tasks:
-    - name: get the kubernetes
-      git:
-        repo: "{{ gitsite }}kubernetes/kubernetes"
-        dest: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
-        update: yes
-        ssh_opts: "-o StrictHostKeyChecking=no"
-      register: git
-      environment:
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-
-    - name: install the kubeadm and kubelet
-      command: go install "./cmd/{{ item }}"
-      args:
-        chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
+    - name: upload the kubeadm and kubelet to nodes
+      copy:
+        src:  "/tmp/{{ ansible_user_id }}/{{ item }}"
+        dest: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
+        mode: 0755
       with_items:
         - kubeadm
         - kubelet
-      when: git.before != git.after
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
 
     - name: check if I'm already in the cluster
       stat:
@@ -45,4 +28,6 @@
         kubeadm join --token "{{ cluster_token }}" "{{ cluster_apiserver }}"
           --discovery-token-ca-cert-hash "{{ cluster_cert_hash }}"
       become: true
+      environment:
+        PATH: "{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
       when: kubelet.stat.exists == false
