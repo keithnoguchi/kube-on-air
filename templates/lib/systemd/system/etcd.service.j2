@@ -4,7 +4,6 @@ Documentation=https://github.com/etcd-io/etcd
 After=network.target
 
 [Service]
-User=etcd
 Type=notify
 Environment=ETCD_DATA_DIR=/var/lib/etcd
 Environment=ETCD_NAME=%m

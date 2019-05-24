@@ -128,6 +128,7 @@
       with_items:
         - etcd.service
         - kubelet.service
+        - kube-apiserver.service
       become: true
 
     - name: enable/start services
@@ -135,6 +136,7 @@
       with_items:
         - etcd
         - kubelet
+        - kube-apiserver
       become: true
 
     - name: initialize the cluster master!
