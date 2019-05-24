@@ -21,8 +21,8 @@
         name:
           - go
           - gcc
-          - make
           - git
+          - make
       become: true
       when: latest|bool
 

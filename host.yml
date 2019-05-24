@@ -53,6 +53,7 @@
         state: present
         update_cache: true
         name:
+          - go
           - git
           - kubectl
       become: true
@@ -97,10 +98,6 @@
         ports:
           - "5000:5000"
       when: not ci|bool
-
-    - name: install the latest golang
-      import_tasks: tasks/golang.yml
-      when: latest|bool
 
     - name: install the prometheus
       import_tasks: tasks/prometheus.yml
