@@ -3,6 +3,7 @@
   hosts: host
   gather_facts: false
   vars:
+    ci: false
     networking: flannel
     manifest:
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
