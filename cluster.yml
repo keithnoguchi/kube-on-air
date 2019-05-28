@@ -37,6 +37,7 @@
           - ebtables
           - ethtool
           - socat
+          - cni-plugins
       become: true
 
     - name: add user to the docker group
@@ -85,17 +86,6 @@
       become: true
       when: not ci|bool
 
-    - name: make sure kubelet is not running
-      systemd:
-        name: "{{ item }}"
-        state: stopped
-        enabled: true
-        daemon_reload: true
-      with_items:
-        - kubelet.service
-      become: true
-      when: not ci|bool
-
     - name: make sure /etc/systemd/system/kubelet.service.d directory exists
       file:
         path:  /etc/systemd/system/kubelet.service.d
@@ -115,6 +105,17 @@
       with_items:
         - 10-kubeadm.conf
       become: true
+
+    - name: make sure kubelet is not running
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+        enabled: true
+        daemon_reload: true
+      with_items:
+        - kubelet.service
+      become: true
+      when: not ci|bool
 
 - name: bootstrap kubernetes master
   import_playbook: master.yml
