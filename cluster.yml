@@ -34,6 +34,9 @@
         name:
           - docker
           - rng-tools
+          - ebtables
+          - ethtool
+          - socat
       become: true
 
     - name: add user to the docker group
