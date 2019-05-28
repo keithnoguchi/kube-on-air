@@ -4,7 +4,7 @@ all: kuard
 .PHONY: boot bootstrap
 boot bootstrap: cluster
 %:
-	@ansible-playbook $*.yml -e latest=true
+	@ansible-playbook $*.yml -e latest=true -e full=false
 
 # https://github.com/kubernetes-up-and-running/kuard target
 .PHONY: kuard
