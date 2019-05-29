@@ -14,7 +14,6 @@
     chdir: "{{ lookup('env', 'GOPATH') }}/src/go.etcd.io/etcd"
   with_items:
     - .
-    - ./etcdctl
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
