@@ -4,6 +4,7 @@
   git:
     repo: "{{ gitsite }}etcd-io/etcd"
     dest: "{{ lookup('env', 'GOPATH') }}/src/go.etcd.io/etcd"
+    force: true
     update: yes
     ssh_opts: "-o StrictHostKeyChecking=no"
   register: git
