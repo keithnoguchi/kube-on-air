@@ -59,6 +59,8 @@
       become: true
       when: not ci|bool
 
+    # we will use systemd cgroup for the container runtime.
+    # https://kubernetes.io/docs/setup/cri/
     - name: allow the insecure air.local local docker registry access
       lineinfile:
         path: /etc/systemd/system/multi-user.target.wants/docker.service

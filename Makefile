@@ -1,7 +1,6 @@
 SUDO ?= sudo
 all: teardown cluster kuard
-
-.PHONY: boot bootstrap teardown
+.PHONY: all boot bootstrap teardown
 boot bootstrap: cluster
 %:
 	@ansible-playbook $*.yml -e latest=true -e full=false
