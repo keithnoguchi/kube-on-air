@@ -3,6 +3,7 @@
   git:
     repo: "{{ gitsite }}golang/go"
     dest: "{{ gitpath }}go"
+    force: true
     update: yes
     ssh_opts: "-o StrictHostKeyChecking=no"
   register: git

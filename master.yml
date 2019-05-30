@@ -54,6 +54,7 @@
       git:
         repo: "{{ gitsite }}kubernetes/kubernetes"
         dest: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
+        force: true
         update: yes
         ssh_opts: "-o StrictHostKeyChecking=no"
       register: k8s
