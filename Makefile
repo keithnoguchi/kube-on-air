@@ -1,10 +1,12 @@
 SUDO ?= sudo
-all: kuard
+all: teardown cluster kuard
 
-.PHONY: boot bootstrap
+.PHONY: boot bootstrap teardown
 boot bootstrap: cluster
 %:
 	@ansible-playbook $*.yml -e latest=true -e full=false
+teardown:
+	-@ansible-playbook teardown.yml
 
 # https://github.com/kubernetes-up-and-running/kuard target
 .PHONY: kuard
