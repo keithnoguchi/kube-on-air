@@ -5,6 +5,7 @@
     latest: false
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
+    srcpath: "{{ lookup('env', 'HOME') }}/src/"
     gobootstrap: /usr/lib/go-1.6
     guest_management_network: 192.168.123
   gather_facts: true
@@ -106,7 +107,10 @@
       become: true
 
     - name: create git root directory
-      file: path={{ gitpath }} state=directory mode=0700
+      file: path={{ item }} state=directory mode=0700
+      with_items:
+        - "{{ gitpath }}"
+        - "{{ srcpath }}"
 
     - name: install docker package
       import_tasks: tasks/docker.yml

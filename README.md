@@ -22,12 +22,12 @@ Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 ## Topology
 
 Here is the topology I created on my air as a KVM/libvirt guests.
-[kube10] template file is for the kubernetes master, while [node20]
+[kube10] template file is for the kubernetes master, while [node11]
 one is for the nodes.  You can add more nodes as you wish, as long
 as you have enough cores on your host machine.
 
 [kube10]: templates/etc/libvirt/qemu/kube.xml.j2
-[node20]: templates/etc/libvirt/qemu/node.xml.j2
+[node11]: templates/etc/libvirt/qemu/node.xml.j2
 
 ```
                      +----------+
@@ -36,7 +36,7 @@ as you have enough cores on your host machine.
                      +----+-----+
                           |
          +-----------+    |     +------------+
-         |   node20  |    |     |   node21   |
+         |   node11  |    |     |   node12   |
          |   (node)  |    |     |   (node)   |
          +-----+-----+    |     +-----+------+
                |          |           |
@@ -63,8 +63,8 @@ air$ sudo virsh list
  Id    Name                           State
 ----------------------------------------------------
  3     kube10                         running
- 4     node20                         running
- 5     node21                         running
+ 4     node11                         running
+ 5     node12                         running
 ```
 
 I've also written [Ansible] dynamic [inventory file],
@@ -91,8 +91,8 @@ as the kubernetes master and nodes, with `kubectl get nodes`:
 air$ kubectl get node
 NAME      STATUS    ROLES     AGE       VERSION
 kube10    Ready     master    1h        v1.8.2
-node20    Ready     <none>    1h        v1.8.2
-node21    Ready     <none>    1h        v1.8.2
+node11    Ready     <none>    1h        v1.8.2
+node12    Ready     <none>    1h        v1.8.2
 ```
 
 I'm using [weave] as a [kubernetes cluster networking] module, as shown in
@@ -157,14 +157,14 @@ by adding `-n kube-system` command line option, as below:
 ```sh
 air$ kubectl get pod -n kube-system -l app=fluentd -o wide --watch
 NAME            READY     STATUS    RESTARTS   AGE       IP        NODE
-fluentd-nvwk5   0/1       Pending   0          6s        <none>    node21
-fluentd-thqvw   0/1       Pending   0         6s        <none>    node20
-fluentd-nvwk5   0/1       ContainerCreating   0         6s        <none>    node21
-fluentd-thqvw   0/1       ContainerCreating   0         6s        <none>    node20
-fluentd-thqvw   1/1       Running   0         7s        10.40.0.2   node20
-fluentd-nvwk5   1/1       Running   0         7s        10.32.0.3   node21
-fluentd-thqvw   1/1       Running   0         8s        10.40.0.2   node20
-fluentd-nvwk5   1/1       Running   0         8s        10.32.0.3   node21
+fluentd-nvwk5   0/1       Pending   0          6s        <none>    node11
+fluentd-thqvw   0/1       Pending   0         6s        <none>    node12
+fluentd-nvwk5   0/1       ContainerCreating   0         6s        <none>    node11
+fluentd-thqvw   0/1       ContainerCreating   0         6s        <none>    node12
+fluentd-thqvw   1/1       Running   0         7s        10.40.0.2   node11
+fluentd-nvwk5   1/1       Running   0         7s        10.32.0.3   node12
+fluentd-thqvw   1/1       Running   0         8s        10.40.0.2   node11
+fluentd-nvwk5   1/1       Running   0         8s        10.32.0.3   node12
 ```
 
 ## Cleanup
