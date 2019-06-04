@@ -48,17 +48,6 @@
       become: true
       when: not ci|bool
 
-    - name: enable/start services
-      systemd: name={{ item }} enabled=true state=started
-      with_items:
-        - systemd-networkd
-        - systemd-resolved
-        - sshd
-        - rngd
-        - docker
-      become: true
-      when: not ci|bool
-
     # we will use systemd cgroup for the container runtime.
     # https://kubernetes.io/docs/setup/cri/
     - name: allow the insecure air.local local docker registry access
@@ -69,9 +58,13 @@
       become: true
       when: not ci|bool
 
-    - name: restart docker service
+    - name: enable/restart services
       systemd: name={{ item }} enabled=true state=restarted
       with_items:
+        - systemd-networkd
+        - systemd-resolved
+        - sshd
+        - rngd
         - docker
       become: true
       when: not ci|bool
