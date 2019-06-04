@@ -17,7 +17,6 @@
       with_items:
         - kubeadm
         - kubelet
-      when: latest|bool
 
     - name: check if I'm already in the cluster
       stat:
