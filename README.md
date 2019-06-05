@@ -30,20 +30,15 @@ as you have enough cores on your host machine.
 [node11]: templates/etc/libvirt/qemu/node.xml.j2
 
 ```
-                     +----------+
-                     |  kube10  |
-                     | (master) |
-                     +----+-----+
-                          |
-         +-----------+    |     +------------+
-         |   node11  |    |     |   node12   |
-         |   (node)  |    |     |   (node)   |
-         +-----+-----+    |     +-----+------+
-               |          |           |
-+--------------+----------+-----------+----------------+
-|                        air                           |
-|                 (KVM/libvirt host)                   |
-+------------------------------------------------------+
+ +----------+ +-----------+ +------------+ +------------+
+ |  kube10  | |   node11  | |   node12   | |   node13   |
+ | (master) | |   (node)  | |   (node)   | |   (node)   |
+ +----+-----+ +-----+-----+ +-----+------+ +-----+------+
+      |             |             |              |
++-----+-------------+-------------+--------------+-------+
+|                        air                             |
+|                 (KVM/libvirt host)                     |
++--------------------------------------------------------+
 ```
 
 I've setup a flat linux bridge based [network] as the management
@@ -59,12 +54,13 @@ And the output of the `virsh list` after booting up those KVM/libvirt
 guests:
 
 ```sh
-air$ sudo virsh list
- Id    Name                           State
-----------------------------------------------------
- 3     kube10                         running
- 4     node11                         running
- 5     node12                         running
+air0$ sudo virsh list
+ Id   Name     State
+------------------------
+ 3    kube10   running
+ 4    node11   running
+ 5    node12   running
+ 6    node13   running
 ```
 
 I've also written [Ansible] dynamic [inventory file],
@@ -88,33 +84,39 @@ Once it's done, you can see those guests correctly configured
 as the kubernetes master and nodes, with `kubectl get nodes`:
 
 ```sh
-air$ kubectl get node
-NAME      STATUS    ROLES     AGE       VERSION
-kube10    Ready     master    1h        v1.8.2
-node11    Ready     <none>    1h        v1.8.2
-node12    Ready     <none>    1h        v1.8.2
+air0$ kubectl get nodes -o wide
+NAME     STATUS   ROLES    AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE     KERNEL-VERSION       CONTAINER-RUNTIME
+kube10   Ready    master   48m   v1.14.2   192.168.122.10   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+node11   Ready    <none>   47m   v1.14.2   192.168.122.11   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+node12   Ready    <none>   47m   v1.14.2   192.168.122.12   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+node13   Ready    <none>   47m   v1.14.2   192.168.122.13   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+air0$
 ```
 
-I'm using [weave] as a [kubernetes cluster networking] module, as shown in
+I'm using [flannel] as a [kubernetes cluster networking] module, as shown in
 `kubectl get pod -n kube-system` output:
 
 ```sh
-air$ kubectl get pod -n kube-system
-NAME                             READY     STATUS    RESTARTS   AGE
-etcd-kube10                      1/1       Running   0          13m
-kube-apiserver-kube10            1/1       Running   0          13m
-kube-controller-manager-kube10   1/1       Running   0          13m
-kube-dns-545bc4bfd4-95dt7        3/3       Running   0          14m
-kube-proxy-b9227                 1/1       Running   0          14m
-kube-proxy-ndfrc                 1/1       Running   0          14m
-kube-proxy-wnm9n                 1/1       Running   0          14m
-kube-scheduler-kube10            1/1       Running   0          13m
-weave-net-fzznm                  2/2       Running   0          14m
-weave-net-xqqhc                  2/2       Running   0          14m
-weave-net-zgh8z                  2/2       Running   0          14m
+air0$ kubectl get pod -n kube-system -o wide
+NAME                             READY   STATUS    RESTARTS   AGE   IP               NODE     NOMINATED NODE   READINESS GATES
+coredns-fb8b8dccf-bggsf          1/1     Running   0          49m   10.244.2.2       node13   <none>           <none>
+coredns-fb8b8dccf-rnxj5          1/1     Running   0          49m   10.244.3.3       node12   <none>           <none>
+etcd-kube10                      1/1     Running   0          48m   192.168.122.10   kube10   <none>           <none>
+kube-apiserver-kube10            1/1     Running   0          48m   192.168.122.10   kube10   <none>           <none>
+kube-controller-manager-kube10   1/1     Running   0          48m   192.168.122.10   kube10   <none>           <none>
+kube-flannel-ds-amd64-bkgpz      1/1     Running   0          48m   192.168.122.13   node13   <none>           <none>
+kube-flannel-ds-amd64-pb8g2      1/1     Running   0          48m   192.168.122.12   node12   <none>           <none>
+kube-flannel-ds-amd64-thqxq      1/1     Running   0          48m   192.168.122.11   node11   <none>           <none>
+kube-flannel-ds-amd64-xbrn8      1/1     Running   0          48m   192.168.122.10   kube10   <none>           <none>
+kube-proxy-6djdh                 1/1     Running   0          48m   192.168.122.13   node13   <none>           <none>
+kube-proxy-96p97                 1/1     Running   0          48m   192.168.122.12   node12   <none>           <none>
+kube-proxy-h9cqv                 1/1     Running   0          49m   192.168.122.10   kube10   <none>           <none>
+kube-proxy-qt7zh                 1/1     Running   0          48m   192.168.122.11   node11   <none>           <none>
+kube-scheduler-kube10            1/1     Running   0          48m   192.168.122.10   kube10   <none>           <none>
+air0$
 ```
 
-And, thanks to k8s super clean modulality approach, changing it to other
+And, thanks to k8s super clean modular approach, changing it to other
 module, e.g. [calico], is really simple, as shown in my [network.yml] playbook.
 
 By the way, please note that `make cluster` command is not idempotent yet,
@@ -155,16 +157,11 @@ You can watch if the `fluentd` up and running in the `kube-system` namespace
 by adding `-n kube-system` command line option, as below:
 
 ```sh
-air$ kubectl get pod -n kube-system -l app=fluentd -o wide --watch
-NAME            READY     STATUS    RESTARTS   AGE       IP        NODE
-fluentd-nvwk5   0/1       Pending   0          6s        <none>    node11
-fluentd-thqvw   0/1       Pending   0         6s        <none>    node12
-fluentd-nvwk5   0/1       ContainerCreating   0         6s        <none>    node11
-fluentd-thqvw   0/1       ContainerCreating   0         6s        <none>    node12
-fluentd-thqvw   1/1       Running   0         7s        10.40.0.2   node11
-fluentd-nvwk5   1/1       Running   0         7s        10.32.0.3   node12
-fluentd-thqvw   1/1       Running   0         8s        10.40.0.2   node11
-fluentd-nvwk5   1/1       Running   0         8s        10.32.0.3   node12
+air0$ kubectl get pod -n kube-system -l app=fluentd -o wide --watch
+NAME            READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
+fluentd-5bdkb   1/1     Running   0          20s   10.244.3.4   node12   <none>           <none>
+fluentd-bsd4f   1/1     Running   0          20s   10.244.1.4   node11   <none>           <none>
+fluentd-p2wbb   1/1     Running   0          20s   10.244.2.3   node13   <none>           <none>
 ```
 
 ## Cleanup
@@ -203,6 +200,7 @@ air$ make teardown
 [kubernetes cluster networking]: https://kubernetes.io/docs/concepts/cluster-administration/networking/
 [kubernetes cluster networking design]: https://git.k8s.io/community/contributors/design-proposals/network/networking.md
 [kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
+[flannel]: https://coreos.com/flannel/docs/latest/
 [weave]: https://github.com/weaveworks/weave/blob/master/README.md
 [calico]: https://github.com/projectcalico/calico/blob/master/README.md
 [fluentd]: https://www.fluentd.org/
