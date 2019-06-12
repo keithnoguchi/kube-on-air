@@ -14,7 +14,7 @@ def main():
                              'vars': {'cluster_node_prefixlen': 24}}}
     inventory['host'] = {'hosts': ['localhost'],
                          'vars': {'ansible_connection': 'local'}}
-    inventory['guest'] = guest()
+    inventory['ubuntu'] = ubuntu()
     inventory['master'] = master()
     inventory['node'] = node()
 
@@ -30,7 +30,7 @@ def main():
                               'cluster_node_ip': '10.0.0.%d' % num}
 
     # We'll conbine this to the above once hv also joins to the cluster.
-    for type in ['guest']:
+    for type in ['ubuntu']:
         for host in inventory[type]['hosts']:
             num = int(''.join(filter(str.isdigit, host)))
             inventory['all']['hosts'].append(host)
@@ -52,8 +52,8 @@ def main():
         print(json.dumps(hostvars.get(args.host, {})))
 
 
-def guest():
-    guest = {'hosts': [],
+def ubuntu():
+    ubuntu = {'hosts': [],
              'vars': {'ansible_python_interpreter': 'python2',
                       'hv_node_netmask': '255.255.0.0',
                       'hv_node_broadcast': '10.0.255.255'}}
@@ -61,10 +61,10 @@ def guest():
     if c != None:
         for i in c.listDomainsID():
             dom = c.lookupByID(i)
-            if dom.name().startswith('cam'):
-                guest['hosts'].append(dom.name())
+            if dom.name().startswith('ubun'):
+                ubuntu['hosts'].append(dom.name())
 
-    return guest
+    return ubuntu
 
 
 def master():

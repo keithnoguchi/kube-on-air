@@ -1,6 +1,6 @@
 ---
 - name: setup full ubuntu guest
-  hosts: guest
+  hosts: ubuntu
   vars:
     latest: false
     gitsite: "git@github.com:"
