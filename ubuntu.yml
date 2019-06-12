@@ -121,6 +121,9 @@
     - name: install the latest golang
       import_tasks: tasks/golang.yml
 
+    - name: install the usuful go packages
+      import_tasks: tasks/gopkg.yml
+
     - name: install the latest nodejs
       import_tasks: tasks/nodejs.yml
 
