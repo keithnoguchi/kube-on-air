@@ -71,6 +71,16 @@
           - binfmt-support
       become: true
 
+    # https://docs.nvidia.com/sdk-manager/download-run-sdkm/index.html
+    - name: install graphics libraries for JetPack Nvidia developer kit
+      apt:
+        state: present
+        update_cache: false
+        name:
+          - libgtk-3-0
+          - libxss1
+      become: true
+
     - name: update hostname to be sync with the inventory host name
       hostname: name={{ inventory_hostname_short }}
       become: true
