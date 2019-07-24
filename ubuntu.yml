@@ -77,8 +77,11 @@
         state: present
         update_cache: false
         name:
+          - libgconf-2-4
+          - libcanberra-gtk-module
           - libgtk-3-0
           - libxss1
+          - libnss3-dev
       become: true
 
     - name: update hostname to be sync with the inventory host name
