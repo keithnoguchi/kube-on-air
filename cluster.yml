@@ -38,6 +38,7 @@
           - ethtool
           - socat
           - cni-plugins
+          - conntrack-tools
       become: true
 
     - name: add user to the docker group
