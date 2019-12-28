@@ -12,7 +12,6 @@
   tasks:
     - name: delete the old networking module
       command: "kubectl delete --force=true -f {{ item.manifest }}"
-      when: item.name != networking
       failed_when: false
       with_items:
         - { name: flannel, manifest: "{{ manifest.flannel }}" }

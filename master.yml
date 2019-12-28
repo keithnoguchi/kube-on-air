@@ -75,7 +75,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and k8s.before != k8s.after
+      when: latest|bool
 
     - name: generate openapi.go
       make:
@@ -93,7 +93,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and k8s.before != k8s.after
+      when: latest|bool
 
     - name: copy generated openapi.go
       copy:
@@ -117,7 +117,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and k8s.before != k8s.after
+      when: latest|bool
 
     # https://kubernetes.io/docs/concepts/overview/components/
     - name: build full k8s components
@@ -134,7 +134,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and full|bool and k8s.before != k8s.after
+      when: latest|bool and full|bool
 
     - name: download the kubeadm and kubelet for nodes
       fetch:
