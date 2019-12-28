@@ -20,7 +20,7 @@ clean-%-deploy:
 	@kubectl delete -f manifests/deploy/$*.yml
 # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
 test test-connectivity:
-	@kubectl delete -f https://raw.githubusercontent.com/cilium/cilium/1.6.5/examples/kubernetes/connectivity-check/connectivity-check.yaml
+	@-kubectl delete -f https://raw.githubusercontent.com/cilium/cilium/1.6.5/examples/kubernetes/connectivity-check/connectivity-check.yaml
 	@kubectl create -f https://raw.githubusercontent.com/cilium/cilium/1.6.5/examples/kubernetes/connectivity-check/connectivity-check.yaml
 
 # Some cleanup targets
