@@ -13,10 +13,14 @@ list:
 	@ansible-playbook $*.yml -e latest=true -e full=true
 %-pod:
 	@kubectl create -f manifests/po/$*.yml
+%-svc:
+	@kubectl create -f manifests/svc/$*.yml
 %-deploy:
 	@kubectl create -f manifests/deploy/$*.yml
 clean-%-pod:
 	@kubectl delete -f manifests/po/$*.yml
+clean-%-svc:
+	@kubectl delete -f manifests/svc/$*.yml
 clean-%-deploy:
 	@kubectl delete -f manifests/deploy/$*.yml
 # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
