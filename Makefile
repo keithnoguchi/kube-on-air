@@ -10,22 +10,14 @@ boot bootstrap: cluster
 	@ansible-playbook $*.yml -e latest=true -e full=true
 teardown:
 	-@ansible-playbook teardown.yml
-
-# https://github.com/kubernetes-up-and-running/kuard target
 %-pod:
-	kubectl apply -f manifests/po/$*.yml
+	@kubectl create -f manifests/po/$*.yml
+%-deploy:
+	@kubectl create -f manifests/deploy/$*.yml
 clean-%-pod:
-	kubectl delete -f manifests/po/$*.yml
-
-# Some kubectl alias targets
-get-%:
-	kubectl get po/$*
-show-%:
-	kubectl describe po/$*
-deploy-%:
-	kubectl apply -f manifests/deploy/$*.yml
-delete-%:
-	kubectl delete -f manifests/deploy/$*.yml
+	@kubectl delete -f manifests/po/$*.yml
+clean-%-deploy:
+	@kubectl delete -f manifests/deploy/$*.yml
 
 # Some cleanup targets
 .PHONY: clean dist-clean
