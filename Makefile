@@ -1,5 +1,5 @@
 SUDO ?= sudo
-all: teardown cluster kuard
+all: teardown cluster-latest kuard
 .PHONY: all boot bootstrap teardown
 boot bootstrap: cluster
 %:
@@ -12,17 +12,16 @@ teardown:
 	-@ansible-playbook teardown.yml
 
 # https://github.com/kubernetes-up-and-running/kuard target
-.PHONY: kuard
-kuard:
-	kubectl apply -f manifests/pods/$@.yml
-clean-%:
-	kubectl delete -f manifests/pods/$*.yml
+%-pod:
+	kubectl apply -f manifests/po/$*.yml
+clean-%-pod:
+	kubectl delete -f manifests/po/$*.yml
 
 # Some kubectl alias targets
 get-%:
-	kubectl get $*
+	kubectl get po/$*
 show-%:
-	kubectl describe $*
+	kubectl describe po/$*
 deploy-%:
 	kubectl apply -f manifests/deploy/$*.yml
 delete-%:
@@ -37,7 +36,7 @@ dist-clean: clean teardown
 
 # TravisCI targets
 .PHONY: ci-ansible
-ci-test-%: ci-ping-%
+ci-test-%-latest: ci-ping-%
 	ansible-playbook -vvv $*.yml \
 		-i inventory.yml -c local -e ci=true -e latest=true \
 		-e full=false -e gitsite=https://github.com/

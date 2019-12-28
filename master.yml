@@ -25,7 +25,6 @@
           - git
           - make
       become: true
-      when: latest|bool
 
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
