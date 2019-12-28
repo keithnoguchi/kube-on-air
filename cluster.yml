@@ -35,6 +35,7 @@
           - docker
           - rng-tools
           - net-tools
+          - tcpdump
           - ebtables
           - ethtool
           - socat
