@@ -1,15 +1,16 @@
+# SPDX-License-Identifier: GPL-2.0
 SUDO ?= sudo
-all: teardown cluster-latest kuard
-.PHONY: all boot bootstrap teardown
-boot bootstrap: cluster
+.PHONY: all list
+all: clean cluster-latest test
+list:
+	@$(SUDO) virsh net-list
+	@$(SUDO) virsh list
 %:
 	@ansible-playbook $*.yml -e latest=false -e full=false
 %-latest:
 	@ansible-playbook $*.yml -e latest=true -e full=false
 %-latest-full:
 	@ansible-playbook $*.yml -e latest=true -e full=true
-teardown:
-	-@ansible-playbook teardown.yml
 %-pod:
 	@kubectl create -f manifests/po/$*.yml
 %-deploy:
@@ -26,11 +27,12 @@ test test-connectivity:
 # Some cleanup targets
 .PHONY: clean dist-clean
 clean:
+	@-ansible-playbook teardown.yml
+dist-clean: clean
 	@$(RM) *.bak *.retry .*.sw? **/.*.sw?
-dist-clean: clean teardown
 	$(SUDO) $(RM) -rf .ansible
 
-# TravisCI targets
+# CI targets
 .PHONY: ci-ansible
 ci-test-%-latest: ci-ping-%
 	ansible-playbook -vvv $*.yml \
