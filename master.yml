@@ -5,7 +5,7 @@
   vars:
     ci: false
     full: false
-    latest: true
+    latest: false
     gobootstrap: /usr/lib/go
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
