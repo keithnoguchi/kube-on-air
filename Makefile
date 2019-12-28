@@ -3,7 +3,11 @@ all: teardown cluster kuard
 .PHONY: all boot bootstrap teardown
 boot bootstrap: cluster
 %:
+	@ansible-playbook $*.yml -e latest=false -e full=false
+%-latest:
 	@ansible-playbook $*.yml -e latest=true -e full=false
+%-latest-full:
+	@ansible-playbook $*.yml -e latest=true -e full=true
 teardown:
 	-@ansible-playbook teardown.yml
 
