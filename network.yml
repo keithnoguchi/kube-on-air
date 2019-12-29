@@ -8,6 +8,8 @@
     manifest:
       # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
       cilium: https://raw.githubusercontent.com/cilium/cilium/1.6.5/install/kubernetes/quick-install.yaml
+      # https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
+      router: https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
       # https://github.com/coreos/flannel#deploying-flannel-manually
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
   tasks:
@@ -16,6 +18,7 @@
       failed_when: false
       with_items:
         - { name: cilium,  manifest: "{{ manifest.cilium }}" }
+        - { name: router,  manifest: "{{ manifest.router }}" }
         - { name: flannel, manifest: "{{ manifest.flannel }}" }
       changed_when: false
 
@@ -24,5 +27,6 @@
       when: item.name == networking
       with_items:
         - { name: cilium,  manifest: "{{ manifest.cilium }}" }
+        - { name: router,  manifest: "{{ manifest.router }}" }
         - { name: flannel, manifest: "{{ manifest.flannel }}" }
       changed_when: false
