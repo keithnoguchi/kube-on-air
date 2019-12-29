@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dnstools
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: dnstools
+  template:
+    metadata:
+      labels:
+        app: dnstools
+    spec:
+      containers:
+        - name: dnstools
+          image: infoblox/dnstools
+          stdin: true
+          tty: true
