@@ -3,6 +3,7 @@
   hosts: cluster
   gather_facts: false
   tasks:
+    # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#tear-down
     - name: reset the kubernetes configuration with kubeadm
       command: kubeadm reset -f
       environment:

@@ -11,7 +11,7 @@
   tasks:
     - name: upload the kubeadm and kubelet to nodes
       copy:
-        src:  "/tmp/{{ ansible_user_id }}/{{ item }}"
+        src:  "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
         dest: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
         mode: 0755
       with_items:

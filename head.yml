@@ -5,39 +5,9 @@
   vars:
     ci: false
     full: false
-    latest: false
-    gobootstrap: /usr/lib/go
-    gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     cluster_podcidr: 10.244.0.0/16
-    # https://dl.k8s.io/release/stable-1.txt
-    # hack/lib/version.sh
-    ldflags: >
-      -X k8s.io/component-base/version.gitVersion=v1.17.0
   tasks:
-    - name: install package(s)
-      pacman:
-        state: present
-        update_cache: true
-        name:
-          - go
-          - gcc
-          - git
-          - make
-      become: true
-
-    - name: create git root directory
-      file: path={{ gitpath }} state=directory mode=0700
-      when: latest|bool
-
-    - name: install the latest golang
-      import_tasks: tasks/golang.yml
-      when: latest|bool
-
-    - name: install etcd
-      import_tasks: tasks/etcd.yml
-      when: latest|bool
-
     - name: make sure /var/lib/etcd is empty
       file: path=/var/lib/etcd state=absent
       become: true
@@ -52,98 +22,15 @@
         PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
       when: latest|bool
 
-    - name: get the kubernetes
-      git:
-        repo: "{{ gitsite }}kubernetes/kubernetes"
-        dest: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
-        force: true
-        update: yes
-        ssh_opts: "-o StrictHostKeyChecking=no"
-      register: k8s
-      environment:
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-      when: latest|bool
-
-    - name: build openapi-gen and go2make for openapi.go generation
-      command: go install -ldflags "{{ ldflags }}" "{{ item }}"
-      args:
-        chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
-      with_items:
-        - ./vendor/k8s.io/kube-openapi/cmd/openapi-gen
-        - ./hack/make-rules/helpers/go2make
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
-
-    - name: generate openapi.go
-      make:
-        chdir:  "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
-        target: ./pkg/generated/openapi/openapi.go
-        file:   ./Makefile.generated_files
-        params:
-          CALLED_FROM_MAIN_MAKEFILE: 1
-          KUBE_VERBOSE: 2
-          PRJ_SRC_PATH: .
-          META_DIR: .make
-          OUT_DIR: _output
-          BIN_DIR: "{{ lookup('env', 'GOPATH') }}/bin"
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and not ci|bool
-
-    - name: copy generated openapi.go
+    - name: upload the kubeadm and kubelet to head nodes
       copy:
-        remote_src: true
-        src:  "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes/_output/local/go/src/{{ item }}"
-        dest: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes/{{ item }}"
+        src:  "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
+        dest: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
         mode: 0755
-      with_items:
-        - pkg/generated/openapi/openapi.go
-      when: latest|bool and not ci|bool
-
-    # https://kubernetes.io/docs/concepts/overview/components/
-    - name: build kubeadm and kubelet components
-      command: go install -ldflags "{{ ldflags }}" "{{ item }}"
-      args:
-        chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
-      with_items:
-        - ./cmd/kubeadm
-        - ./cmd/kubelet
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
-
-    # https://kubernetes.io/docs/concepts/overview/components/
-    - name: build full k8s components
-      command: go install -ldflags "{{ ldflags }}" "{{ item }}"
-      args:
-        chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
-      with_items:
-        - ./cmd/kubectl
-        - ./cmd/kube-proxy
-        - ./cmd/kube-apiserver
-        - ./cmd/kube-scheduler
-        - ./cmd/kube-controller-manager
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and full|bool
-
-    - name: download the kubeadm and kubelet for nodes
-      fetch:
-        src: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
-        dest: "/tmp/{{ ansible_user_id }}/{{ item }}"
-        flat: yes
       with_items:
         - kubeadm
         - kubelet
+      when: latest|bool
 
     - name: check if the head node is already initialized
       stat:
