@@ -120,11 +120,11 @@
       become: true
       when: not ci|bool
 
-- name: bootstrap kubernetes master
-  import_playbook: master.yml
+- name: bootstrap kubernetes head nodes
+  import_playbook: head.yml
 
-- name: bootstrap kubernetes node
-  import_playbook: node.yml
+- name: bootstrap kubernetes worker node
+  import_playbook: work.yml
 
 - name: bootstrap kubernetes network
   import_playbook: network.yml

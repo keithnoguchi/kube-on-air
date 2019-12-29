@@ -5,23 +5,21 @@
 #<ip-address>	<hostname.domain.org>	<hostname>
 127.0.0.1	localhost.local	localhost
 ::1		localhost.local	localhost
-127.0.0.1	{{ inventory_hostname_short }}.local	{{ inventory_hostname_short }}
-::1		{{ inventory_hostname_short }}.local	{{ inventory_hostname_short }}
+127.0.0.1	{{ inventory_hostname_short }}.node.local	{{ inventory_hostname_short }}
+::1		{{ inventory_hostname_short }}.node.local	{{ inventory_hostname_short }}
 
 # air.local for the local docker registry
-10.0.0.1	air.local	air
+10.0.0.1	host.node.local	air
 
-{{ guest_management_network }}.1	arch01.local	arch01
-{{ guest_management_network }}.2	arch02.local	arch02
-{{ guest_management_network }}.3	ubun03.local	ubun03
-{{ guest_management_network }}.4	ubun04.local	ubun04
-{{ guest_management_network }}.10	kube10.local	kube10
-{{ guest_management_network }}.11	node11.local	node11
-{{ guest_management_network }}.12	node12.local	node12
-{{ guest_management_network }}.13	node13.local	node13
-{{ guest_management_network }}.20	kube20.local	kube20
-{{ guest_management_network }}.21	node21.local	node21
-{{ guest_management_network }}.22	node22.local	node22
-{{ guest_management_network }}.23	node23.local	node23
+{{ guest_management_network }}.1	arch01.node.local	arch01
+{{ guest_management_network }}.2	arch02.node.local	arch02
+{{ guest_management_network }}.10	head10.node.local	head10
+{{ guest_management_network }}.11	work11.node.local	work11
+{{ guest_management_network }}.12	work12.node.local	work12
+{{ guest_management_network }}.13	work13.node.local	work13
+{{ guest_management_network }}.20	head20.node.local	head20
+{{ guest_management_network }}.21	work21.node.local	work21
+{{ guest_management_network }}.22	work22.node.local	work22
+{{ guest_management_network }}.23	work23.node.local	work23
 
 # End of file

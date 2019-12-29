@@ -3,13 +3,13 @@ all:
   vars:
     ansible_host: localhost
     ansible_connection: local
-    master: master
+    head: head
   children:
     cluster:
       children:
-        master:
+        head:
           hosts: localhost
-        node:
+        work:
           hosts: localhost
       vars:
         cluster_node_ip: 10.0.0.1

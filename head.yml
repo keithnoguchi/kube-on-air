@@ -1,6 +1,6 @@
 ---
-- name: setup arch based kube master
-  hosts: master
+- name: setup arch based kube head nodes
+  hosts: head
   gather_facts: true
   vars:
     ci: false
@@ -145,13 +145,13 @@
         - kubeadm
         - kubelet
 
-    - name: check if the master is already initialized
+    - name: check if the head node is already initialized
       stat:
         path: /etc/kubernetes/kubelet.conf
       register: kubelet
       changed_when: false
 
-    - name: initialize the cluster master!
+    - name: initialize the cluster head node!
       command: |
         kubeadm init --pod-network-cidr "{{ cluster_podcidr }}"
           --apiserver-advertise-address "{{ cluster_node_ip }}"

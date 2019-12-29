@@ -38,7 +38,7 @@ dist-clean: clean
 
 # CI targets
 .PHONY: ci-ansible
-ci-test-%-latest: ci-ping-%
+ci-test-%: ci-ping-%
 	ansible-playbook -vvv $*.yml \
 		-i inventory.yml -c local -e ci=true -e latest=true \
 		-e full=false -e gitsite=https://github.com/

@@ -20,16 +20,14 @@
     guests:
       - { id: '01', type: arch }
       - { id: '02', type: arch }
-      - { id: '03', type: ubun }
-      - { id: '04', type: ubun }
-      - { id: '10', type: kube }
-      - { id: '11', type: node }
-      - { id: '12', type: node }
-      - { id: '13', type: node }
-      - { id: '20', type: kube }
-      - { id: '21', type: node }
-      - { id: '22', type: node }
-      - { id: '23', type: node }
+      - { id: '10', type: head }
+      - { id: '11', type: work }
+      - { id: '12', type: work }
+      - { id: '13', type: work }
+      - { id: '20', type: head }
+      - { id: '21', type: work }
+      - { id: '22', type: work }
+      - { id: '23', type: work }
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
