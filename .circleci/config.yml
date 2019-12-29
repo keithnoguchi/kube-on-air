@@ -15,7 +15,7 @@ workflows:
       - host:
           requires:
             - checkout
-      - master:
+      - head:
           requires:
             - checkout
       - cluster:
@@ -51,7 +51,7 @@ jobs:
       - attach_workspace:
           at: .
       - run: SUDO= GOROOT=/usr/lib/go GOPATH=$HOME make ci-test-host
-  master:
+  head:
     <<: *defaults
     steps:
       - run:
@@ -59,7 +59,7 @@ jobs:
           command: pacman -Sy --noconfirm tar make ansible
       - attach_workspace:
           at: .
-      - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-master
+      - run: SUDO= GOROOT=$HOME/git/go GOPATH=$HOME make ci-test-head
   cluster:
     <<: *defaults
     steps:

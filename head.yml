@@ -93,7 +93,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
+      when: latest|bool and not ci|bool
 
     - name: copy generated openapi.go
       copy:
@@ -103,7 +103,7 @@
         mode: 0755
       with_items:
         - pkg/generated/openapi/openapi.go
-      when: latest|bool and k8s.before != k8s.after
+      when: latest|bool and not ci|bool
 
     # https://kubernetes.io/docs/concepts/overview/components/
     - name: build kubeadm and kubelet components
