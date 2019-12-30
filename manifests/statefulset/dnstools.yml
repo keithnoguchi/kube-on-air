@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: dnstools
+  namespace: default
+spec:
+  replicas: 3
+  serviceName: dnstool
+  selector:
+    matchLabels:
+      app: dnstool
+  template:
+    metadata:
+      labels:
+        app: dnstool
+    spec:
+      containers:
+        - name: dnstool
+          image: infoblox/dnstools
+          stdin: true
+          tty: true

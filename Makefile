@@ -17,12 +17,16 @@ list:
 	@kubectl create -f manifests/svc/$*.yml
 %-deploy:
 	@kubectl create -f manifests/deploy/$*.yml
+%-ss:
+	@kubectl create -f manifests/statefulset/$*.yml
 clean-%-pod:
 	@kubectl delete -f manifests/po/$*.yml
 clean-%-svc:
 	@kubectl delete -f manifests/svc/$*.yml
 clean-%-deploy:
 	@kubectl delete -f manifests/deploy/$*.yml
+clean-%-ss:
+	@kubectl delete -f manifests/statefulset/$*.yml
 # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
 .PHONY: test clean-test
 test:
