@@ -33,6 +33,7 @@
         state: present
         update_cache: true
         name:
+          - go
           - docker
           - rng-tools
           - net-tools
