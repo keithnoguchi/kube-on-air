@@ -60,7 +60,7 @@
       with_items:
         - systemd-networkd
         - systemd-resolved
-        - systemd-timedated
+        - systemd-timesyncd
         - sshd
         - rngd
         - docker
