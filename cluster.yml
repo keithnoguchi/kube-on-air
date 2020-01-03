@@ -7,6 +7,24 @@
     latest: false
     guest_management_network: 192.168.122
   tasks:
+    - name: install package(s)
+      pacman:
+        state: present
+        update_cache: true
+        name:
+          - docker
+          - rng-tools
+          - net-tools
+          - inetutils
+          - tcpdump
+          - ebtables
+          - ethtool
+          - socat
+          - cni-plugins
+          - conntrack-tools
+      become: true
+      when: latest|bool
+
     - name: update hostname to be in sync with the inventory host name
       hostname: name={{ inventory_hostname_short }}
       become: true
@@ -23,28 +41,11 @@
         - hosts
         - systemd/network/bond0.netdev
         - systemd/network/bond0.network
+        - systemd/network/ens3.network
         - systemd/network/ens4.network
         - systemd/network/ens5.network
       become: true
       when: not ci|bool
-
-    - name: install package(s)
-      pacman:
-        state: present
-        update_cache: true
-        name:
-          - go
-          - docker
-          - rng-tools
-          - net-tools
-          - tcpdump
-          - ebtables
-          - ethtool
-          - socat
-          - cni-plugins
-          - conntrack-tools
-      become: true
-      when: latest|bool
 
     - name: add user to the docker group
       user:

@@ -4,23 +4,11 @@
   gather_facts: true
   vars:
     ci: false
-    full: false
-    gitpath: "{{ lookup('env', 'HOME') }}/git/"
     cluster_podcidr: 10.244.0.0/16
   tasks:
     - name: make sure /var/lib/etcd is empty
       file: path=/var/lib/etcd state=absent
       become: true
-
-    - name: install crictl
-      command: go get -u {{ item }}
-      with_items:
-        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
-      when: latest|bool
 
     - name: upload the kubeadm and kubelet to head nodes
       copy:
@@ -30,7 +18,6 @@
       with_items:
         - kubeadm
         - kubelet
-      when: latest|bool
 
     - name: check if the head node is already initialized
       stat:

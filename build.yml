@@ -5,7 +5,7 @@
   vars:
     ci: false
     full: false
-    latest: false
+    latest: true
     gobootstrap: /usr/lib/go
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
@@ -105,11 +105,12 @@
       when: latest|bool and not ci|bool
 
     # https://kubernetes.io/docs/concepts/overview/components/
-    - name: build kubeadm and kubelet components
+    - name: build kubectl, kubeadm, and kubelet components
       command: go install -ldflags "{{ ldflags }}" "{{ item }}"
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:
+        - ./cmd/kubectl
         - ./cmd/kubeadm
         - ./cmd/kubelet
       environment:
@@ -124,7 +125,6 @@
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:
-        - ./cmd/kubectl
         - ./cmd/kube-proxy
         - ./cmd/kube-apiserver
         - ./cmd/kube-scheduler

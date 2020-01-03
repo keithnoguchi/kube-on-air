@@ -55,7 +55,6 @@
         name:
           - go
           - git
-          - kubectl
       become: true
 
     - name: undefine libvirt guest network
