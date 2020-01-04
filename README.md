@@ -22,17 +22,17 @@ Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 ## Topology
 
 Here is the topology I created on my air as a KVM/libvirt guests.
-[kube10] template file is for the kubernetes master, while [node11]
+[head10] template file is for the kubernetes master, while [work11]
 one is for the nodes.  You can add more nodes as you wish, as long
 as you have enough cores on your host machine.
 
-[kube10]: templates/etc/libvirt/qemu/kube.xml.j2
-[node11]: templates/etc/libvirt/qemu/node.xml.j2
+[head10]: templates/etc/libvirt/qemu/head.xml.j2
+[work11]: templates/etc/libvirt/qemu/work.xml.j2
 
 ```
  +----------+ +-----------+ +------------+ +------------+
- |  kube10  | |   node11  | |   node12   | |   node13   |
- | (master) | |   (node)  | |   (node)   | |   (node)   |
+ |  head10  | |   work11  | |   work12   | |   work13   |
+ | (master) | |  (worker) | |  (worker)  | |  (worker)  |
  +----+-----+ +-----+-----+ +-----+------+ +-----+------+
       |             |             |              |
 +-----+-------------+-------------+--------------+-------+
@@ -57,10 +57,10 @@ guests:
 air0$ sudo virsh list
  Id   Name     State
 ------------------------
- 3    kube10   running
- 4    node11   running
- 5    node12   running
- 6    node13   running
+ 3    head10   running
+ 4    work11   running
+ 5    work12   running
+ 6    work13   running
 ```
 
 I've also written [Ansible] dynamic [inventory file],
@@ -86,10 +86,10 @@ as the kubernetes master and nodes, with `kubectl get nodes`:
 ```sh
 air0$ kubectl get nodes -o wide
 NAME     STATUS   ROLES    AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE     KERNEL-VERSION       CONTAINER-RUNTIME
-kube10   Ready    master   48m   v1.14.2   192.168.122.10   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
-node11   Ready    <none>   47m   v1.14.2   192.168.122.11   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
-node12   Ready    <none>   47m   v1.14.2   192.168.122.12   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
-node13   Ready    <none>   47m   v1.14.2   192.168.122.13   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+head10   Ready    master   48m   v1.14.2   192.168.122.10   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+work11   Ready    <none>   47m   v1.14.2   192.168.122.11   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+work12   Ready    <none>   47m   v1.14.2   192.168.122.12   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
+work13   Ready    <none>   47m   v1.14.2   192.168.122.13   <none>        Arch Linux   5.1.6-arch1-1-ARCH   docker://18.9.6
 air0$
 ```
 
@@ -236,5 +236,11 @@ Here is the list of [Ansible] playbooks used in this project:
 [node.yml]: node.yml
 [network.yml]: network.yml
 [teardown.yml]: teardown.yml
+
+## References
+
+- [Kubernetes networking]
+
+[kubernetes networking]: https://www.altoros.com/blog/kubernetes-networking-writing-your-own-simple-cni-plug-in-with-bash/
 
 Happy Hacking!
