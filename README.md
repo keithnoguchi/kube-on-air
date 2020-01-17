@@ -240,7 +240,9 @@ Here is the list of [Ansible] playbooks used in this project:
 ## References
 
 - [Kubernetes networking]
+- [CNI]: Container Network Interface Specification
 
 [kubernetes networking]: https://www.altoros.com/blog/kubernetes-networking-writing-your-own-simple-cni-plug-in-with-bash/
+[cni]: https://github.com/containernetworking/cni/blob/master/SPEC.md
 
 Happy Hacking!
