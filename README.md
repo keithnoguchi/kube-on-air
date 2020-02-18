@@ -181,34 +181,6 @@ Teardown the whole cluster, as in [teardown.yml]:
 ```sh
 air$ make teardown
 ```
-
-## Reference
-
-- [Kubernetes: Up and Running] by HB&B
-- [kuard]: Kubernetes Up And Running Daemon
-- How to create [Kubernetes Cluster] from scratch
-- [Kubernetes Cluster Networking] Concepts
-- [Kubernetes Cluster Networking Design]
-- [Weave]: A virtual network that connects Docker containers across multiple hosts
-- [Calico]: An open source system enabling cloud native application connectivity and policy
-- [kubelet]: What even is a kubelet? by [Kamal Marhubi]
-- [kube-apiserver]: Kubernetes from the ground up: the API server by [Kamal Marhubi]
-- [kube-scheduler]: Kubernetes from the ground up: the scheduler by [Kamal Marhubi]
-
-[kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
-[kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
-[kubernetes cluster networking]: https://kubernetes.io/docs/concepts/cluster-administration/networking/
-[kubernetes cluster networking design]: https://git.k8s.io/community/contributors/design-proposals/network/networking.md
-[kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
-[flannel]: https://coreos.com/flannel/docs/latest/
-[weave]: https://github.com/weaveworks/weave/blob/master/README.md
-[calico]: https://github.com/projectcalico/calico/blob/master/README.md
-[fluentd]: https://www.fluentd.org/
-[Kamal Marhubi]: http://kamalmarhubi.com/
-[kubelet]: http://kamalmarhubi.com/blog/2015/08/27/what-even-is-a-kubelet/
-[kube-apiserver]: http://kamalmarhubi.com/blog/2015/09/06/kubernetes-from-the-ground-up-the-api-server/
-[kube-scheduler]: http://kamalmarhubi.com/blog/2015/11/17/kubernetes-from-the-ground-up-the-scheduler/
-
 ### Kubernetes manifests
 
 - [Celery RabbitMQ] kubernetes example
@@ -239,10 +211,41 @@ Here is the list of [Ansible] playbooks used in this project:
 
 ## References
 
+- [Kubernetes: Up and Running] by HB&B
+- [kuard]: Kubernetes Up And Running Daemon
+- How to create [Kubernetes Cluster] from scratch
+- [Kubernetes Cluster Networking] Concepts
+- [Kubernetes Cluster Networking Design]
+- [Weave]: A virtual network that connects Docker containers across multiple hosts
+- [Calico]: An open source system enabling cloud native application connectivity and policy
+- [kubelet]: What even is a kubelet? by [Kamal Marhubi]
+- [kube-apiserver]: Kubernetes from the ground up: the API server by [Kamal Marhubi]
+- [kube-scheduler]: Kubernetes from the ground up: the scheduler by [Kamal Marhubi]
 - [Kubernetes networking]
 - [CNI]: Container Network Interface Specification
+- [kube-router]
+  - [kube-router blog posts]
+  - [kube-router user guide]
+  - [kube-router with kubeadm]: Deploying kube-router with kubeadm
 
+[kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
+[kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
+[kubernetes cluster networking]: https://kubernetes.io/docs/concepts/cluster-administration/networking/
+[kubernetes cluster networking design]: https://git.k8s.io/community/contributors/design-proposals/network/networking.md
+[kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
+[flannel]: https://coreos.com/flannel/docs/latest/
+[weave]: https://github.com/weaveworks/weave/blob/master/README.md
+[calico]: https://github.com/projectcalico/calico/blob/master/README.md
+[fluentd]: https://www.fluentd.org/
+[Kamal Marhubi]: http://kamalmarhubi.com/
+[kubelet]: http://kamalmarhubi.com/blog/2015/08/27/what-even-is-a-kubelet/
+[kube-apiserver]: http://kamalmarhubi.com/blog/2015/09/06/kubernetes-from-the-ground-up-the-api-server/
+[kube-scheduler]: http://kamalmarhubi.com/blog/2015/11/17/kubernetes-from-the-ground-up-the-scheduler/
 [kubernetes networking]: https://www.altoros.com/blog/kubernetes-networking-writing-your-own-simple-cni-plug-in-with-bash/
 [cni]: https://github.com/containernetworking/cni/blob/master/SPEC.md
+[kube-router]: https://www.kube-router.io/
+[kube-router blog posts]: https://cloudnativelabs.github.io/post/2017-04-18-kubernetes-networking/
+[kube-router user guide]: https://www.kube-router.io/docs/user-guide/
+[kube-router with kubeadmin]: https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
 
 Happy Hacking!
