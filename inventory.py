@@ -26,8 +26,7 @@ def main():
             hostvars[host] = {'name': host,
                               # Pick the first head as the head head node.
                               'head': inventory['head']['hosts'][0],
-                              'management_ip': '192.168.122.%d' % num,
-                              'cluster_node_ip': '10.0.0.%d' % num}
+                              'cluster_node_ip': '172.31.255.%d' % num}
 
     # https://github.com/ansible/ansible/commit/bcaa983c2f3ab684dca6c2c2c8d1997742260761
     inventory['_meta'] = {'hostvars': hostvars}

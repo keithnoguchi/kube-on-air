@@ -4,29 +4,21 @@
   gather_facts: false
   vars:
     ci: false
-    networking: flannel
+    network: true
+    cni: router
     manifest:
-      # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
-      cilium: https://raw.githubusercontent.com/cilium/cilium/1.6.5/install/kubernetes/quick-install.yaml
-      # https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
-      router: https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
       # https://github.com/coreos/flannel#deploying-flannel-manually
       flannel: https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+      # https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
+      router: https://raw.githubusercontent.com/cloudnativelabs/kube-router/master/daemonset/kubeadm-kuberouter.yaml
+      # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
+      cilium: https://raw.githubusercontent.com/cilium/cilium/1.6.5/install/kubernetes/quick-install.yaml
   tasks:
-    - name: delete the old networking module
-      command: "kubectl delete --force=true -f {{ item.manifest }}"
-      failed_when: false
-      with_items:
-        - { name: cilium,  manifest: "{{ manifest.cilium }}" }
-        - { name: router,  manifest: "{{ manifest.router }}" }
-        - { name: flannel, manifest: "{{ manifest.flannel }}" }
-      changed_when: false
-
-    - name: create the new networking module
+    - name: create the new cni module
       command: "kubectl create -f {{ item.manifest }}"
-      when: item.name == networking
+      when: item.name == cni
       with_items:
-        - { name: cilium,  manifest: "{{ manifest.cilium }}" }
-        - { name: router,  manifest: "{{ manifest.router }}" }
         - { name: flannel, manifest: "{{ manifest.flannel }}" }
+        - { name: router,  manifest: "{{ manifest.router }}" }
+        - { name: cilium,  manifest: "{{ manifest.cilium }}" }
       changed_when: false

@@ -7,7 +7,7 @@
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     srcpath: "{{ lookup('env', 'HOME') }}/src/"
     gobootstrap: /usr/lib/go-1.6
-    guest_management_network: 192.168.123
+    guest_management_network: 172.31.255
   gather_facts: true
   tasks:
     - name: install console apps

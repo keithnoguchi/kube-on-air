@@ -4,8 +4,8 @@
   gather_facts: false
   vars:
     ci: false
-    full: false
-    latest: true
+    build: false
+    full_build: false
     gobootstrap: /usr/lib/go
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
@@ -27,15 +27,12 @@
 
     - name: create git root directory
       file: path={{ gitpath }} state=directory mode=0700
-      when: latest|bool
 
     - name: install the latest golang
       import_tasks: tasks/golang.yml
-      when: latest|bool
 
     - name: install etcd
       import_tasks: tasks/etcd.yml
-      when: latest|bool
 
     - name: make sure /var/lib/etcd is empty
       file: path=/var/lib/etcd state=absent
@@ -49,7 +46,6 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
-      when: latest|bool
 
     - name: get the kubernetes
       git:
@@ -61,7 +57,6 @@
       register: k8s
       environment:
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
-      when: latest|bool
 
     - name: build openapi-gen and go2make for openapi.go generation
       command: go install -ldflags "{{ ldflags }}" "{{ item }}"
@@ -74,7 +69,6 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
 
     - name: generate openapi.go
       make:
@@ -92,7 +86,7 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and not ci|bool
+      when: not ci|bool
 
     - name: copy generated openapi.go
       copy:
@@ -102,7 +96,7 @@
         mode: 0755
       with_items:
         - pkg/generated/openapi/openapi.go
-      when: latest|bool and not ci|bool
+      when: not ci|bool
 
     # https://kubernetes.io/docs/concepts/overview/components/
     - name: build kubectl, kubeadm, and kubelet components
@@ -117,7 +111,6 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool
 
     # https://kubernetes.io/docs/concepts/overview/components/
     - name: build full k8s components
@@ -133,4 +126,4 @@
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:{{ lookup('env', 'GOROOT') }}/bin:/usr/bin:/bin"
-      when: latest|bool and full|bool
+      when: full_build|bool

@@ -1,0 +1,11 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dnstools-2
+spec:
+  containers:
+    - name: dnstools
+      image: infoblox/dnstools
+      stdin: true
+      tty: true

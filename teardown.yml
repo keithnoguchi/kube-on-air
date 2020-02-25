@@ -2,6 +2,8 @@
 - name: teardown kubernetes cluster
   hosts: cluster
   gather_facts: false
+  vars:
+    ci: false
   tasks:
     # https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#tear-down
     - name: reset the kubernetes configuration with kubeadm
@@ -9,3 +11,27 @@
       environment:
         PATH: "{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
       become: true
+      ignore_errors: true
+      changed_when: false
+      when: not ci|bool
+
+    - name: cleanup /etc/cni/net.d/ directory
+      file:
+        path: "/etc/cni/net.d"
+        state: absent
+        force: true
+      become: true
+      ignore_errors: true
+      changed_when: false
+      when: not ci|bool
+
+    - name: cleanup network interfaces
+      command: ip link delete dev {{ item }}
+      with_items:
+        - cni0
+        - flannel.1
+        - kube-bridge
+      become: true
+      ignore_errors: true
+      changed_when: false
+      when: not ci|bool

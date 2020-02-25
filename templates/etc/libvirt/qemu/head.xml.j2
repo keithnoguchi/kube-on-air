@@ -46,22 +46,6 @@
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
-    <interface type='bridge'>
-      <mac address='00:00:16:04:{{ item.id }}:04'/>
-      <source bridge='br0'/>
-      <target dev='{{ guest_intf1_dev_prefix }}{{ item.id }}'/>
-      <virtualport type='openvswitch'/>
-      <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
-    </interface>
-    <interface type='bridge'>
-      <mac address='00:00:16:04:{{ item.id }}:05'/>
-      <source bridge='br0'/>
-      <target dev='{{ guest_intf2_dev_prefix }}{{ item.id }}'/>
-      <virtualport type='openvswitch'/>
-      <model type='virtio'/>
-      <address type='pci' domain='0x0000' bus='0x00' slot='0x05' function='0x0'/>
-    </interface>
     <serial type='pty'>
       <target type='isa-serial' port='0'>
         <model name='isa-serial'/>

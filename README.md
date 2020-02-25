@@ -222,11 +222,13 @@ Here is the list of [Ansible] playbooks used in this project:
 - [kube-apiserver]: Kubernetes from the ground up: the API server by [Kamal Marhubi]
 - [kube-scheduler]: Kubernetes from the ground up: the scheduler by [Kamal Marhubi]
 - [Kubernetes networking]
-- [CNI]: Container Network Interface Specification
-- [kube-router]
-  - [kube-router blog posts]
-  - [kube-router user guide]
-  - [kube-router with kubeadm]: Deploying kube-router with kubeadm
+  - [CNI]: Container Network Interface Specification
+  - [bash-cni-plugin]: Command line based CNI plugin
+  - [How to inspect k8s networking]
+  - [kube-router]
+    - [kube-router blog posts]
+    - [kube-router user guide]
+    - [kube-router with kubeadm]: Deploying kube-router with kubeadm
 
 [kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
 [kubernetes cluster]: https://kubernetes.io/docs/getting-started-guides/scratch/
@@ -242,10 +244,12 @@ Here is the list of [Ansible] playbooks used in this project:
 [kube-apiserver]: http://kamalmarhubi.com/blog/2015/09/06/kubernetes-from-the-ground-up-the-api-server/
 [kube-scheduler]: http://kamalmarhubi.com/blog/2015/11/17/kubernetes-from-the-ground-up-the-scheduler/
 [kubernetes networking]: https://www.altoros.com/blog/kubernetes-networking-writing-your-own-simple-cni-plug-in-with-bash/
+[bash-cni-plugin]: https://github.com/s-matyukevich/bash-cni-plugin
 [cni]: https://github.com/containernetworking/cni/blob/master/SPEC.md
+[how to inspect k8s networking]: https://www.digitalocean.com/community/tutorials/how-to-inspect-kubernetes-networking
 [kube-router]: https://www.kube-router.io/
 [kube-router blog posts]: https://cloudnativelabs.github.io/post/2017-04-18-kubernetes-networking/
 [kube-router user guide]: https://www.kube-router.io/docs/user-guide/
-[kube-router with kubeadmin]: https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
+[kube-router with kubeadm]: https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
 
 Happy Hacking!

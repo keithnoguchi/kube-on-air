@@ -9,17 +9,16 @@
 ::1		{{ inventory_hostname_short }}.node.local	{{ inventory_hostname_short }}
 
 # air.local for the local docker registry
-10.0.0.1	host.node.local	air
-
-{{ guest_management_network }}.1	arch01.node.local	arch01
-{{ guest_management_network }}.2	arch02.node.local	arch02
-{{ guest_management_network }}.10	head10.node.local	head10
-{{ guest_management_network }}.11	work11.node.local	work11
-{{ guest_management_network }}.12	work12.node.local	work12
-{{ guest_management_network }}.13	work13.node.local	work13
-{{ guest_management_network }}.20	head20.node.local	head20
-{{ guest_management_network }}.21	work21.node.local	work21
-{{ guest_management_network }}.22	work22.node.local	work22
-{{ guest_management_network }}.23	work23.node.local	work23
+{{ guest_management_network }}.1	arch01.local	arch01
+{{ guest_management_network }}.2	arch02.local	arch02
+{{ guest_management_network }}.10	head10.local	head10
+{{ guest_management_network }}.11	work11.local	work11
+{{ guest_management_network }}.12	work12.local	work12
+{{ guest_management_network }}.13	work13.local	work13
+{{ guest_management_network }}.20	head20.local	head20
+{{ guest_management_network }}.21	work21.local	work21
+{{ guest_management_network }}.22	work22.local	work22
+{{ guest_management_network }}.23	work23.local	work23
+{{ guest_management_network }}.254	host.local	host
 
 # End of file

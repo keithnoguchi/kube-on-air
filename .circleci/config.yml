@@ -41,7 +41,7 @@ jobs:
           command: pacman -Sy --noconfirm tar make git python python-pip
       - attach_workspace:
           at: .
-      - run: SUDO= make ci-ansible
+      - run: SUDO= make ansible
   host:
     <<: *defaults
     steps:

@@ -5,7 +5,7 @@
   vars:
     ci: false
     latest: false
-    guest_management_network: 192.168.122
+    guest_management_network: 172.31.255
   tasks:
     - name: install package(s)
       pacman:
@@ -22,6 +22,8 @@
           - socat
           - cni-plugins
           - conntrack-tools
+          - jq
+          - nmap
       become: true
       when: latest|bool
 
@@ -39,9 +41,17 @@
         group: root
       with_items:
         - hosts
+        - systemd/network/ens3.network
+      become: true
+      when: not ci|bool
+
+    - name: remove bond0 for now
+      file:
+        path: "/etc/{{ item }}"
+        state: absent
+      with_items:
         - systemd/network/bond0.netdev
         - systemd/network/bond0.network
-        - systemd/network/ens3.network
         - systemd/network/ens4.network
         - systemd/network/ens5.network
       become: true
@@ -55,7 +65,7 @@
       become: true
       when: not ci|bool
 
-    - name: enable/restart services
+    - name: restart systemd services
       systemd: name={{ item }} enabled=true state=restarted
       with_items:
         - systemd-networkd
@@ -69,11 +79,11 @@
 
     # we will use systemd cgroup for the container runtime.
     # https://kubernetes.io/docs/setup/cri/
-    - name: allow the insecure air.local local docker registry access
+    - name: allow the insecure host.local local docker registry access
       lineinfile:
         path: /etc/systemd/system/multi-user.target.wants/docker.service
         regexp: "^ExecStart"
-        line: "ExecStart=/usr/bin/dockerd --insecure-registry air.local:5000 -H fd:// $DOCKER_OPTS"
+        line: "ExecStart=/usr/bin/dockerd --insecure-registry host.local:5000 -H fd:// $DOCKER_OPTS"
       become: true
       when: not ci|bool
 
@@ -94,13 +104,16 @@
       become: true
       when: not ci|bool
 
-    - name: make sure /etc/systemd/system/kubelet.service.d directory exists
+    - name: create k8s related directories
       file:
-        path:  /etc/systemd/system/kubelet.service.d
+        path: "{{ item }}"
         state: directory
         mode:  0755
         owner: root
         group: root
+      with_items:
+        - /etc/kubernetes/manifests
+        - /etc/systemd/system/kubelet.service.d
       become: true
 
     - name: copy kubelet unit file(s) tailered to kubeadm setup
@@ -114,20 +127,12 @@
         - 10-kubeadm.conf
       become: true
 
-    - name: make sure kubelet is not running
-      systemd:
-        name: "{{ item }}"
-        state: stopped
-        enabled: true
-        daemon_reload: true
-      with_items:
-        - kubelet.service
-      become: true
-      when: not ci|bool
-
-- name: build the latest k8s
+- name: build the k8s
   import_playbook: build.yml
-  when: latest|bool
+  when: build|bool
+
+- name: cleanup the cluster first
+  import_playbook: teardown.yml
 
 - name: bootstrap kubernetes head nodes
   import_playbook: head.yml
@@ -137,4 +142,4 @@
 
 - name: bootstrap kubernetes network
   import_playbook: network.yml
-  when: not ci|bool
+  when: network|bool and not ci|bool
