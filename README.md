@@ -159,11 +159,10 @@ You can deploy [dnstools] container on all the nodes through the `Deployment` ma
 $ make deploy/dnstools
 ```
 
-You can watch if the `fluentd` up and running in the `kube-system` namespace
-by adding `-n kube-system` command line option, as below:
+You can check if `dnstools` pods are up and running as below:
 
 ```sh
-$ kubectl get deploy -o wide
+$ kubectl get deploy -o wide -w
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES              SELECTOR
 dnstools   3/3     3            3           4m35s   dnstools     infoblox/dnstools   app=dnstools
 ```
@@ -184,20 +183,20 @@ You should be able to get all the pods up and running as shown below:
 ```sh
 $ kubectl get po -o wide
 NAME                     READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
-echo-5659cf6c69-9bqfs    1/1     Running   0          5m    10.244.1.5   work11   <none>           <none>
-echo-5659cf6c69-gjqd2    1/1     Running   0          5m    10.244.2.5   work12   <none>           <none>
-echo-5659cf6c69-nghrg    1/1     Running   0          5m    10.244.3.4   work13   <none>           <none>
-echo-5659cf6c69-phmwx    1/1     Running   0          5m    10.244.3.5   work13   <none>           <none>
-echo-5659cf6c69-v6ksk    1/1     Running   0          5m    10.244.2.4   work12   <none>           <none>
-probe-765cbd6789-ll9s8   1/1     Running   0          5m    10.244.3.3   work13   <none>           <none>
-probe-765cbd6789-s27qw   1/1     Running   0          5m    10.244.1.3   work11   <none>           <none>
-probe-765cbd6789-vgz8q   1/1     Running   0          5m    10.244.3.2   work13   <none>           <none>
-probe-765cbd6789-wf4z2   1/1     Running   0          5m    10.244.2.3   work12   <none>           <none>
-probe-765cbd6789-xql7f   1/1     Running   0          5m    10.244.1.4   work11   <none>           <none>
+echo-5659cf6c69-56t47    1/1     Running   0          19s   10.244.1.4   work11   <none>           <none>
+echo-5659cf6c69-c5ngd    1/1     Running   0          19s   10.244.2.5   work13   <none>           <none>
+echo-5659cf6c69-j6nk2    1/1     Running   0          19s   10.244.1.5   work11   <none>           <none>
+echo-5659cf6c69-sz2kw    1/1     Running   0          19s   10.244.2.4   work13   <none>           <none>
+echo-5659cf6c69-z7xvp    1/1     Running   0          19s   10.244.3.5   work12   <none>           <none>
+probe-765cbd6789-dshtf   1/1     Running   0          19s   10.244.1.3   work11   <none>           <none>
+probe-765cbd6789-qggtr   1/1     Running   0          19s   10.244.3.4   work12   <none>           <none>
+probe-765cbd6789-qrpwd   1/1     Running   0          19s   10.244.2.3   work13   <none>           <none>
+probe-765cbd6789-x6f6h   1/1     Running   0          19s   10.244.2.2   work13   <none>           <none>
+probe-765cbd6789-x86x6   1/1     Running   0          19s   10.244.3.3   work12   <none>           <none>
 ```
 
 [cilium]: http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
-[connectivity check test]: https://raw.githubusercontent.com/cilium/cilium/1.6.5/examples/kubernetes/connectivity-check/connectivity-check.yaml
+[connectivity check test]: https://raw.githubusercontent.com/cilium/cilium/1.6.6/examples/kubernetes/connectivity-check/connectivity-check.yaml
 
 ## Cleanup
 

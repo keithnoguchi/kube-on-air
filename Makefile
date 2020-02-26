@@ -8,9 +8,9 @@ all: cluster test
 # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
 .PHONY: test clean-test
 test:
-	@kubectl create -f https://raw.githubusercontent.com/cilium/cilium/1.6.5/examples/kubernetes/connectivity-check/connectivity-check.yaml
+	@kubectl create -f https://raw.githubusercontent.com/cilium/cilium/1.6.6/examples/kubernetes/connectivity-check/connectivity-check.yaml
 clean-test:
-	@-kubectl delete -f https://raw.githubusercontent.com/cilium/cilium/1.6.5/examples/kubernetes/connectivity-check/connectivity-check.yaml
+	@-kubectl delete -f https://raw.githubusercontent.com/cilium/cilium/1.6.6/examples/kubernetes/connectivity-check/connectivity-check.yaml
 
 .PHONY: clean dist-clean list ls
 clean:
