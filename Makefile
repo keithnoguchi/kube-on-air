@@ -29,16 +29,20 @@ svc/%:
 	@kubectl create -f manifests/svc/$*.yml
 deploy/%:
 	@kubectl create -f manifests/deploy/$*.yml
-statefulset/%:
-	@kubectl create -f manifests/statefulset/$*.yml
+ss/%:
+	@kubectl create -f manifests/ss/$*.yml
+ds/%:
+	@kubectl create -f manifests/ds/$*.yml
 clean-po/%:
 	@kubectl delete -f manifests/po/$*.yml
 clean-svc/%:
 	@kubectl delete -f manifests/svc/$*.yml
 clean-deploy/%:
 	@kubectl delete -f manifests/deploy/$*.yml
-clean-statefulset/%:
-	@kubectl delete -f manifests/statefulset/$*.yml
+clean-ss/%:
+	@kubectl delete -f manifests/ss/$*.yml
+clean-ds/%:
+	@kubectl delete -f manifests/ds/$*.yml
 
 # CI targets
 .PHONY: ansible
