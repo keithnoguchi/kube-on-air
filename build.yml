@@ -12,7 +12,7 @@
     # https://dl.k8s.io/release/stable-1.txt
     # hack/lib/version.sh
     ldflags: >
-      -X k8s.io/component-base/version.gitVersion=v1.17.0
+      -X k8s.io/component-base/version.gitVersion=v1.17.1
   tasks:
     - name: install package(s)
       pacman:

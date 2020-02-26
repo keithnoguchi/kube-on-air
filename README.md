@@ -87,11 +87,11 @@ as the kubernetes master and nodes, with `kubectl get nodes`:
 
 ```sh
 $ kubectl get node -o wide
-NAME     STATUS   ROLES    AGE     VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE     KERNEL-VERSION   CONTAINER-RUNTIME
-head10   Ready    master   4m55s   v1.17.0   172.31.255.10   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
-work11   Ready    <none>   4m21s   v1.17.0   172.31.255.11   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
-work12   Ready    <none>   4m21s   v1.17.0   172.31.255.12   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
-work13   Ready    <none>   4m21s   v1.17.0   172.31.255.13   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
+NAME     STATUS   ROLES    AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE     KERNEL-VERSION   CONTAINER-RUNTIME
+head10   Ready    master   10m   v1.17.1   172.31.255.10   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
+work11   Ready    <none>   10m   v1.17.1   172.31.255.11   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
+work12   Ready    <none>   10m   v1.17.1   172.31.255.12   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
+work13   Ready    <none>   10m   v1.17.1   172.31.255.13   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
 ```
 
 I'm using [flannel] as a [kubernetes cluster networking] module, as shown in
