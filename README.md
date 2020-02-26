@@ -87,11 +87,16 @@ as the kubernetes master and nodes, with `kubectl get nodes`:
 
 ```sh
 $ kubectl get node -o wide
-NAME     STATUS   ROLES    AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE     KERNEL-VERSION   CONTAINER-RUNTIME
-head10   Ready    master   10m   v1.17.1   172.31.255.10   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
-work11   Ready    <none>   10m   v1.17.1   172.31.255.11   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
-work12   Ready    <none>   10m   v1.17.1   172.31.255.12   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
-work13   Ready    <none>   10m   v1.17.1   172.31.255.13   <none>        Arch Linux   5.4.6-arch3-1    docker://19.3.5
+NAME     STATUS   ROLES    AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE     KERNEL-VERSION   C
+ONTAINER-RUNTIME
+head10   Ready    master   46s   v1.17.2   172.31.255.10   <none>        Arch Linux   5.4.6-arch3-1    d
+ocker://19.3.5
+work11   Ready    <none>   13s   v1.17.2   172.31.255.11   <none>        Arch Linux   5.4.6-arch3-1    d
+ocker://19.3.5
+work12   Ready    <none>   14s   v1.17.2   172.31.255.12   <none>        Arch Linux   5.4.6-arch3-1    d
+ocker://19.3.5
+work13   Ready    <none>   14s   v1.17.2   172.31.255.13   <none>        Arch Linux   5.4.6-arch3-1    d
+ocker://19.3.5
 ```
 
 I'm using [flannel] as a [kubernetes cluster networking] module, as shown in
@@ -193,15 +198,17 @@ air$ make clean
 
 Here is the list of [Ansible] playbooks used in this project:
 
-- [host.yml]: Bootstrap the KVM/libvirt host
-- [cluster.yml]: Bootstrap the kubernetes cluster
-  - [head.yml]: Bootstrap kubernetes head nodes
-  - [work.yml]: Bootstrap kubernetes worker nodes
-  - [network.yml]: Bootstrap kubernetes networking
-- [teardown.yml]: Teardown the kubernetes cluster
+- [host.yml]: KVM/libvirt host playbook
+- [cluster.yml]: Cluster playbook
+  - [build.yml]: k8s Build playbook
+  - [head.yml]: Head node playbook
+  - [work.yml]: Worker node playbook
+  - [network.yml]: Network/CNI playbook
+- [teardown.yml]: Teardown playbook
 
 [host.yml]: host.yml
 [cluster.yml]: cluster.yml
+[build.yml]: build.yml
 [head.yml]: head.yml
 [work.yml]: work.yml
 [network.yml]: network.yml
