@@ -100,7 +100,7 @@ work13   Ready    <none>   14s   v1.17.2   172.31.255.13   <none>        Arch Li
 ocker://19.3.5
 ```
 
-I'm using [flannel] as a [kubernetes cluster networking] module, as shown in
+I'm using [kube-router] as the [kubernetes cluster networking] module, as shown in
 `kubectl get pod -n kube-system` output:
 
 ```sh
