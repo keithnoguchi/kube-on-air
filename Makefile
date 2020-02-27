@@ -23,6 +23,8 @@ list ls:
 	@$(SUDO) virsh list
 
 # kubectl aliases
+dashboard:
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
 po/%:
 	@kubectl create -f manifests/po/$*.yml
 svc/%:
