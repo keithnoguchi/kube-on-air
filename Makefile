@@ -23,8 +23,17 @@ list ls:
 	@$(SUDO) virsh list
 
 # kubectl aliases
+.PHONY: dashboard linkerd clean-linkerd cat-linkerd ls-linkerd
 dashboard:
 	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
+linkerd:
+	@linkerd install | kubectl apply -f -
+clean-linkerd:
+	@linkerd install --ignore-cluster | kubectl delete -f -
+cat-linkerd:
+	@linkerd install --ignore-cluster | less
+ls-linkerd:
+	@kubectl get -o wide -n linkerd po
 po/%:
 	@kubectl create -f manifests/po/$*.yml
 svc/%:
