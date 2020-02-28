@@ -128,9 +128,6 @@
     - name: install docker package
       import_tasks: tasks/docker.yml
 
-    - name: install docker-compose package
-      import_tasks: tasks/docker-compose.yml
-
     - name: install the latest golang
       import_tasks: tasks/golang.yml
 
