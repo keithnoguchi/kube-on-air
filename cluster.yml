@@ -45,18 +45,6 @@
       become: true
       when: not ci|bool
 
-    - name: remove bond0 for now
-      file:
-        path: "/etc/{{ item }}"
-        state: absent
-      with_items:
-        - systemd/network/bond0.netdev
-        - systemd/network/bond0.network
-        - systemd/network/ens4.network
-        - systemd/network/ens5.network
-      become: true
-      when: not ci|bool
-
     - name: add user to the docker group
       user:
         name: "{{ lookup('env', 'USER') }}"

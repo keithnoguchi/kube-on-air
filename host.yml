@@ -14,12 +14,8 @@
     guest_disk_path: /dev/images
     guest_disk_source_type: dev
     guest_intf0_dev_prefix: ens3-
-    guest_intf1_dev_prefix: ens4-
-    guest_intf2_dev_prefix: ens5-
     guest_management_network: 172.31.255
     guests:
-      - { id: '01', type: arch }
-      - { id: '02', type: arch }
       - { id: '10', type: head }
       - { id: '11', type: work }
       - { id: '12', type: work }
@@ -44,16 +40,6 @@
       with_items:
         - hosts
         - modprobe.d/modprobe.conf
-        - systemd/network/br0.network
-      become: true
-      when: not ci|bool
-
-    - name: remove br0 for now
-      file:
-        dest: "/etc/{{ item }}"
-        state: absent
-      with_items:
-        - systemd/network/br0.network
       become: true
       when: not ci|bool
 

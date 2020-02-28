@@ -40,13 +40,11 @@
     - name: get go tools
       command: go get -u {{ item }}
       with_items:
-        - "{{ item }}"
+        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
-      with_items:
-        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
 
     - name: get the kubernetes
       git:
