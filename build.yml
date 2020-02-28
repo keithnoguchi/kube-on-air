@@ -37,14 +37,16 @@
       file: path=/var/lib/etcd state=absent
       become: true
 
-    - name: install crictl
+    - name: get go tools
       command: go get -u {{ item }}
       with_items:
-        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
+        - "{{ item }}"
       environment:
         GOROOT: "{{ lookup('env', 'GOROOT') }}"
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
         PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
+      with_items:
+        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
 
     - name: get the kubernetes
       git:

@@ -9,7 +9,7 @@
     cluster_apiserver: "{{ hostvars[head]['cluster_apiserver'] }}"
     cluster_cert_hash: "{{ hostvars[head]['cluster_cert_hash'] }}"
   tasks:
-    - name: upload the kubeadm and kubelet to worker nodes
+    - name: upload the kubeadm, kubelet, and crictl to worker nodes
       copy:
         src:  "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
         dest: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
@@ -17,6 +17,7 @@
       with_items:
         - kubeadm
         - kubelet
+        - crictl
 
     - name: check if I'm already in the cluster
       stat:
