@@ -116,18 +116,18 @@
       become: true
 
 - name: build the k8s
-  import_playbook: build.yml
+  import_playbook: build.yaml
   when: build|bool
 
 - name: cleanup the cluster first
-  import_playbook: teardown.yml
+  import_playbook: teardown.yaml
 
 - name: bootstrap kubernetes head nodes
-  import_playbook: head.yml
+  import_playbook: head.yaml
 
 - name: bootstrap kubernetes worker node
-  import_playbook: work.yml
+  import_playbook: work.yaml
 
 - name: bootstrap kubernetes network
-  import_playbook: network.yml
+  import_playbook: network.yaml
   when: network|bool and not ci|bool

@@ -1,6 +1,0 @@
----
-- name: provision the host
-  import_playbook: host.yml
-
-- name: bootup the cluster!
-  import_playbook: cluster.yml

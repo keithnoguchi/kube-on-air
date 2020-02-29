@@ -58,7 +58,7 @@
         GOPATH: "{{ lookup('env', 'GOPATH') }}"
 
     - name: build openapi-gen and go2make for openapi.go generation
-      command: go install -ldflags "{{ ldflags }}" "{{ item }}"
+      command: go install -mod=vendor -ldflags "{{ ldflags }}" "{{ item }}"
       args:
         chdir: "{{ lookup('env', 'GOPATH') }}/src/k8s.io/kubernetes"
       with_items:

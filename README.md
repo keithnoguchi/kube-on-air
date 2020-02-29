@@ -77,7 +77,7 @@ based on the host prefix.
 
 ## Bootstrap
 
-Bootstrap the kubernetes cluster, as in [cluster.yml]:
+Bootstrap the kubernetes cluster, as in [cluster.yaml]:
 
 ```sh
 $ make cluster
@@ -123,7 +123,7 @@ kube-scheduler-head10            1/1     Running   0          5m38s   172.31.255
 ```
 
 And, thanks to k8s super clean modular approach, changing it to other
-module, e.g. [calico], is really simple, as shown in my [network.yml] playbook.
+module, e.g. [calico], is really simple, as shown in my [network.yaml] playbook.
 
 By the way, please note that `make cluster` command is not idempotent yet,
 meaning it won't work if you run it multiple times.  Please run `make teardown`
@@ -210,7 +210,7 @@ air$ make clean-po/kuard
 
 ## Teardown
 
-Teardown the whole cluster, as in [teardown.yml]:
+Teardown the whole cluster, as in [teardown.yaml]:
 
 ```sh
 air$ make clean
@@ -229,21 +229,21 @@ air$ make clean
 
 Here is the list of [Ansible] playbooks used in this project:
 
-- [host.yml]: KVM/libvirt host playbook
-- [cluster.yml]: Cluster playbook
-  - [build.yml]: k8s Build playbook
-  - [head.yml]: Head node playbook
-  - [work.yml]: Worker node playbook
-  - [network.yml]: Network/CNI playbook
-- [teardown.yml]: Teardown playbook
+- [host.yaml]: KVM/libvirt host playbook
+- [cluster.yaml]: Cluster playbook
+  - [build.yaml]: k8s Build playbook
+  - [head.yaml]: Head node playbook
+  - [work.yaml]: Worker node playbook
+  - [network.yaml]: Network/CNI playbook
+- [teardown.yaml]: Teardown playbook
 
-[host.yml]: host.yml
-[cluster.yml]: cluster.yml
-[build.yml]: build.yml
-[head.yml]: head.yml
-[work.yml]: work.yml
-[network.yml]: network.yml
-[teardown.yml]: teardown.yml
+[host.yaml]: host.yaml
+[cluster.yaml]: cluster.yaml
+[build.yaml]: build.yaml
+[head.yaml]: head.yaml
+[work.yaml]: work.yaml
+[network.yaml]: network.yaml
+[teardown.yaml]: teardown.yaml
 
 ## References
 

@@ -3,7 +3,7 @@ SUDO ?= sudo
 all: cluster test
 # ansible-playbook alias
 %:
-	@ansible-playbook $*.yml -e latest=true -e build=true
+	@ansible-playbook $*.yaml -e latest=true -e build=true
 
 # http://docs.cilium.io/en/stable/gettingstarted/k8s-install-default/
 .PHONY: test clean-test
@@ -14,7 +14,7 @@ clean-test:
 
 .PHONY: clean dist-clean list ls
 clean:
-	@-ansible-playbook teardown.yml
+	@-ansible-playbook teardown.yaml
 dist-clean: clean
 	@$(RM) *.bak *.retry .*.sw? **/.*.sw?
 	$(SUDO) $(RM) -rf .ansible
@@ -58,11 +58,11 @@ clean-ds/%:
 # CI targets
 .PHONY: ansible
 ci-test-%: ci-ping-%
-	ansible-playbook -vvv $*.yml \
-		-i inventory.yml -c local -e ci=true -e build=true \
+	ansible-playbook -vvv $*.yaml \
+		-i inventory.yaml -c local -e ci=true -e build=true \
 		-e network=true -e gitsite=https://github.com/
 ci-ping-%:
-	ansible -vvv -m ping -i inventory.yml -c local $*
+	ansible -vvv -m ping -i inventory.yaml -c local $*
 ansible:
 	git clone https://github.com/ansible/ansible .ansible
 	cd .ansible \
