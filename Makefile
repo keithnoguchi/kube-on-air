@@ -60,7 +60,7 @@ ls-linkerd:
 	@kubectl get -o wide -n linkerd po
 test-linkerd:
 	@curl -sL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
-%-linkerd:
+linkerd-%:
 	@linkerd $*
 
 # CI targets
