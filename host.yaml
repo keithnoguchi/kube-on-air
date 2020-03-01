@@ -60,6 +60,7 @@
         name:
           - go
           - git
+          - docker
       become: true
       when: latest|bool
 

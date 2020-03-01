@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: GPL-2.0
+FROM golang:1.14
+WORKDIR /build
+COPY . .
+RUN GOOS=linux go build -a -installsuffix -o hello .
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root
+COPY --from=0 /build/hello .
+CMD ["./hello"]
