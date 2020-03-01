@@ -7,23 +7,33 @@
     gitsite: "git@github.com:"
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     gobootstrap: /usr/lib/go
-    guest_emulator: /usr/bin/qemu-system-x86_64
-    guest_arch: x86_64
-    guest_machine: pc-i440fx-2.11
-    guest_disk_type: block
-    guest_disk_path: /dev/images
-    guest_disk_source_type: dev
-    guest_intf0_dev_prefix: ens3-
-    guest_management_network: 172.31.255
-    guests:
+    cluster_node_emulator: /usr/bin/qemu-system-x86_64
+    cluster_node_arch: x86_64
+    cluster_node_machine: pc-i440fx-2.11
+    cluster_node_disk_type: block
+    cluster_node_disk_path: /dev/images
+    cluster_node_disk_source_type: dev
+    cluster_node_intf0_dev_prefix: ens3-
+    cluster_node_network: 172.31.255
+    cluster_nodes:
       - { id: '10', type: head }
       - { id: '11', type: work }
       - { id: '12', type: work }
       - { id: '13', type: work }
+      - { id: '14', type: work }
+      - { id: '15', type: work }
       - { id: '20', type: head }
       - { id: '21', type: work }
       - { id: '22', type: work }
       - { id: '23', type: work }
+      - { id: '24', type: work }
+      - { id: '25', type: work }
+      - { id: '30', type: head }
+      - { id: '31', type: work }
+      - { id: '32', type: work }
+      - { id: '33', type: work }
+      - { id: '34', type: work }
+      - { id: '35', type: work }
   environment:
     GOROOT: "{{ lookup('env', 'GOROOT') }}"
     GOPATH: "{{ lookup('env', 'GOPATH') }}"
@@ -70,7 +80,7 @@
       virt:
         name: "{{ item.type }}{{ item.id }}"
         command: undefine
-      with_items: "{{ guests }}"
+      with_items: "{{ cluster_nodes }}"
       become: true
       ignore_errors: true
       when: not ci|bool
@@ -79,7 +89,7 @@
       virt:
         command: define
         xml: "{{ lookup('template', 'templates/etc/libvirt/qemu/{{ item.type }}.xml.j2') }}"
-      with_items: "{{ guests }}"
+      with_items: "{{ cluster_nodes }}"
       become: true
       when: not ci|bool
 

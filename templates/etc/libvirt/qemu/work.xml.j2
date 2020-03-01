@@ -4,7 +4,7 @@
   <currentMemory unit='KiB'>1012152</currentMemory>
   <vcpu placement='static'>1</vcpu>
   <os>
-    <type arch='{{ guest_arch }}' machine='{{ guest_machine }}'>hvm</type>
+    <type arch='{{ cluster_node_arch }}' machine='{{ cluster_node_machine }}'>hvm</type>
     <boot dev='hd'/>
   </os>
   <features>
@@ -28,10 +28,10 @@
     <suspend-to-disk enabled='no'/>
   </pm>
   <devices>
-    <emulator>{{ guest_emulator }}</emulator>
-    <disk type='{{ guest_disk_type }}' device='disk'>
+    <emulator>{{ cluster_node_emulator }}</emulator>
+    <disk type='{{ cluster_node_disk_type }}' device='disk'>
       <driver name='qemu' type='raw' cache='none' io='native'/>
-      <source {{ guest_disk_source_type }}='{{ guest_disk_path }}/{{ item.type }}{{ item.id }}'/>
+      <source {{ cluster_node_disk_source_type }}='{{ cluster_node_disk_path }}/{{ item.type }}{{ item.id }}'/>
       <target dev='vda' bus='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x06' function='0x0'/>
     </disk>
@@ -42,7 +42,7 @@
     <interface type='network'>
       <mac address='00:00:bb:00:{{ item.id }}:03'/>
       <source network='default'/>
-      <target dev='{{ guest_intf0_dev_prefix }}{{ item.id }}'/>
+      <target dev='{{ cluster_node_intf0_dev_prefix }}{{ item.id }}'/>
       <model type='virtio'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>

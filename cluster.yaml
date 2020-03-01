@@ -5,7 +5,7 @@
   vars:
     ci: false
     latest: false
-    guest_management_network: 172.31.255
+    cluster_node_network: 172.31.255
   tasks:
     - name: install package(s)
       pacman:
