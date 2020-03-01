@@ -28,10 +28,10 @@
       file: path={{ gitpath }} state=directory mode=0700
 
     - name: install the latest golang
-      import_tasks: tasks/golang.yml
+      import_tasks: tasks/golang.yaml
 
     - name: install etcd
-      import_tasks: tasks/etcd.yml
+      import_tasks: tasks/etcd.yaml
 
     - name: make sure /var/lib/etcd is empty
       file: path=/var/lib/etcd state=absent

@@ -20,7 +20,9 @@ workflows:
             - checkout
       - cluster:
           requires:
-            - checkout
+            - ansible
+            - host
+            - build
 jobs:
   checkout:
     <<: *defaults
