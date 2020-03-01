@@ -4,7 +4,7 @@
 
 [CircleCI]: https://circleci.com/gh/keithnoguchi/kube-on-air.svg?style=svg
 
-Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
+Creating [Kubernetes Cluster] with [KVM/libvirt] on [Arch-on-Air]!
 
 - [Topology](#topology)
 - [Bootstrap](#bootstrap)
@@ -14,8 +14,8 @@ Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 - [Teardown](#teardown)
 - [References](#references)
 
-[KVM/libvirt]: https://libvirt.org/drvqemu.html
-[Arch-on-Air]: https://github.com/keithnoguchi/arch-on-air/blob/master/README.md
+[kvm/libvirt]: https://libvirt.org/drvqemu.html
+[arch-on-air]: https://github.com/keithnoguchi/arch-on-air/blob/master/README.md
 [asciicast]: https://asciinema.org/a/146661.png
 
 ## Topology
