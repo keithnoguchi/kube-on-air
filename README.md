@@ -12,7 +12,7 @@ Creating [Kubernetes Cluster] over [KVM/libvirt] on [Arch-on-Air]!
 - [Test](#test)
 - [Cleanup](#cleanup)
 - [Teardown](#teardown)
-- [Reference](#reference)
+- [References](#references)
 
 [KVM/libvirt]: https://libvirt.org/drvqemu.html
 [Arch-on-Air]: https://github.com/keithnoguchi/arch-on-air/blob/master/README.md

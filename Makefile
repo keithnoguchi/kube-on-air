@@ -23,22 +23,9 @@ list ls:
 	@$(SUDO) virsh list
 
 # kubectl aliases
-.PHONY: dashboard linkerd clean-linkerd cat-linkerd ls-linkerd test-linkerd
+.PHONY: dashboard
 dashboard:
 	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
-linkerd:
-	@linkerd install | kubectl apply -f -
-clean-linkerd:
-	@-curl -sL https://run.linkerd.io/emojivoto.yml| kubectl delete -f -
-	@-linkerd install --ignore-cluster | kubectl delete -f -
-cat-linkerd:
-	@linkerd install --ignore-cluster | less
-ls-linkerd:
-	@kubectl get -o wide -n linkerd po
-test-linkerd:
-	@curl -sL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
-%-linkerd:
-	@linkerd $*
 po/%:
 	@kubectl create -f manifests/po/$*.yml
 svc/%:
@@ -59,6 +46,22 @@ clean-ss/%:
 	@kubectl delete -f manifests/ss/$*.yml
 clean-ds/%:
 	@kubectl delete -f manifests/ds/$*.yml
+
+# linkerd
+.PHONY: linkerd clean-linkerd cat-linkerd ls-linkerd test-linkerd
+linkerd:
+	@linkerd install | kubectl apply -f -
+clean-linkerd:
+	@-curl -sL https://run.linkerd.io/emojivoto.yml| kubectl delete -f -
+	@-linkerd install --ignore-cluster | kubectl delete -f -
+cat-linkerd:
+	@linkerd install --ignore-cluster | less
+ls-linkerd:
+	@kubectl get -o wide -n linkerd po
+test-linkerd:
+	@curl -sL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
+%-linkerd:
+	@linkerd $*
 
 # CI targets
 .PHONY: ansible
