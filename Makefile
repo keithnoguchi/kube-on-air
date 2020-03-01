@@ -27,25 +27,25 @@ list ls:
 dashboard:
 	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
 po/%:
-	@kubectl create -f manifests/po/$*.yml
+	@kubectl create -f manifests/po/$*.yaml
 svc/%:
-	@kubectl create -f manifests/svc/$*.yml
+	@kubectl create -f manifests/svc/$*.yaml
 deploy/%:
-	@kubectl create -f manifests/deploy/$*.yml
+	@kubectl create -f manifests/deploy/$*.yaml
 ss/%:
-	@kubectl create -f manifests/ss/$*.yml
+	@kubectl create -f manifests/ss/$*.yaml
 ds/%:
-	@kubectl create -f manifests/ds/$*.yml
+	@kubectl create -f manifests/ds/$*.yaml
 clean-po/%:
-	@kubectl delete -f manifests/po/$*.yml
+	@kubectl delete -f manifests/po/$*.yaml
 clean-svc/%:
-	@kubectl delete -f manifests/svc/$*.yml
+	@kubectl delete -f manifests/svc/$*.yaml
 clean-deploy/%:
-	@kubectl delete -f manifests/deploy/$*.yml
+	@kubectl delete -f manifests/deploy/$*.yaml
 clean-ss/%:
-	@kubectl delete -f manifests/ss/$*.yml
+	@kubectl delete -f manifests/ss/$*.yaml
 clean-ds/%:
-	@kubectl delete -f manifests/ds/$*.yml
+	@kubectl delete -f manifests/ds/$*.yaml
 
 # linkerd
 .PHONY: linkerd clean-linkerd cat-linkerd ls-linkerd test-linkerd

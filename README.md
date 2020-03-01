@@ -153,7 +153,7 @@ kuard     1/1       Running   0         38s
 
 ### Deployment
 
-You can deploy [dnstools] container on all the nodes through the `Deployment` manifest, as in [dnstools.yml]:
+You can deploy [dnstools] container on all the nodes through the `Deployment` manifest, as in [dnstools.yaml]:
 
 ```sh
 $ make deploy/dnstools
@@ -215,15 +215,6 @@ Teardown the whole cluster, as in [teardown.yaml]:
 ```sh
 air$ make clean
 ```
-
-### Kubernetes manifests
-
-- [Celery RabbitMQ] kubernetes example
-- [RabbitMQ StatefulSets] example
-
-[dnstools.yml]: manifests/deploy/dnstools.yml
-[celery rabbitmq]: https://github.com/kubernetes/kubernetes/tree/release-1.3/examples/celery-rabbitmq/README.md
-[rabbitmq statefulsets]: https://wesmorgan.svbtle.com/rabbitmq-cluster-on-kubernetes-with-statefulsets
 
 ### Ansible playbooks
 
