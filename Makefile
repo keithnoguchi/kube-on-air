@@ -23,6 +23,7 @@ list ls:
 	@$(SUDO) virsh list
 	@docker images
 
+# simple hello app
 .PHONY: hello-go clean-hello-go
 push-%: %
 	@docker push host.local:5000/$*:latest
@@ -33,30 +34,10 @@ clean-hello-go:
 	@-docker rmi host.local:5000/hello-go
 	@-cd examples/hello && go clean
 
-# kubectl aliases
-.PHONY: dashboard
-dashboard:
-	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
-po/%:
-	@kubectl create -f manifests/po/$*.yaml
-svc/%:
-	@kubectl create -f manifests/svc/$*.yaml
-deploy/%:
-	@kubectl create -f manifests/deploy/$*.yaml
-ss/%:
-	@kubectl create -f manifests/ss/$*.yaml
-ds/%:
-	@kubectl create -f manifests/ds/$*.yaml
-clean-po/%:
-	@kubectl delete -f manifests/po/$*.yaml
-clean-svc/%:
-	@kubectl delete -f manifests/svc/$*.yaml
-clean-deploy/%:
-	@kubectl delete -f manifests/deploy/$*.yaml
-clean-ss/%:
-	@kubectl delete -f manifests/ss/$*.yaml
-clean-ds/%:
-	@kubectl delete -f manifests/ds/$*.yaml
+# prometheus
+.PHONY: prom clean-prom
+prom: cm/prometheus deploy/prometheus
+clean-prom: clean-deploy/prometheus clean-cm/prometheus
 
 # linkerd
 .PHONY: linkerd clean-linkerd cat-linkerd ls-linkerd test-linkerd
@@ -73,6 +54,35 @@ test-linkerd:
 	@curl -sL https://run.linkerd.io/emojivoto.yml | kubectl apply -f -
 linkerd-%:
 	@linkerd $*
+
+# kubectl aliases
+.PHONY: dashboard
+dashboard:
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc5/aio/deploy/recommended.yaml
+po/%:
+	@kubectl create -f manifests/po/$*.yaml
+svc/%:
+	@kubectl create -f manifests/svc/$*.yaml
+deploy/%:
+	@kubectl create -f manifests/deploy/$*.yaml
+ss/%:
+	@kubectl create -f manifests/ss/$*.yaml
+ds/%:
+	@kubectl create -f manifests/ds/$*.yaml
+cm/%:
+	@kubectl create -f manifests/cm/$*.yaml
+clean-po/%:
+	@-kubectl delete -f manifests/po/$*.yaml
+clean-svc/%:
+	@-kubectl delete -f manifests/svc/$*.yaml
+clean-deploy/%:
+	@-kubectl delete -f manifests/deploy/$*.yaml
+clean-ss/%:
+	@-kubectl delete -f manifests/ss/$*.yaml
+clean-ds/%:
+	@-kubectl delete -f manifests/ds/$*.yaml
+clean-cm/%:
+	@-kubectl delete -f manifests/cm/$*.yaml
 
 # CI targets
 .PHONY: ansible
