@@ -42,6 +42,7 @@ clean-prom: clean-deploy/prometheus clean-cm/prometheus
 # linkerd
 .PHONY: linkerd clean-linkerd cat-linkerd ls-linkerd test-linkerd
 linkerd:
+	@curl -sL https://run.linkerd.io/install | sh
 	@linkerd install | kubectl apply -f -
 clean-linkerd:
 	@-curl -sL https://run.linkerd.io/emojivoto.yml| kubectl delete -f -
