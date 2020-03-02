@@ -24,12 +24,12 @@ list ls:
 	@docker images
 
 # simple hello app
-.PHONY: hello-go clean-hello-go
-push-%: %
-	@docker push host.local:5000/$*:latest
-hello-go:
+.PHONY: clean-hello-go
+hello-%:
 	@cd examples/hello && docker build -f Dockerfile.hello-go \
-		-t host.local:5000/hello-go:latest .
+		-t host.local:5000/hello-$*:latest .
+push-hello-%: hello-%
+	@docker push host.local:5000/hello-$*:latest
 clean-hello-go:
 	@-docker rmi host.local:5000/hello-go
 	@-cd examples/hello && go clean
@@ -86,11 +86,12 @@ clean-cm/%:
 
 # CI targets
 .PHONY: ansible
-ci-%: ping-%
+ci-%: ci-ping-%
 	ansible-playbook -vvv $*.yaml \
 		-i inventory.yaml -c local -e ci=true -e build=true \
 		-e network=true -e gitsite=https://github.com/
-ping-%:
+ci-hello-%: hello-%
+ci-ping-%:
 	ansible -vvv -m ping -i inventory.yaml -c local $*
 ansible:
 	git clone https://github.com/ansible/ansible .ansible
