@@ -11,16 +11,13 @@ all:
           hosts: localhost
         work:
           hosts: localhost
-      vars:
-        cluster_node_ip: 10.0.0.1
-        cluster_node_prefixlen: 24
     host:
       hosts: localhost
+      vars:
+        cluster_node_ip: 172.31.255.254
+        cluster_node_prefixlen: 24
     guest:
       hosts: localhost
       vars:
-        hv_node_ip: 1.1.1.1
-        hv_node_netmask: 255.255.255.0
-        hv_node_broadcast: 1.1.1.255
-bootstrap:
-  children: cluster
+        cluster_node_ip: 172.31.255.1
+        cluster_node_prefixlen: 24
