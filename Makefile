@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 SUDO ?= sudo
-all: hello-go cluster po/hello-go test
+all: cluster po/hello-go test
 # ansible-playbook alias
 %:
 	@ansible-playbook $*.yaml -e latest=true -e build=true
@@ -91,7 +91,7 @@ ci-%: ci-ping-%
 	ansible-playbook -vvv $*.yaml \
 		-i inventory.yaml -c local -e ci=true -e build=true \
 		-e network=true -e gitsite=https://github.com/
-ci-hello-%: hello-%
+ci-hello-go: hello-go
 ci-ping-%:
 	ansible -vvv -m ping -i inventory.yaml -c local $*
 ansible:
