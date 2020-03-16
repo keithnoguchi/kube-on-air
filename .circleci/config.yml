@@ -18,15 +18,11 @@ workflows:
       - build:
           requires:
             - checkout
-      - hello-go:
-          requires:
-            - checkout
       - cluster:
           requires:
             - ansible
             - host
             - build
-            - hello-go
 jobs:
   checkout:
     <<: *defaults
