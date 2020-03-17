@@ -23,6 +23,12 @@ list ls:
 	@$(SUDO) virsh list
 	@docker images
 
+# helm based install/uninstall
+install-%:
+	@helm install $* charts/$*
+uninstall-%:
+	@helm uninstall $*
+
 # simple hello app
 .PHONY: clean-hello-go
 hello-%:
