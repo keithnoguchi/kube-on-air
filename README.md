@@ -254,6 +254,9 @@ Here is the list of [Ansible] playbooks used in this project:
     - [kube-router blog posts]
     - [kube-router user guide]
     - [kube-router with kubeadm]: Deploying kube-router with kubeadm
+- [Ingress Controllers]
+  - [What is Ingress?]
+  - [Nginx ingress controller]
 - [Linkerd]: Ultralight service mesh for Kubernetes and beyond
   - [Linkerd getting started]
 
@@ -274,6 +277,9 @@ Here is the list of [Ansible] playbooks used in this project:
 [kube-router blog posts]: https://cloudnativelabs.github.io/post/2017-04-18-kubernetes-networking/
 [kube-router user guide]: https://www.kube-router.io/docs/user-guide/
 [kube-router with kubeadm]: https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
+[ingress controllers]: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
+[what is ingress?]: https://kubernetes.io/docs/concepts/services-networking/ingress/
+[nginx ingress controller]: https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal
 [linkerd]: https://linkerd.io/
 [linkerd getting started]: https://linkerd.io/2/getting-started/
 
