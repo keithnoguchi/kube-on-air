@@ -258,6 +258,7 @@ Here is the list of [Ansible] playbooks used in this project:
   - [What is Ingress?]
   - [Nginx ingress controller]
     - [Bare-metal consideration]
+    - [Nginx ingress guide]
 - [Linkerd]: Ultralight service mesh for Kubernetes and beyond
   - [Linkerd getting started]
 
@@ -282,6 +283,7 @@ Here is the list of [Ansible] playbooks used in this project:
 [what is ingress?]: https://kubernetes.io/docs/concepts/services-networking/ingress/
 [nginx ingress controller]: https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal
 [bare-metal consideration]: https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
+[nginx ingress guide]: https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 [linkerd]: https://linkerd.io/
 [linkerd getting started]: https://linkerd.io/2/getting-started/
 
