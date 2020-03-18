@@ -61,6 +61,7 @@
           - go
           - git
           - docker
+          - kubectx
       become: true
       when: latest|bool
 

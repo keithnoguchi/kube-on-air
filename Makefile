@@ -13,7 +13,7 @@ clean-test:
 	@-kubectl delete -f https://raw.githubusercontent.com/cilium/cilium/1.6.6/examples/kubernetes/connectivity-check/connectivity-check.yaml
 
 .PHONY: clean dist-clean list ls
-clean: clean-hello-go clean-linkerd
+clean: clean-hello-go clean-linkerd clean-ingress-nginx
 	@-ansible-playbook teardown.yaml
 dist-clean: clean
 	@$(RM) *.bak *.retry .*.sw? **/.*.sw?
@@ -22,6 +22,15 @@ list ls:
 	@$(SUDO) virsh net-list
 	@$(SUDO) virsh list
 	@docker images
+
+# ingress-nginx
+.PHONY: ingress-nginx clean-ingress-nginx
+ingress-nginx:
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
+clean-ingress-nginx:
+	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
+	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
 
 # helm based install/uninstall
 install-%:
