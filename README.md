@@ -167,6 +167,105 @@ NAME       READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES         
 dnstools   3/3     3            3           4m35s   dnstools     infoblox/dnstools   app=dnstools
 ```
 
+### Ingress
+
+Let's access containers through [nginx ingress controller].
+
+First setup the controller with `make ingress-nginx`:
+
+```sh
+$ make ingress-nginx
+```
+
+You can check resources through `kubectl`:
+
+```sh
+$ kubectl -n ingress-nginx get all
+NAME                                            READY   STATUS    RESTARTS   AGE
+pod/nginx-ingress-controller-7f74f657bd-k7j7v   1/1     Running   0          36m
+
+NAME                    TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)
+           AGE
+service/ingress-nginx   NodePort   10.108.220.67   <none>        80:30724/TCP,443:32697/TCP   36m
+
+NAME                                       READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-ingress-controller   1/1     1            1           36m
+
+NAME                                                  DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-ingress-controller-7f74f657bd   1         1         1       36m
+```
+
+Now, let's create a fanout example with `make ing/fanout` command:
+
+```sh
+$ make ing/fanout
+```
+
+Check it with the `kubectl describe ing/fanout`:
+
+```sh
+$ kubectl describe ing/fanout
+Name:             fanout
+Namespace:        default
+Address:          10.108.220.67
+Default backend:  default-http-backend:80 (<error: endpoints "default-http-backend" not found>)
+Rules:
+  Host        Path  Backends
+  ----        ----  --------
+  *
+              /apple    apples:5678 (10.244.1.16:5678,10.244.1.18:5678)
+              /banana   bananas:5678 (10.244.1.17:5678)
+Annotations:  nginx.ingress.kubernetes.io/rewrite-target: /
+Events:
+  Type    Reason  Age   From                      Message
+  ----    ------  ----  ----                      -------
+  Normal  CREATE  10m   nginx-ingress-controller  Ingress default/fanout
+  Normal  UPDATE  9m5s  nginx-ingress-controller  Ingress default/fanout
+```
+
+Now, check the `ingress-nginx-controller`'s node port with `kubectl`:
+
+```sh
+$ kubectl -n ingress-nginx get svc
+NAME            TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)
+   AGE
+ingress-nginx   NodePort   10.108.220.67   <none>        80:30724/TCP,443:32697/TCP   39m
+```
+
+and check the node IP with `kubectl get node`:
+
+```sh
+$ kubectl get node -o wide
+NAME     STATUS   ROLES    AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE
+   KERNEL-VERSION   CONTAINER-RUNTIME
+head10   Ready    master   47m   v1.17.3   172.31.255.10   <none>        Arch Linux   5.5.7-arch1-1    docker://19.3.6
+work11   Ready    <none>   47m   v1.17.3   172.31.255.11   <none>        Arch Linux   5.5.7-arch1-1    docker://19.3.6
+work12   Ready    <none>   47m   v1.17.3   172.31.255.12   <none>        Arch Linux   5.5.7-arch1-1    docker://19.3.6
+work13   Ready    <none>   47m   v1.17.3   172.31.255.13   <none>        Arch Linux   5.5.7-arch1-1    docker://19.3.6
+```
+
+Pick one of those and run curl to get the result:
+
+```sh
+$ curl http://172.31.255.13:30724/apple
+apple
+$ curl http://172.31.255.13:30724/banana
+banan
+```
+
+Make sure you get 404 when you access other path.
+
+```sh
+$ curl http://172.31.255.13:30724/
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx/1.17.8</center>
+</body>
+</html>
+```
+
 ## Test
 
 I've incorporated [Cilium]'s [connectivity check test] as below:
@@ -257,7 +356,9 @@ Here is the list of [Ansible] playbooks used in this project:
 - [Ingress Controllers]
   - [What is Ingress?]
   - [Nginx ingress controller]
+    - [How it works]
     - [Bare-metal consideration]
+      - [MetalLB]
     - [Nginx ingress guide]
 - [Linkerd]: Ultralight service mesh for Kubernetes and beyond
   - [Linkerd getting started]
@@ -281,8 +382,10 @@ Here is the list of [Ansible] playbooks used in this project:
 [kube-router with kubeadm]: https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
 [ingress controllers]: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 [what is ingress?]: https://kubernetes.io/docs/concepts/services-networking/ingress/
-[nginx ingress controller]: https://kubernetes.github.io/ingress-nginx/deploy/#bare-metal
+[nginx ingress controller]: https://kubernetes.github.io/ingress-nginx/
+[how it works]: https://kubernetes.github.io/ingress-nginx/how-it-works/
 [bare-metal consideration]: https://kubernetes.github.io/ingress-nginx/deploy/baremetal/
+[metallb]: https://metallb.universe.tf/
 [nginx ingress guide]: https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 [linkerd]: https://linkerd.io/
 [linkerd getting started]: https://linkerd.io/2/getting-started/

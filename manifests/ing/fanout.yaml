@@ -1,0 +1,80 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: fanout
+  annotations:
+    # https://kubernetes.github.io/ingress-nginx/examples/rewrite/
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host:
+    http:
+      paths:
+      - path: /apple
+        backend:
+          serviceName: apples
+          servicePort: 5678
+      - path: /banana
+        backend:
+          serviceName: bananas
+          servicePort: 5678
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: apples
+spec:
+  selector:
+    app: fanout-apple
+  ports:
+  - port: 5678
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: bananas
+spec:
+  selector:
+    app: fanout-banana
+  ports:
+  - port: 5678
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: apple
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fanout-apple
+  template:
+    metadata:
+      labels:
+        app: fanout-apple
+    spec:
+      containers:
+      - name: app
+        image: hashicorp/http-echo
+        args:
+        - "-text=apple"
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: banana
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fanout-banana
+  template:
+    metadata:
+      labels:
+        app: fanout-banana
+    spec:
+      containers:
+      - name: app
+        image: hashicorp/http-echo
+        args:
+        - "-text=banana"
