@@ -19,9 +19,9 @@ dist-clean: clean
 	@$(RM) *.bak *.retry .*.sw? **/.*.sw?
 	$(SUDO) $(RM) -rf .ansible
 list ls:
+	@docker images
 	@$(SUDO) virsh net-list
 	@$(SUDO) virsh list
-	@docker images
 
 # helm based install/uninstall
 install-%:
