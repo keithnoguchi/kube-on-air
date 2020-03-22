@@ -30,9 +30,6 @@
     - name: install the latest golang
       import_tasks: tasks/golang.yaml
 
-    - name: install etcd
-      import_tasks: tasks/etcd.yaml
-
     - name: install helm
       import_tasks: tasks/helm.yaml
 
