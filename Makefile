@@ -94,7 +94,7 @@ ds/%:
 	@kubectl create -f manifests/ds/$*.yaml
 cm/%:
 	@kubectl create -f manifests/cm/$*.yaml
-ing/%:
+ing/%: ingress-nginx
 	@kubectl create -f manifests/ing/$*.yaml
 clean-po/%:
 	@-kubectl delete -f manifests/po/$*.yaml
