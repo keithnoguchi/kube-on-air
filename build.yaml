@@ -24,8 +24,11 @@
           - make
       become: true
 
-    - name: create git root directory
-      file: path={{ gitpath }} state=directory mode=0700
+    - name: create git and $GOPATH/bin root directory
+      file: path={{ item }} state=directory mode=0700
+      with_items:
+        - "{{ gitpath }}"
+        - "{{ lookup('env', 'GOPATH') }}/bin"
 
     - name: install the latest golang
       import_tasks: tasks/golang.yaml
