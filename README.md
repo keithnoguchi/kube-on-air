@@ -353,6 +353,7 @@ Here is the list of [Ansible] playbooks used in this project:
     - [kube-router blog posts]
     - [kube-router user guide]
     - [kube-router with kubeadm]: Deploying kube-router with kubeadm
+  - [kube with cilium]
 - [Ingress Controllers]
   - [What is Ingress?]
   - [Nginx ingress controller]
@@ -380,6 +381,7 @@ Here is the list of [Ansible] playbooks used in this project:
 [kube-router blog posts]: https://cloudnativelabs.github.io/post/2017-04-18-kubernetes-networking/
 [kube-router user guide]: https://www.kube-router.io/docs/user-guide/
 [kube-router with kubeadm]: https://github.com/cloudnativelabs/kube-router/blob/master/docs/kubeadm.md
+[kube with cilium]: http://virtualelephant.com/2020/03/24/kubernetes-with-cilium-p1/
 [ingress controllers]: https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
 [what is ingress?]: https://kubernetes.io/docs/concepts/services-networking/ingress/
 [nginx ingress controller]: https://kubernetes.github.io/ingress-nginx/
