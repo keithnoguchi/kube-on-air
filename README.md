@@ -363,6 +363,8 @@ Here is the list of [Ansible] playbooks used in this project:
     - [Nginx ingress guide]
 - [Linkerd]: Ultralight service mesh for Kubernetes and beyond
   - [Linkerd getting started]
+- [Kafka]
+  - [Kafka on Kube]
 
 [kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
 [kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
@@ -391,5 +393,7 @@ Here is the list of [Ansible] playbooks used in this project:
 [nginx ingress guide]: https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 [linkerd]: https://linkerd.io/
 [linkerd getting started]: https://linkerd.io/2/getting-started/
+[kafka]: http://kafka.apache.org/
+[kafka on kube]: https://www.confluent.io/blog/apache-kafka-kubernetes-could-you-should-you/
 
 Happy Hacking!
