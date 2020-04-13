@@ -365,6 +365,7 @@ Here is the list of [Ansible] playbooks used in this project:
   - [Linkerd getting started]
 - [Kafka]
   - [Getting started with Kafka on Kube]
+  - [Kafka stack on Kube (YouTube)]
   - [Kafka on Kube, Could you, Should you]
 
 [kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
@@ -396,6 +397,7 @@ Here is the list of [Ansible] playbooks used in this project:
 [linkerd getting started]: https://linkerd.io/2/getting-started/
 [kafka]: http://kafka.apache.org/
 [getting started with kafka on kube]: https://www.confluent.io/blog/getting-started-apache-kafka-kubernetes
+[Kafka stack on kube (youtube)]: https://www.youtube.com/watch?v=P_DEreC4ECw
 [kafka on kube, could you, should you]: https://www.confluent.io/blog/apache-kafka-kubernetes-could-you-should-you/
 
 Happy Hacking!
