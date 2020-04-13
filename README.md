@@ -364,7 +364,8 @@ Here is the list of [Ansible] playbooks used in this project:
 - [Linkerd]: Ultralight service mesh for Kubernetes and beyond
   - [Linkerd getting started]
 - [Kafka]
-  - [Kafka on Kube]
+  - [Getting started with Kafka on Kube]
+  - [Kafka on Kube, Could you, Should you]
 
 [kubernetes: up and running]: http://shop.oreilly.com/product/0636920043874.do
 [kuard]: https://github.com/kubernetes-up-and-running/kuard/blob/master/README.md
@@ -394,6 +395,7 @@ Here is the list of [Ansible] playbooks used in this project:
 [linkerd]: https://linkerd.io/
 [linkerd getting started]: https://linkerd.io/2/getting-started/
 [kafka]: http://kafka.apache.org/
-[kafka on kube]: https://www.confluent.io/blog/apache-kafka-kubernetes-could-you-should-you/
+[getting started with kafka on kube]: https://www.confluent.io/blog/getting-started-apache-kafka-kubernetes
+[kafka on kube, could you, should you]: https://www.confluent.io/blog/apache-kafka-kubernetes-could-you-should-you/
 
 Happy Hacking!
