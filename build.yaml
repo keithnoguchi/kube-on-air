@@ -11,7 +11,7 @@
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     # https://dl.k8s.io/release/stable-1.txt
     # hack/lib/version.sh
-    ldflags: -X k8s.io/component-base/version.gitVersion=v1.17.4
+    ldflags: -X k8s.io/component-base/version.gitVersion=v1.18.3
   tasks:
     - name: install package(s)
       pacman:
