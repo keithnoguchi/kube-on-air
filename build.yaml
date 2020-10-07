@@ -11,7 +11,7 @@
     gitpath: "{{ lookup('env', 'HOME') }}/git/"
     # https://dl.k8s.io/release/stable-1.txt
     # hack/lib/version.sh
-    ldflags: -X k8s.io/component-base/version.gitVersion=v1.18.3
+    ldflags: -X k8s.io/component-base/version.gitVersion=v1.19.1
   tasks:
     - name: install package(s)
       pacman:
@@ -39,15 +39,6 @@
     - name: make sure /var/lib/etcd is empty
       file: path=/var/lib/etcd state=absent
       become: true
-
-    - name: get go tools
-      command: go get -u {{ item }}
-      with_items:
-        - github.com/kubernetes-sigs/cri-tools/cmd/crictl
-      environment:
-        GOROOT: "{{ lookup('env', 'GOROOT') }}"
-        GOPATH: "{{ lookup('env', 'GOPATH') }}"
-        PATH: "{{ lookup('env', 'GOROOT') }}/bin:{{ lookup('env', 'GOPATH') }}/bin:/usr/bin:/bin"
 
     - name: get the kubernetes
       git:

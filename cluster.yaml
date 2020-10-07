@@ -9,9 +9,11 @@
   tasks:
     - name: install package(s)
       pacman:
-        state: present
+        state: latest
         update_cache: true
         name:
+          - glibc
+          - systemd
           - docker
           - rng-tools
           - net-tools

@@ -10,7 +10,7 @@
       file: path=/var/lib/etcd state=absent
       become: true
 
-    - name: upload the kubeadm, kubelet, and crictl to head nodes
+    - name: upload the kube tools to head nodes
       copy:
         src:  "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
         dest: "{{ lookup('env', 'GOPATH') }}/bin/{{ item }}"
@@ -18,7 +18,6 @@
       with_items:
         - kubeadm
         - kubelet
-        - crictl
 
     - name: check if the head node is already initialized
       stat:
