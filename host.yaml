@@ -62,6 +62,7 @@
           - git
           - docker
           - kubectx
+          - helm
       become: true
 
     - name: undefine libvirt guest network

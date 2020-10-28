@@ -33,9 +33,6 @@
     - name: install the latest golang
       import_tasks: tasks/golang.yaml
 
-    - name: install helm
-      import_tasks: tasks/helm.yaml
-
     - name: make sure /var/lib/etcd is empty
       file: path=/var/lib/etcd state=absent
       become: true
