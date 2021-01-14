@@ -50,7 +50,7 @@
       set_fact:
         cluster_cert_hash: "{{kubeadm.stdout|regex_search(regexp, '\\1')|list|first}}"
       vars:
-        regexp: '    --discovery-token-ca-cert-hash (\S+)'
+        regexp: '\s+--discovery-token-ca-cert-hash (\S+)'
       changed_when: false
       when: not ci|bool and kubeadm.changed|bool
 
