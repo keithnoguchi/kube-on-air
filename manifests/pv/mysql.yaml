@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: database
+  name: mysql
   labels:
-    volume: my-volume
+    volume: mysql
 spec:
   capacity:
     storage: 1Gi
@@ -11,5 +11,5 @@ spec:
     - ReadWriteMany
   nfs:
     server: 172.31.255.254
-    path: "/srv/nfs/k8s"
+    path: "/srv/nfs/k8s/mysql"
     readOnly: false

@@ -23,7 +23,7 @@ spec:
               memory: 10Mi
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: some-password-here
+              value: mysql
           livenessProbe:
             tcpSocket:
               port: 3306
@@ -35,15 +35,4 @@ spec:
       volumes:
         - name: database
           persistentVolumeClaim:
-            claimName: database
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mysql
-spec:
-  ports:
-    - port: 3306
-      protocol: TCP
-  selector:
-    app: mysql
+            claimName: mysql

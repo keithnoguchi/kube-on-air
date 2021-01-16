@@ -38,6 +38,18 @@ clean-ingress-nginx:
 	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
 	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
 
+# MySQL
+mysql:
+	@kubectl apply -f ./manifests/pv/mysql.yaml
+	@kubectl apply -f ./manifests/pvc/mysql.yaml
+	@kubectl apply -f ./manifests/rs/mysql.yaml
+	@kubectl apply -f ./manifests/svc/mysql.yaml
+clean-mysql:
+	@-kubectl delete svc/mysql
+	@-kubectl delete rs/mysql
+	@-kubectl delete pvc/mysql
+	@-kubectl delete pv/mysql
+
 # simple hello app
 .PHONY: clean-hello-go
 hello-%:
