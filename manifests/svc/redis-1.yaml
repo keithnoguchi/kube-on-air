@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis-1
+spec:
+  selector:
+    app: redis
+    name: redis-1
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: 6379
+    - name: cluster
+      port: 16379
+      targetPort: 16379
+  type: LoadBalancer
+  clusterIP: 10.97.0.1

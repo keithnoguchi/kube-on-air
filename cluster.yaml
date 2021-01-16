@@ -18,6 +18,7 @@
           - rng-tools
           - net-tools
           - inetutils
+          - nfs-utils
           - tcpdump
           - ebtables
           - ethtool
