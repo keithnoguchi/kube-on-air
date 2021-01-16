@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis
+data:
+  init.sh: "#!/bin/bash\nif [[ ${HOSTNAME} == 'redis-0' ]]; then\n\tredis-server /redis-config/master.conf\nelse\n\tredis-server
+    /redis-config/replica.conf\nfi\n"
+  master.conf: |
+    bind 0.0.0.0
+    protected-mode no
+    port 6379
+    dir /redis-data
+  replica.conf: |
+    bind 0.0.0.0
+    protected-mode no
+    port 6379
+    dir .
+    replicaof redis-0.redis.default.svc.cluster.local 6379
+  sentinel.conf: |
+    bind 0.0.0.0
+    protected-mode no
+    port 26379
+    sentinel monitor redis redis-0.redis.default.svc.cluster.local 6379 2
+    sentinel parallel-syncs redis 1
+    sentinel down-after-milliseconds redis 10000
+    sentinel failover-timeout redis 20000
+  sentinel.sh: "#!/bin/bash\nwhile ! ping -c 1 redis-0.redis.default.svc.cluster.local; do\n\techo 'waiting
+    for server'\n\tsleep 1\ndone\n\ncp /redis-config/sentinel.conf /redis-data/sentinel.conf\n
+    redis-sentinel /redis-data/sentinel.conf\n"

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+spec:
+  replicas: 3
+  serviceName: redis
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - command: [sh, -c, source /redis-config/init.sh]
+          image: redis:6.0.10-alpine
+          name: redis
+          ports:
+            - containerPort: 6379
+              name: redis
+          volumeMounts:
+            - mountPath: /redis-config
+              name: config
+            - mountPath: /redis-data
+              name: data
+        - command: [sh, -c, source /redis-config/sentinel.sh]
+          image: redis:6.0.10-alpine
+          name: sentinel
+          ports:
+            - containerPort: 26379
+              name: sentinel
+          volumeMounts:
+            - mountPath: /redis-config
+              name: config
+            - mountPath: /redis-data
+              name: data
+      volumes:
+        - configMap:
+            defaultMode: 0620
+            name: redis
+          name: config
+        - emptyDir:
+          name: data
+
