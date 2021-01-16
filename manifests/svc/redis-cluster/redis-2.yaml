@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-cluster-2
+  namespace: redis-cluster
+  name: redis-2
 spec:
   selector:
     app: redis
-    name: redis-cluster-2
+    name: redis-2
   ports:
     - name: redis
       protocol: TCP

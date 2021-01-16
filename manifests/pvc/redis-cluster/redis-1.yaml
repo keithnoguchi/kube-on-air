@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: redis-cluster
+  name: redis-1
+spec:
+  resources:
+    requests:
+      storage: 128Mi
+  accessModes:
+    - ReadWriteMany
+  selector:
+    matchLabels:
+      volume: redis-1

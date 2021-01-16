@@ -2,18 +2,18 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   namespace: redis-cluster
-  name: redis-1
+  name: redis-6
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: redis
-      name: redis-1
+      name: redis-6
   template:
     metadata:
       labels:
         app: redis
-        name: redis-1
+        name: redis-6
     spec:
       containers:
         - name: redis
@@ -53,4 +53,6 @@ spec:
                 path: "redis.conf"
         - name: data
           persistentVolumeClaim:
-            claimName: redis-1
+            claimName: redis-6
+
+

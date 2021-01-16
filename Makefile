@@ -29,16 +29,25 @@ install-%:
 uninstall-%:
 	@helm uninstall $*
 
-# NodePort based ingress-nginx
-.PHONY: ingress-nginx clean-ingress-nginx
-ingress-nginx:
-	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
-	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
-clean-ingress-nginx:
-	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
-	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+# Redis Cluster
+.PHONY: redis-cluster clean-redis-cluster
+redis-cluster:
+	@kubectl apply -f ./manifests/pv/redis-cluster/
+	@kubectl apply -f ./manifests/ns/redis-cluster/
+	@kubectl apply -f ./manifests/cm/redis-cluster/
+	@kubectl apply -f ./manifests/pvc/redis-cluster/
+	@kubectl apply -f ./manifests/rs/redis-cluster/
+	@kubectl apply -f ./manifests/svc/redis-cluster/
+clean-redis-cluster:
+	@-kubectl delete --all svc -n redis-cluster
+	@-kubectl delete --all rs  -n redis-cluster
+	@-kubectl delete --all pvc -n redis-cluster
+	@-kubectl delete cm -l app=redis -n redis-cluster
+	@-kubectl delete ns redis-cluster
+	@-kubectl delete pv -l app=redis-cluster
 
 # MySQL
+.PHONY: mysql clean-mysql
 mysql:
 	@kubectl apply -f ./manifests/pv/mysql.yaml
 	@kubectl apply -f ./manifests/pvc/mysql.yaml
@@ -65,6 +74,15 @@ clean-hello-go:
 .PHONY: prom clean-prom
 prom: cm/prometheus deploy/prometheus
 clean-prom: clean-deploy/prometheus clean-cm/prometheus
+
+# NodePort based ingress-nginx
+.PHONY: ingress-nginx clean-ingress-nginx
+ingress-nginx:
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+	@kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
+clean-ingress-nginx:
+	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/baremetal/service-nodeport.yaml
+	@-kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
 
 # linkerd
 .PHONY: linkerd clean-linkerd cat-linkerd ls-linkerd test-linkerd

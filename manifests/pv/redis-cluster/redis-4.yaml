@@ -1,15 +1,16 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mysql
+  name: redis-4
   labels:
-    volume: mysql
+    app: redis-cluster
+    volume: redis-4
 spec:
   capacity:
-    storage: 1Gi
+    storage: 128Mi
   accessModes:
     - ReadWriteMany
   nfs:
     server: 172.31.255.254
-    path: "/srv/nfs/mysql"
+    path: "/srv/nfs/redis-4"
     readOnly: false
