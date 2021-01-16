@@ -1,16 +1,19 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: redis-2
+  name: redis-cluster-2
 spec:
   selector:
     app: redis
-    name: redis-2
+    name: redis-cluster-2
   ports:
     - name: redis
+      protocol: TCP
       port: 6379
       targetPort: 6379
     - name: cluster
+      protocol: TCP
       port: 16379
       targetPort: 16379
   type: LoadBalancer
+  clusterIP: 10.96.255.2

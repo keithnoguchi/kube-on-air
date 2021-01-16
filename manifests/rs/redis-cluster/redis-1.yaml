@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: redis-1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+      name: redis-1
+  template:
+    metadata:
+      labels:
+        app: redis
+        name: redis-1
+    spec:
+      containers:
+        - name: redis
+          image: redis:6.0.10-alpine
+          command: [redis-server]
+          args:
+            - "/etc/redis/redis.conf"
+            - "--protected-mode"
+            - "no"
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10Mi
+          ports:
+            - name: redis
+              containerPort: 6379
+              protocol: TCP
+            - name: cluster
+              containerPort: 16379
+              protocol: TCP
+          volumeMounts:
+            - name: redis-conf
+              mountPath: "/etc/redis"
+            - name: redis-data
+              mountPath: "/var/lib/redis"
+      volumes:
+        - name: redis-conf
+          configMap:
+            name: redis-conf
+            itmes:
+              - key: "redis.conf"
+                path: "redis.conf"
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: redis-1
