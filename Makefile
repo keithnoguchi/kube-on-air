@@ -29,7 +29,28 @@ install-%:
 uninstall-%:
 	@helm uninstall $*
 
-# Redis Cluster
+# TiKV cluster
+#
+# https://tikv.org/docs/4.0/tasks/try/tikv-operator/#step-2-deploy-tikv-operator
+.PHONY: tikv-cluster clean-tikv-cluster
+tikv-cluster:
+	@kubectl apply -f ./manifests/sc/tikv-cluster/
+	@kubectl apply -f ./manifests/pv/tikv-cluster/
+	@kubectl apply -f ./manifests/ns/tikv-cluster/
+	#@kubectl apply -f ./manifests/pvc/tikv-cluster/
+	@kubectl apply -f https://raw.githubusercontent.com/tikv/tikv-operator/master/manifests/crd.v1beta1.yaml
+	@-helm repo add pingcap https://charts.pingcap.org/
+	@helm install -n tikv-operator tikv-operator pingcap/tikv-operator --version v0.1.0
+	@kubectl apply -n tikv-cluster -f ./manifests/op/tikv-cluster/
+
+clean-tikv-cluster:
+	@-kubectl delete -n tikv-cluster -f ./manifests/op/tikv-cluster/
+	#@-kubectl delete -f ./manifests/pvc/tikv-cluster/
+	@-kubectl delete -f ./manifests/ns/tikv-cluster/
+	@-kubectl delete -f ./manifests/pv/tikv-cluster/
+	@-kubectl delete -f ./manifests/sc/tikv-cluster/
+
+# Redis cluster
 .PHONY: redis-cluster clean-redis-cluster
 redis-cluster:
 	@kubectl apply -f ./manifests/pv/redis-cluster/
