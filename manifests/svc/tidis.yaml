@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tidis
+  namespace: tidis
+spec:
+  selector:
+    app: tidis
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 5379
+  type: LoadBalancer

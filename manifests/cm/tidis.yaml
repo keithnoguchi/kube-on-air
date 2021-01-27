@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: tidis
+  name: tidis
+  labels:
+    app: tidis
+data:
+  config.toml: |
+    [tidis]
+    listen = ":6379"
+    max_connection = 5000
+    loglevel = "info"
+    txn_retry = 2
+    auth = ""
+    tenantid = ""
+
+    [backend]
+    pds = "basic-pd.tikv-cluster.svc.cluster.local:2379"

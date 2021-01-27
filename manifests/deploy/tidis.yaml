@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tidis
+  namespace: tidis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tidis
+  template:
+    metadata:
+      labels:
+        app: tidis
+    spec:
+      containers:
+        - name: tidis
+          image: yongman/tidis
+          args: ["-conf", "/config/config.toml"]
+          ports:
+            - containerPort: 5379
+              name: tidis
+          volumeMounts:
+            - mountPath: /config
+              name: config
+      volumes:
+        - configMap:
+            defaultMode: 0620
+            name: tidis
+          name: config
