@@ -31,10 +31,20 @@ uninstall-%:
 
 # ScyllaDB
 .PHONY: scylla clean-scylla
-scylla:
+scylla: cert-manager
+	@kubectl apply -f ./manifests/op/scylla.yaml
 	@kubectl apply -f ./manifests/ns/scylla.yaml
 clean-scylla:
-	@kubectl delete -f ./manifests/ns/scylla.yaml
+	@-kubectl delete -f ./manifests/ns/scylla.yaml
+	@-kubectl delete -f ./manifests/op/scylla.yaml
+
+# cert-manager
+.PHONY: cert-manager clean-cert-manager
+cert-manager:
+	@kubectl apply -f ./manifests/yaml/cert-manager.yaml
+	@kubectl wait -n cert-manager --for=condition=ready pod -l app=cert-manager --timeout=60s
+clean-cert-manager:
+	@-kubectl delete -f ./manifests/yaml/cert-manager.yaml
 
 # Tidis TiKV Redis query layer
 .PHONY: tidis clean-tidis
