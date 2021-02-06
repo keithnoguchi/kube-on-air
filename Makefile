@@ -29,6 +29,26 @@ install-%:
 uninstall-%:
 	@helm uninstall $*
 
+# ScyllaDB
+.PHONY: scylla clean-scylla
+scylla:
+	@kubectl apply -f ./manifests/ns/scylla.yaml
+clean-scylla:
+	@kubectl delete -f ./manifests/ns/scylla.yaml
+
+# Tidis TiKV Redis query layer
+.PHONY: tidis clean-tidis
+tidis: metallb tikv-cluster
+	@kubectl apply -f ./manifests/ns/tidis.yaml
+	@kubectl apply -f ./manifests/cm/tidis.yaml
+	@kubectl apply -f ./manifests/deploy/tidis.yaml
+	@kubectl apply -f ./manifests/svc/tidis.yaml
+clean-tidis:
+	@kubectl delete -f ./manifests/svc/tidis.yaml
+	@kubectl delete -f ./manifests/deploy/tidis.yaml
+	@kubectl delete -f ./manifests/cm/tidis.yaml
+	@kubectl delete -f ./manifests/ns/tidis.yaml
+
 # TiKV cluster
 #
 # https://tikv.org/docs/4.0/tasks/try/tikv-operator/#step-2-deploy-tikv-operator
@@ -38,9 +58,10 @@ tikv-cluster:
 	@kubectl apply -f ./manifests/pv/tikv-cluster/
 	@kubectl apply -f ./manifests/ns/tikv-cluster/
 	#@kubectl apply -f ./manifests/pvc/tikv-cluster/
+	#@kubectl apply -f https://raw.githubusercontent.com/pingcap/tidb-operator/master/manifests/crd.yaml
 	@kubectl apply -f https://raw.githubusercontent.com/tikv/tikv-operator/master/manifests/crd.v1beta1.yaml
 	@-helm repo add pingcap https://charts.pingcap.org/
-	@helm install -n tikv-operator tikv-operator pingcap/tikv-operator --version v0.1.0
+	@-helm install -n tikv-operator tikv-operator pingcap/tikv-operator --version v0.1.0
 	@kubectl apply -n tikv-cluster -f ./manifests/op/tikv-cluster/
 
 clean-tikv-cluster:

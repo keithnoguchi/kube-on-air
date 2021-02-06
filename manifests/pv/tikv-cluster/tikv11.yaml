@@ -11,10 +11,10 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Recycle
   storageClassName: local-storage
   local:
-    path: /mnt/disk/tikv
+    path: /var/lib/tikv
   nodeAffinity:
     required:
       nodeSelectorTerms:
