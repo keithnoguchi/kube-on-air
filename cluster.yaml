@@ -27,6 +27,7 @@
           - conntrack-tools
           - jq
           - nmap
+          - prometheus-node-exporter
       become: true
       when: latest|bool
 
@@ -65,6 +66,7 @@
         - sshd
         - rngd
         - docker
+        - prometheus-node-exporter
       become: true
       when: not ci|bool
 
